@@ -1,3 +1,5 @@
+#include "spec.h"
+#include <string>
 
 
 class CharacterClass
@@ -5,11 +7,11 @@ class CharacterClass
 private:
     /* data */
 public:
-    CharacterClass(/* args */);
+    CharacterClass(int id, std::string className, Spec specilizations[]);
     ~CharacterClass();
 };
 
-CharacterClass::CharacterClass(/* args */)
+CharacterClass::CharacterClass(int id, std::string className, Spec specilizations[])
 {
 }
 

@@ -1,15 +1,16 @@
-
+#include <string>
+#include "Resource.h"
 
 class Spec
 {
 private:
     /* data */
 public:
-    Spec(/* args */);
+    Spec(std::string name, Resource resouceUsed);
     ~Spec();
 };
 
-Spec::Spec(/* args */)
+Spec::Spec(std::string name, Resource resouceUsed)
 {
 }
 

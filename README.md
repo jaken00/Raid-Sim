@@ -16,8 +16,8 @@ pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x
 Open the **MSYS2 UCRT64** shell and run:
 
 ```bash
-cd /c/dev/raid-manager
-mkdir build
+cd /c/dev/raid-manager -- Work computer
+cd /c/programming/dev/Raid-Sim/ -- Home PC
 cd build
 cmake ..
 mingw32-make

@@ -1,5 +1,6 @@
 #pragma once
 #include <sqlite3.h>
+
 #include <string>
 
 class Database {
@@ -11,6 +12,8 @@ public:
     bool isEmpty(const std::string& table);
     bool insertPlayer(const std::string& name, const std::string& cls, int level);
     bool insertClass(const std::string& name, const std::string& role, const std::string& specs);
+    bool insertSpecialization(const std::string& parent_class, const std::string& name,
+                              const std::string& resource, const std::string& attack_range);
 
 private:
     std::string m_path;

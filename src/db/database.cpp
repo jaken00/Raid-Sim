@@ -1,4 +1,5 @@
 #include "database.h"
+
 #include <iostream>
 
 Database::Database(const std::string& path) : m_path(path) {}
@@ -26,16 +27,32 @@ bool Database::init() {
 
     const std::string create_classes = R"(
         CREATE TABLE IF NOT EXISTS classes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            role TEXT NOT NULL,
-            specializations TEXT NOT NULL,
+            id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+            name                TEXT NOT NULL,
+            role                TEXT NOT NULL,
+            specializations     TEXT NOT NULL,
             FOREIGN KEY (name) REFERENCES players(class)
         )
     )";
 
-    if (!exec(create_players)) return false;
-    if (!exec(create_classes)) return false;
+    const std::string create_specialization = R"(
+        CREATE TABLE IF NOT EXISTS specialization (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_class    TEXT NOT NULL,
+            name            TEXT NOT NULL,
+            resource        TEXT NOT NULL,
+            attack_range    TEXT NOT NULL
+            FOREIGN KEY (parent_class) REFERENCES classes(name)
+        )
+
+    )";
+
+    if (!exec(create_players))
+        return false;
+    if (!exec(create_classes))
+        return false;
+    if (!exec(create_specialization))
+        return false;
 
     std::cout << "Database initialized at: " << m_path << "\n";
     return true;
@@ -66,16 +83,18 @@ bool Database::insertPlayer(const std::string& name, const std::string& cls, int
     }
 
     sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, cls.c_str(),  -1, SQLITE_STATIC);
-    sqlite3_bind_int (stmt, 3, level);
+    sqlite3_bind_text(stmt, 2, cls.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 3, level);
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
-    if (!ok) std::cerr << "Insert player failed: " << sqlite3_errmsg(m_db) << "\n";
+    if (!ok)
+        std::cerr << "Insert player failed: " << sqlite3_errmsg(m_db) << "\n";
     sqlite3_finalize(stmt);
     return ok;
 }
 
-bool Database::insertClass(const std::string& name, const std::string& role, const std::string& specs) {
+bool Database::insertClass(const std::string& name, const std::string& role,
+                           const std::string& specs) {
     const char* sql = "INSERT INTO classes (name, role, specializations) VALUES (?, ?, ?);";
     sqlite3_stmt* stmt;
 
@@ -84,12 +103,37 @@ bool Database::insertClass(const std::string& name, const std::string& role, con
         return false;
     }
 
-    sqlite3_bind_text(stmt, 1, name.c_str(),  -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, role.c_str(),  -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, role.c_str(), -1, SQLITE_STATIC);
     sqlite3_bind_text(stmt, 3, specs.c_str(), -1, SQLITE_STATIC);
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
-    if (!ok) std::cerr << "Insert class failed: " << sqlite3_errmsg(m_db) << "\n";
+    if (!ok)
+        std::cerr << "Insert class failed: " << sqlite3_errmsg(m_db) << "\n";
+    sqlite3_finalize(stmt);
+    return ok;
+}
+
+bool Database::insertSpecialization(const std::string& parent_class, const std::string& name,
+                                    const std::string& resource, const std::string& attack_range) {
+    const char* sql =
+        "INSERT INTO specialization (parent_class, name, resource, attack_range) VALUES (?, ?, ?, "
+        "?);";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed: " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, parent_class.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, name.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, resource.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 4, attack_range.c_str(), -1, SQLITE_STATIC);
+
+    bool ok = sqlite3_step(stmt) == SQLITE_DONE;
+    if (!ok)
+        std::cerr << "Insert class failed: " << sqlite3_errmsg(m_db) << "\n";
     sqlite3_finalize(stmt);
     return ok;
 }

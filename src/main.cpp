@@ -1,15 +1,18 @@
 #include <SDL2/SDL.h>
-#include <imgui.h>
-#include <imgui_impl_sdl2.h>
-#include <imgui_impl_opengl3.h>
 #include <SDL2/SDL_opengl.h>
+#include <imgui.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui_impl_sdl2.h>
+
 #include <iostream>
-#include "db/database.h"
+
 #include "data/seeder.h"
+#include "db/database.h"
 
 int main(int argc, char* argv[]) {
     Database db("raid.db");
-    if (!db.init()) return 1;
+    if (!db.init())
+        return 1;
     Seeder::seed(db);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -24,12 +27,9 @@ int main(int argc, char* argv[]) {
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    SDL_Window* window = SDL_CreateWindow(
-        "Raid Sim",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        1280, 720,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
-    );
+    SDL_Window* window =
+        SDL_CreateWindow("Raid Sim", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720,
+                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
     if (!window) {
         std::cerr << "Window creation failed: " << SDL_GetError() << "\n";
@@ -54,7 +54,8 @@ int main(int argc, char* argv[]) {
     while (running) {
         while (SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT) running = false;
+            if (event.type == SDL_QUIT)
+                running = false;
         }
 
         ImGui_ImplOpenGL3_NewFrame();

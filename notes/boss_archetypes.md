@@ -73,3 +73,9 @@ struct ProceduralBoss {
 ## MVP
 
 For the first playable loop: 1 handcrafted boss, 2 mechanics only (AOE_DAMAGE at 50%, ENRAGE at 25%). No procedural generation yet.
+
+
+Armored — heavily plated physical enemies. Golems, constructs, heavily armored knights, siege creatures. Strong against slashing/physical force, weak to electricity forcing its way through the gaps.
+Warded — magically shielded enemies. Mages, liches, magical constructs, enchanters. Their magic shell absorbs elemental damage but struggles against cold that disrupts the magical field.
+Spectral — undead, ghosts, shadow creatures, incorporeal beings. Physical weapons pass through them. Fire and Radiant (holy light) are their traditional weaknesses.
+Primal — beasts, elementals, nature creatures, raw primal entities. No magical shielding, no armor plating — just raw HP and physicality. Weak to physical force.

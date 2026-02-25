@@ -9,7 +9,7 @@ public
     Items(std::string itemName, 
         std::string slot, 
         float ilvl, 
-        Stats stats[]
+        Stats stats
     );
 
     ~Items();
@@ -17,7 +17,11 @@ public
 };
 
 
-Items::Items(/* args */)
+Items::Items(std::string itemName, 
+        std::string slot, 
+        float ilvl, 
+        Stats stats
+    )
 {
 
 }

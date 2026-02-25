@@ -1,15 +1,17 @@
-
+#include "Resource.h"
+#include "enum.h"
+#include <string>
 
 class Ability
 {
 private:
-    /* data */
+
 public:
-    Ability(/* args */);
+    Ability(std::string name, DamageType damageType, CastType castType, Resource resourceUsed);
     ~Ability();
 };
 
-Ability::Ability(/* args */)
+Ability::Ability(std::string name, DamageType damageType, CastType castType, Resource resourceUsed)
 {
 }
 

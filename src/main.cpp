@@ -1,7 +1,14 @@
 #include <SDL2/SDL.h>
 #include <iostream>
+#include "db/database.h"
+#include "data/seeder.h"
 
 int main(int argc, char* argv[]) {
+    Database db("raid.db");
+    if (!db.init()) return 1;
+
+    Seeder::seed(db);
+
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL Init failed: " << SDL_GetError() << "\n";

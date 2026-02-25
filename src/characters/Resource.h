@@ -4,7 +4,7 @@ class Resource
 {
 private:
     /* data */
-public:
+public: //This is like Mana, Energy, Rage etc
     Resource(std::string name, int currentReourceAmount, int maxResourceAmount);
     ~Resource();
 };

@@ -1,10 +1,11 @@
-#include "spec.h"
-#include "enum.h"
 #include <string>
+#include <vector>
 
+#include "Ability.h"
+#include "enum.h"
+#include "spec.h"
 
-class CharacterClass
-{
+class CharacterClass {
 private:
     /* data */
 public:
@@ -12,10 +13,6 @@ public:
     ~CharacterClass();
 };
 
-CharacterClass::CharacterClass(int id, std::string className, Role role, Spec specilizations[])
-{
-}
+CharacterClass::CharacterClass(int id, std::string className, Role role, Spec specilizations[]) {}
 
-CharacterClass::~CharacterClass()
-{
-}
+CharacterClass::~CharacterClass() {}

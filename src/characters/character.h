@@ -1,9 +1,11 @@
-#include <stdlib.h>
+
 #include <string>
+#include <vector>
+
 #include "CharacterClass.h"
 #include "Spec.h"
-#include "Talents.h"
 #include "Stats.h"
+#include "Talents.h"
 
 /*
     What will be in a character:
@@ -22,33 +24,15 @@
 
 */
 
-
-
-class Character
-{
+class Character {
 private:
-    
 public:
-    Character(std::string name, 
-        CharacterClass characterClass, 
-        Spec specialization, 
-        int level, 
-        int skill_points_spent, 
-        int currentXP, 
-        int XPToLvl);
+    Character(std::string name, std::vector<CharacterClass*>, Spec specialization, int level,
+              int skill_points_spent, int currentXP, int XPToLvl, int gold);
     ~Character();
 };
 
-Character::Character(std::string name, 
-        CharacterClass characterClass, 
-        Spec specialization, 
-        int level, 
-        int skill_points_spent, 
-        int currentXP, 
-        int XPToLvl)
-{
-}
+Character::Character(std::string name, std::vector<CharacterClass*>, Spec specialization, int level,
+                     int skill_points_spent, int currentXP, int XPToLvl, int gold) {}
 
-Character::~Character()
-{
-}
+Character::~Character() {}

@@ -6,10 +6,10 @@
 #include "CharacterClass.h"
 #include "Spec.h"
 
-// Attitude represents a raider's general mindset and impact on guild culture.
+// Attitude represents a raider's general mindset and impact on guild culture. Will need to expand on this later
 enum class Attitude
 {
-    Positive,
+    Positive, 
     Neutral,
     Toxic
 };
@@ -22,10 +22,10 @@ public:
            CharacterClass *characterClass,
            const Spec &spec,
            float itemLevel,
-           float performanceRating,
+           float performanceRating, //Current Stars (FM style)
            float attendancePercent,
            Attitude attitude,
-           float potential);
+           float potential); // Potential Stars
 
     // Accessors
     int GetId() const;
@@ -37,7 +37,7 @@ public:
     float GetAttendancePercent() const;
     Attitude GetAttitude() const;
     float GetPotential() const;
-    const std::vector<std::string> &GetRaidHistory() const;
+    const std::vector<std::string> &GetRaidHistory() const; //This should prob be raid entries
 
     // Mutators / updaters
     void SetItemLevel(float newItemLevel);

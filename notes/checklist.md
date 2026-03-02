@@ -6,9 +6,9 @@ Phase 0 — Environment (Day 1)
 
 Phase 1 — Core Data (Week 1)
 
- - [ ] Define Player struct (name, class, spec, role, ilvl, performance rating, attendance)
- - [ ] Define Boss struct (name, hp, mechanics, ilvl threshold)
- - [ ] Define AttemptResult struct (wipe/kill, deaths, log lines, loot)
+ - [x] Define Player struct (name, class, spec, role, ilvl, performance rating, attendance)
+ - [x] Define Boss struct (name, hp, mechanics, ilvl threshold)
+ - [x] Define AttemptResult struct (wipe/kill, deaths, log lines, loot)
  - [ ] Hard-code 10 players and 1 boss in a test file
  - [ ] Display one player profile in an ImGui window
 

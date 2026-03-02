@@ -4,40 +4,31 @@
 #include <vector>
 
 #include "CharacterClass.h"
+#include "Items.h"
 #include "Spec.h"
 
-// Attitude represents a raider's general mindset and impact on guild culture. Will need to expand on this later
-enum class Attitude
-{
-    Positive, 
-    Neutral,
-    Toxic
-};
+enum class Attitude { Positive, Neutral, Toxic };
 
-class Player
-{
+class Player {
 public:
-    Player(int id,
-           const std::string &name,
-           CharacterClass *characterClass,
-           const Spec &spec,
-           float itemLevel,
-           float performanceRating, //Current Stars (FM style)
-           float attendancePercent,
-           Attitude attitude,
-           float potential); // Potential Stars
+    Player(int id, const std::string& name, CharacterClass* characterClass,
+           const Spec& spec,  // Mayve this shouldnt be const? this can change no?
+           float itemLevel, std::vector<Items*> items,
+           float performanceRating,  // Current Stars (FM style)
+           float attendancePercent, Attitude attitude,
+           float potential);  // Potential Stars
 
     // Accessors
     int GetId() const;
-    const std::string &GetName() const;
-    CharacterClass *GetCharacterClass() const;
-    const Spec &GetSpec() const;
+    const std::string& GetName() const;
+    CharacterClass* GetCharacterClass() const;
+    const Spec& GetSpec() const;
     float GetItemLevel() const;
     float GetPerformanceRating() const;
     float GetAttendancePercent() const;
     Attitude GetAttitude() const;
     float GetPotential() const;
-    const std::vector<std::string> &GetRaidHistory() const; //This should prob be raid entries
+    const std::vector<std::string>& GetRaidHistory() const;  // This should prob be raid entries
 
     // Mutators / updaters
     void SetItemLevel(float newItemLevel);
@@ -45,14 +36,15 @@ public:
     void SetAttendancePercent(float newAttendancePercent);
     void SetAttitude(Attitude newAttitude);
 
-    void AddRaidHistoryEntry(const std::string &entry);
+    void AddRaidHistoryEntry(const std::string& entry);
 
 private:
     int id;
     std::string name;
-    CharacterClass *characterClass;
+    CharacterClass* characterClass;
     Spec spec;
     float itemLevel;
+    std::vector<Items*> items;
     float performanceRating;
     float attendancePercent;
     Attitude attitude;
@@ -60,116 +52,89 @@ private:
     std::vector<std::string> raidHistory;
 };
 
-inline Player::Player(int id,
-                      const std::string &name,
-                      CharacterClass *characterClass,
-                      const Spec &spec,
-                      float itemLevel,
-                      float performanceRating,
-                      float attendancePercent,
-                      Attitude attitude,
+inline Player::Player(int id, const std::string& name, CharacterClass* characterClass,
+                      const Spec& spec, float itemLevel, std::vector<Items*> items,
+                      float performanceRating, float attendancePercent, Attitude attitude,
                       float potential)
     : id(id),
       name(name),
       characterClass(characterClass),
       spec(spec),
       itemLevel(itemLevel),
+      items(items),
       performanceRating(performanceRating),
       attendancePercent(attendancePercent),
       attitude(attitude),
-      potential(potential)
-{
-    if (this->attendancePercent < 0.0f)
-    {
+      potential(potential) {
+    if (this->attendancePercent < 0.0f) {
         this->attendancePercent = 0.0f;
-    }
-    else if (this->attendancePercent > 100.0f)
-    {
+    } else if (this->attendancePercent > 100.0f) {
         this->attendancePercent = 100.0f;
     }
 }
 
-inline int Player::GetId() const
-{
+inline int Player::GetId() const {
     return id;
 }
 
-inline const std::string &Player::GetName() const
-{
+inline const std::string& Player::GetName() const {
     return name;
 }
 
-inline CharacterClass *Player::GetCharacterClass() const
-{
+inline CharacterClass* Player::GetCharacterClass() const {
     return characterClass;
 }
 
-inline const Spec &Player::GetSpec() const
-{
+inline const Spec& Player::GetSpec() const {
     return spec;
 }
 
-inline float Player::GetItemLevel() const
-{
+inline float Player::GetItemLevel() const {
     return itemLevel;
 }
 
-inline float Player::GetPerformanceRating() const
-{
+inline float Player::GetPerformanceRating() const {
     return performanceRating;
 }
 
-inline float Player::GetAttendancePercent() const
-{
+inline float Player::GetAttendancePercent() const {
     return attendancePercent;
 }
 
-inline Attitude Player::GetAttitude() const
-{
+inline Attitude Player::GetAttitude() const {
     return attitude;
 }
 
-inline float Player::GetPotential() const
-{
+inline float Player::GetPotential() const {
     return potential;
 }
 
-inline const std::vector<std::string> &Player::GetRaidHistory() const
-{
+inline const std::vector<std::string>& Player::GetRaidHistory() const {
     return raidHistory;
 }
 
-inline void Player::SetItemLevel(float newItemLevel)
-{
+inline void Player::SetItemLevel(float newItemLevel) {
     itemLevel = newItemLevel;
 }
 
-inline void Player::SetPerformanceRating(float newPerformanceRating)
-{
+inline void Player::SetPerformanceRating(float newPerformanceRating) {
     performanceRating = newPerformanceRating;
 }
 
-inline void Player::SetAttendancePercent(float newAttendancePercent)
-{
+inline void Player::SetAttendancePercent(float newAttendancePercent) {
     attendancePercent = newAttendancePercent;
 
-    if (attendancePercent < 0.0f)
-    {
+    if (attendancePercent < 0.0f) {
         attendancePercent = 0.0f;
-    }
-    else if (attendancePercent > 100.0f)
-    {
+    } else if (attendancePercent > 100.0f) {
         attendancePercent = 100.0f;
     }
 }
 
-inline void Player::SetAttitude(Attitude newAttitude)
-{
+inline void Player::SetAttitude(Attitude newAttitude) {
     attitude = newAttitude;
 }
 
-inline void Player::AddRaidHistoryEntry(const std::string &entry)
-{
+inline void Player::AddRaidHistoryEntry(const std::string& entry) {
     raidHistory.push_back(entry);
 }
-

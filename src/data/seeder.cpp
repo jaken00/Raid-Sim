@@ -5,15 +5,15 @@
 void Seeder::seed(Database& db) {
     if (db.isEmpty("classes")) {
         std::cout << "Seeding classes...\n";
-        db.insertClass("Warrior", "Bulwark, Vanguard");
-        db.insertClass("Conduit", "Mender, Siphon");
-        db.insertClass("Invoker", "Elementalist");
-        db.insertClass("Reaver", "Exsanguinate, Striker");
-        db.insertClass("Herald", "Warsinger, Dirge");
+        db.insertClass("Warrior");
+        db.insertClass("Conduit");
+        db.insertClass("Invoker");
+        db.insertClass("Reaver");
+        db.insertClass("Herald");
     }
 
-    if (db.isEmpty("specializations")) {
-        std::cout << "Seeding Specs\n";
+    if (db.isEmpty("specialization")) {
+        std::cout << "Seeding specializations...\n";
         db.insertSpecialization("Warrior", "Tank", "Bulwark", "Resolve", "Melee");
         db.insertSpecialization("Warrior", "OffTank", "Vanguard", "Resolve", "Melee");
         db.insertSpecialization("Conduit", "Healer", "Mender", "Attunement", "Caster");
@@ -26,11 +26,10 @@ void Seeder::seed(Database& db) {
         db.insertSpecialization("Herald", "SupportDPS", "Dirge", "Resonance", "Ranged");
     }
 
-    // HERE IS WHERE WE WILL BE ADDING IN OUR PLAYER
     if (db.isEmpty("players")) {
         std::cout << "Seeding players...\n";
-        db.insertPlayer("Arthas", "Warrior", 60);
-        db.insertPlayer("Anduin", "Priest", 60);
-        db.insertPlayer("Jaina", "Mage", 60);
+        db.insertPlayer("Arthas", "Warrior", "Bulwark", 100.0f, 60);
+        db.insertPlayer("Anduin", "Conduit", "Mender", 98.0f, 60);
+        db.insertPlayer("Jaina", "Invoker", "Elementalist", 99.0f, 60);
     }
 }

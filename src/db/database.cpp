@@ -21,6 +21,8 @@ bool Database::init() {
             id      INTEGER PRIMARY KEY AUTOINCREMENT,
             name    TEXT NOT NULL,
             class   TEXT NOT NULL,
+            spec    TEXT NOT NULL,
+            ilvl    FLOAT NOT NULL DEFAULT 0,
             level   INTEGER NOT NULL DEFAULT 1
         );
     )";
@@ -28,22 +30,38 @@ bool Database::init() {
     const std::string create_classes = R"(
         CREATE TABLE IF NOT EXISTS classes (
             id                  INTEGER PRIMARY KEY AUTOINCREMENT,
-            name                TEXT NOT NULL,
-            specializations     TEXT NOT NULL
-            FOREIGN KEY (name) REFERENCES players(class)
-        )
+            name                TEXT NOT NULL
+        );
     )";
 
     const std::string create_specialization = R"(
         CREATE TABLE IF NOT EXISTS specialization (
-            id              INTEGER PRIMARY KEY AUTOINCREMENT,
-            parent_class    TEXT NOT NULL,
-            role            TEXT NOT NULL,
-            name            TEXT NOT NULL,
-            resource        TEXT NOT NULL,
-            attack_range    TEXT NOT NULL
+            id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_class        TEXT NOT NULL,
+            role                TEXT NOT NULL,
+            name                TEXT NOT NULL,
+            resource            TEXT NOT NULL,
+            attack_range        TEXT NOT NULL,
+
+            dps_weight          REAL DEFAULT 0.0,
+            hps_weight          REAL DEFAULT 0.0,
+            defensive_weight    REAL DEFAULT 0.0,
+            utility_weight      REAL DEFAULT 0.0,
+
+            -- Primary stat this spec scales with
+            primary_stat        TEXT NOT NULL,
+
+            -- Mechanic flags
+            can_interrupt       BOOLEAN DEFAULT 0,
+            can_dispel          BOOLEAN DEFAULT 0,
+            provides_shield     BOOLEAN DEFAULT 0,
+            provides_external_cd BOOLEAN DEFAULT 0,
+            raid_buff           TEXT NULL,       -- e.g. "physical_amp_5"
+            execute_bonus       REAL DEFAULT 0.0,
+            aoe_modifier        REAL DEFAULT 1.0,
+
             FOREIGN KEY (parent_class) REFERENCES classes(name)
-        )
+        );
 
     )";
 
@@ -73,8 +91,10 @@ bool Database::isEmpty(const std::string& table) {
     return empty;
 }
 
-bool Database::insertPlayer(const std::string& name, const std::string& cls, int level) {
-    const char* sql = "INSERT INTO players (name, class, level) VALUES (?, ?, ?);";
+bool Database::insertPlayer(const std::string& name, const std::string& cls,
+                            const std::string& spec, float ilvl, int level) {
+    const char* sql =
+        "INSERT INTO players (name, class, spec, ilvl, level) VALUES (?, ?, ?, ?, ?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -84,7 +104,9 @@ bool Database::insertPlayer(const std::string& name, const std::string& cls, int
 
     sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
     sqlite3_bind_text(stmt, 2, cls.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_int(stmt, 3, level);
+    sqlite3_bind_text(stmt, 3, spec.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_double(stmt, 4, static_cast<double>(ilvl));
+    sqlite3_bind_int(stmt, 5, level);
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
     if (!ok)
@@ -93,8 +115,8 @@ bool Database::insertPlayer(const std::string& name, const std::string& cls, int
     return ok;
 }
 
-bool Database::insertClass(const std::string& name, const std::string& specs) {
-    const char* sql = "INSERT INTO classes (name, specializations) VALUES (?, ?);";
+bool Database::insertClass(const std::string& name) {
+    const char* sql = "INSERT INTO classes (name) VALUES (?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -103,7 +125,6 @@ bool Database::insertClass(const std::string& name, const std::string& specs) {
     }
 
     sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, specs.c_str(), -1, SQLITE_STATIC);
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
     if (!ok)
@@ -112,13 +133,12 @@ bool Database::insertClass(const std::string& name, const std::string& specs) {
     return ok;
 }
 
-bool Database::insertSpecialization(const std::string& parent_class, const std::string& name,
-                                    const std::string& role, const std::string& resource,
+bool Database::insertSpecialization(const std::string& parent_class, const std::string& role,
+                                    const std::string& name, const std::string& resource,
                                     const std::string& attack_range) {
     const char* sql =
-        "INSERT INTO specialization (parent_class, name, role, resource, attack_range) VALUES (?, "
-        "?, ?, "
-        "?,?);";
+        "INSERT INTO specialization (parent_class, role, name, resource, attack_range) VALUES (?, "
+        "?, ?, ?, ?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -127,8 +147,8 @@ bool Database::insertSpecialization(const std::string& parent_class, const std::
     }
 
     sqlite3_bind_text(stmt, 1, parent_class.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, name.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 3, role.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, role.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, name.c_str(), -1, SQLITE_STATIC);
     sqlite3_bind_text(stmt, 4, resource.c_str(), -1, SQLITE_STATIC);
     sqlite3_bind_text(stmt, 5, attack_range.c_str(), -1, SQLITE_STATIC);
 

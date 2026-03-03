@@ -10,8 +10,9 @@ public:
 
     bool init();
     bool isEmpty(const std::string& table);
-    bool insertPlayer(const std::string& name, const std::string& cls, int level);
-    bool insertClass(const std::string& name, const std::string& specs);
+    bool insertPlayer(const std::string& name, const std::string& cls, const std::string& spec,
+                      float ilvl, int level);
+    bool insertClass(const std::string& name);
     bool insertSpecialization(const std::string& parent_class, const std::string& name,
                               const std::string& role, const std::string& resource,
                               const std::string& attack_range);

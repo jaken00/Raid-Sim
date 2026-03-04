@@ -16,7 +16,9 @@ public:
     bool insertSpecialization(const std::string& parent_class, const std::string& name,
                               const std::string& role, const std::string& resource,
                               const std::string& attack_range);
-
+    bool insertBoss(const std::string& name, int tuning_ilvl, int hps_threshold, int dps_threshold,
+                    int interrupt_coverage_needed, int tank_minimum, int dispel_coverage_needed,
+                    bool rewards_physical_buffs, bool punishes_melee_heavy);
 private:
     std::string m_path;
     sqlite3* m_db = nullptr;

@@ -65,11 +65,28 @@ bool Database::init() {
 
     )";
 
+    const std::string create_bosses = R"(
+        CREATE TABLE IF NOT EXISTS bosses (
+            id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+            name                TEXT NOT NULL,
+            tuning_ilvl         INTEGER NOT NULL,
+            hps_threshold        INTEGER NOT NULL,
+            dps_threshold       INTEGER NOT NULL,
+            interrupt_coverage_needed INTEGER NOT NULL,
+            tank_minimum          INTEGER NOT NULL,
+            dispel_coverage_needed INTEGER NOT NULL,
+            rewards_physical_buffs BOOLEAN DEFAULT 0,
+            punishes_melee_heavy   BOOLEAN DEFAULT 0,
+        );
+    )";    
+
     if (!exec(create_players))
         return false;
     if (!exec(create_classes))
         return false;
     if (!exec(create_specialization))
+        return false;
+    if (!exec(create_bosses))
         return false;
 
     std::cout << "Database initialized at: " << m_path << "\n";
@@ -155,6 +172,31 @@ bool Database::insertSpecialization(const std::string& parent_class, const std::
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
     if (!ok)
         std::cerr << "Insert class failed: " << sqlite3_errmsg(m_db) << "\n";
+    sqlite3_finalize(stmt);
+    return ok;
+}
+
+bool Database::insertBoss(const std::string& name, int tuning_ilvl, int hps_threshold, int dps_threshold,
+                    int interrupt_coverage_needed, int tank_minimum, int dispel_coverage_needed,
+                    bool rewards_physical_buffs, bool punishes_melee_heavy) {
+    const char* sql = "INSERT INTO bosses (name, tuning_ilvl, hps_threshold, dps_threshold, interrupt_coverage_needed, tank_minimum, dispel_coverage_needed, rewards_physical_buffs, punishes_melee_heavy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed: " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+    sqlite3_bind_text(stmt, 1, name.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 2, tuning_ilvl);
+    sqlite3_bind_int(stmt, 3, hps_threshold);
+    sqlite3_bind_int(stmt, 4, dps_threshold);
+    sqlite3_bind_int(stmt, 5, interrupt_coverage_needed);
+    sqlite3_bind_int(stmt, 6, tank_minimum);
+    sqlite3_bind_int(stmt, 7, dispel_coverage_needed);
+    sqlite3_bind_int(stmt, 8, rewards_physical_buffs);
+    sqlite3_bind_int(stmt, 9, punishes_melee_heavy);
+    bool ok = sqlite3_step(stmt) == SQLITE_DONE;
+    if (!ok)
+        std::cerr << "Insert boss failed: " << sqlite3_errmsg(m_db) << "\n";
     sqlite3_finalize(stmt);
     return ok;
 }

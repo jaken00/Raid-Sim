@@ -30,6 +30,7 @@ add_executable(RaidSim
     src/main.cpp
     src/db/database.cpp
     src/data/seeder.cpp
+    src/ui/main_window.cpp
     ${IMGUI_SOURCES}
 )
 

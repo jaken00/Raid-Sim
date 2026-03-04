@@ -9,8 +9,8 @@ Phase 1 — Core Data (Week 1)
  - [x] Define Player struct (name, class, spec, role, ilvl, performance rating, attendance)
  - [x] Define Boss struct (name, hp, mechanics, ilvl threshold)
  - [x] Define AttemptResult struct (wipe/kill, deaths, log lines, loot)
- - [ ] Hard-code 10 players and 1 boss in a test file
- - [ ] Display one player profile in an ImGui window
+ - [x] Hard-code 10 players and 1 boss in a test file
+ - [x] Display one player profile in an ImGui window
 
 Phase 2 — The Sim (Week 2)
 

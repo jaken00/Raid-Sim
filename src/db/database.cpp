@@ -49,7 +49,7 @@ bool Database::init() {
             utility_weight      REAL DEFAULT 0.0,
 
             -- Primary stat this spec scales with
-            primary_stat        TEXT NOT NULL,
+            primary_stat        TEXT NOT NULL DEFAULT '',
 
             -- Mechanic flags
             can_interrupt       BOOLEAN DEFAULT 0,
@@ -70,15 +70,15 @@ bool Database::init() {
             id                  INTEGER PRIMARY KEY AUTOINCREMENT,
             name                TEXT NOT NULL,
             tuning_ilvl         INTEGER NOT NULL,
-            hps_threshold        INTEGER NOT NULL,
+            hps_threshold       INTEGER NOT NULL,
             dps_threshold       INTEGER NOT NULL,
             interrupt_coverage_needed INTEGER NOT NULL,
-            tank_minimum          INTEGER NOT NULL,
+            tank_minimum        INTEGER NOT NULL,
             dispel_coverage_needed INTEGER NOT NULL,
             rewards_physical_buffs BOOLEAN DEFAULT 0,
-            punishes_melee_heavy   BOOLEAN DEFAULT 0,
+            punishes_melee_heavy   BOOLEAN DEFAULT 0
         );
-    )";    
+    )";
 
     if (!exec(create_players))
         return false;

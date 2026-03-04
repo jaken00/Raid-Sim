@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -6,13 +8,15 @@
 
 class Boss {
 private:
+    std::string name;
+    int id;
+    Raid* raid;
+    float currentHP;
+    float maxHP;
+    std::vector<BossMechanic> mechanics;
+
 public:
-    Boss(std::string name, int id, Raid* raid, float currentHP, float maxHP,
-         std::vector<BossMechanic>);
+    Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP,
+         const std::vector<BossMechanic>& mechanics);
     ~Boss();
 };
-
-Boss::Boss(std::string name, int id, Raid* raid, float currentHP, float maxHP,
-           std::vector<BossMechanic>) {}
-
-Boss::~Boss() {}

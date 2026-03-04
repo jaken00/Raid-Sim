@@ -201,6 +201,66 @@ bool Database::insertBoss(const std::string& name, int tuning_ilvl, int hps_thre
     return ok;
 }
 
+bool Database::getFirstPlayer(PlayerRow& out) {
+    const char* sql =
+        "SELECT name, class, spec, ilvl, level FROM players ORDER BY id LIMIT 1;";
+    sqlite3_stmt* stmt = nullptr;
+
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed (getFirstPlayer): " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+
+    bool ok = false;
+    int rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW) {
+        const unsigned char* name = sqlite3_column_text(stmt, 0);
+        const unsigned char* cls = sqlite3_column_text(stmt, 1);
+        const unsigned char* spec = sqlite3_column_text(stmt, 2);
+
+        out.name = name ? reinterpret_cast<const char*>(name) : "";
+        out.class_name = cls ? reinterpret_cast<const char*>(cls) : "";
+        out.spec = spec ? reinterpret_cast<const char*>(spec) : "";
+        out.ilvl = static_cast<float>(sqlite3_column_double(stmt, 3));
+        out.level = sqlite3_column_int(stmt, 4);
+        ok = true;
+    } else if (rc != SQLITE_DONE) {
+        std::cerr << "Query failed (getFirstPlayer): " << sqlite3_errmsg(m_db) << "\n";
+    }
+
+    sqlite3_finalize(stmt);
+    return ok;
+}
+
+bool Database::getFirstBoss(BossRow& out) {
+    const char* sql =
+        "SELECT name, tuning_ilvl, hps_threshold, dps_threshold FROM bosses ORDER BY id "
+        "LIMIT 1;";
+    sqlite3_stmt* stmt = nullptr;
+
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed (getFirstBoss): " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+
+    bool ok = false;
+    int rc = sqlite3_step(stmt);
+    if (rc == SQLITE_ROW) {
+        const unsigned char* name = sqlite3_column_text(stmt, 0);
+
+        out.name = name ? reinterpret_cast<const char*>(name) : "";
+        out.tuning_ilvl = sqlite3_column_int(stmt, 1);
+        out.hps_threshold = sqlite3_column_int(stmt, 2);
+        out.dps_threshold = sqlite3_column_int(stmt, 3);
+        ok = true;
+    } else if (rc != SQLITE_DONE) {
+        std::cerr << "Query failed (getFirstBoss): " << sqlite3_errmsg(m_db) << "\n";
+    }
+
+    sqlite3_finalize(stmt);
+    return ok;
+}
+
 bool Database::exec(const std::string& sql) {
     char* err = nullptr;
     if (sqlite3_exec(m_db, sql.c_str(), nullptr, nullptr, &err) != SQLITE_OK) {

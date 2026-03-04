@@ -8,6 +8,7 @@
 
 #include "data/seeder.h"
 #include "db/database.h"
+#include "ui/main_window.h"
 
 int main(int argc, char* argv[]) {
     Database db("raid.db");
@@ -62,9 +63,7 @@ int main(int argc, char* argv[]) {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Raid Manager");
-        ImGui::Text("ImGui is working!");
-        ImGui::End();
+        DrawMainWindow(db);
 
         ImGui::Render();
         glViewport(0, 0, 1280, 720);

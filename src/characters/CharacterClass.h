@@ -1,9 +1,8 @@
 #include <string>
 #include <vector>
 
-#include "Ability.h"
+#include "Spec.h"
 #include "enum.h"
-#include "spec.h"
 
 class CharacterClass {
 private:

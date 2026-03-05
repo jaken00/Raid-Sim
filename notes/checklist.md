@@ -15,8 +15,26 @@ Phase 1 — Core Data (Week 1)
 Phase 2 — The Sim (Week 2)
 
  - [ ] Write resolveAttempt() — returns result from roster + boss
- - [ ] Implement mechanic checks (interrupt coverage, healer throughput)
- - [ ] RNG layer — variance on performance ratings
+    - [ ] This requires building out spec class so that we can get DPS/HPS/Defense modiers to get the parties totals
+        - [ ] DPS Linked
+        - [ ] HPS Linked
+        - [ ] Defense Linked
+        - [ ] Totals Calculated
+        - [ ] Damage Type added to each Specialization
+        - [ ] Add boss Damage Reduction Calculation
+        - [ ] Add movement modifers to the fight / Decide if this lives in the boss or if it lives in the RaidEncounter (It lives i nthe boss)
+        - [ ] Add FightAffinityStruct to the boss (This lives in JSON we load up per boss?) -> Cleave, AOE, Movement, Etc
+        - [ ] Add secondary stat multiplers calcualtions as well as adding to the specs them selves 
+        - [ ] Add healerState for mana and effective HPS calculation 
+        - [ ] Calculate Phase duration by DPS numbers
+        - [ ] Add in DPS variance (determined by current skill level)
+        - [ ] Add in Phases and Phase Result calculation (AOE, Burn, HP start and end)  
+        - [ ] Reolve deaths and who dies in a phase
+        - [ ] Create a function for a chance to roll that a random player dies or wipes the raid due to a mechanic
+        - [ ] Recalculate dps on death
+        - [ ] BossMechanicCheck struct that outlines that boss mechanics
+        - [ ] Account for ability weights (15 total abilites select 8)
+        - [ ] Need Weights and tuning for: DPS_Weight, Stats_Weights, Affinity (Cleave, AOE, Single Target), Boss Resistances and Dmg Type, BOss Fight Type, Phase AOE DMG Per Player, Boss Tuning Ilvl Floor, Player Consistancy (Varible lvl)
  - [ ] Generate human-readable log lines from result
  - [ ] Display attempt log in ImGui
 

@@ -1,9 +1,9 @@
 #include <string>
-#include "Resource.h"
+
+#include "PlayerStructTypes.h"
 #include "enum.h"
 
-class Spec
-{
+class Spec {
 private:
     /* data */
 public:
@@ -11,10 +11,6 @@ public:
     ~Spec();
 };
 
-Spec::Spec(std::string name, Resource resouceUsed, AttackRange AttackRange)
-{
-}
+Spec::Spec(std::string name, Resource resouceUsed, AttackRange AttackRange) {}
 
-Spec::~Spec()
-{
-}
+Spec::~Spec() {}

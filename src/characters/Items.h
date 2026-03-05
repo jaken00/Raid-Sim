@@ -1,32 +1,16 @@
 #include <string>
-#include "stats.h"
-class Items
-{
+
+#include "PlayerStructTypes.h"
+
+class Items {
 private:
     /* data */
-public
-:
-    Items(std::string itemName, 
-        std::string slot, 
-        float ilvl, 
-        Stats stats
-    );
+public:
+    Items(std::string itemName, std::string slot, float ilvl, Stats stats);
 
     ~Items();
-
 };
 
+Items::Items(std::string itemName, std::string slot, float ilvl, Stats stats) {}
 
-Items::Items(std::string itemName, 
-        std::string slot, 
-        float ilvl, 
-        Stats stats
-    )
-{
-
-}
-
-
-Items::~Items()
-{
-}
+Items::~Items() {}

@@ -75,7 +75,7 @@ bool Database::init() {
             interrupt_coverage_needed INTEGER NOT NULL,
             tank_minimum        INTEGER NOT NULL,
             dispel_coverage_needed INTEGER NOT NULL,
-            rewards_physical_buffs BOOLEAN DEFAULT 0,
+            rewards_physical_buffs BOOLEAN DEFAULT 0, --need to look for better way of descriping weaknessses
             punishes_melee_heavy   BOOLEAN DEFAULT 0
         );
     )";
@@ -176,10 +176,14 @@ bool Database::insertSpecialization(const std::string& parent_class, const std::
     return ok;
 }
 
-bool Database::insertBoss(const std::string& name, int tuning_ilvl, int hps_threshold, int dps_threshold,
-                    int interrupt_coverage_needed, int tank_minimum, int dispel_coverage_needed,
-                    bool rewards_physical_buffs, bool punishes_melee_heavy) {
-    const char* sql = "INSERT INTO bosses (name, tuning_ilvl, hps_threshold, dps_threshold, interrupt_coverage_needed, tank_minimum, dispel_coverage_needed, rewards_physical_buffs, punishes_melee_heavy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+bool Database::insertBoss(const std::string& name, int tuning_ilvl, int hps_threshold,
+                          int dps_threshold, int interrupt_coverage_needed, int tank_minimum,
+                          int dispel_coverage_needed, bool rewards_physical_buffs,
+                          bool punishes_melee_heavy) {
+    const char* sql =
+        "INSERT INTO bosses (name, tuning_ilvl, hps_threshold, dps_threshold, "
+        "interrupt_coverage_needed, tank_minimum, dispel_coverage_needed, rewards_physical_buffs, "
+        "punishes_melee_heavy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     sqlite3_stmt* stmt;
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
         std::cerr << "Prepare failed: " << sqlite3_errmsg(m_db) << "\n";
@@ -202,8 +206,7 @@ bool Database::insertBoss(const std::string& name, int tuning_ilvl, int hps_thre
 }
 
 bool Database::getFirstPlayer(PlayerRow& out) {
-    const char* sql =
-        "SELECT name, class, spec, ilvl, level FROM players ORDER BY id LIMIT 1;";
+    const char* sql = "SELECT name, class, spec, ilvl, level FROM players ORDER BY id LIMIT 1;";
     sqlite3_stmt* stmt = nullptr;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {

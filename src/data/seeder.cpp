@@ -14,16 +14,37 @@ void Seeder::seed(Database& db) {
 
     if (db.isEmpty("specialization")) {
         std::cout << "Seeding specializations...\n";
-        db.insertSpecialization("Warrior", "Tank", "Bulwark", "Resolve", "Melee");
-        db.insertSpecialization("Warrior", "OffTank", "Vanguard", "Resolve", "Melee");
-        db.insertSpecialization("Conduit", "Healer", "Mender", "Attunement", "Caster");
-        db.insertSpecialization("Conduit", "SupportHealer", "Siphon", "Mana", "Caster");
-        db.insertSpecialization("Invoker", "PureDPS", "Arcanist", "Essence", "Caster");
-        db.insertSpecialization("Invoker", "PureDPS", "Elementalist", "Essence", "Caster");
-        db.insertSpecialization("Reaver", "SupportDPS", "Exsanguinate", "Momentum", "Melee");
-        db.insertSpecialization("Reaver", "PureDPS", "Striker", "Momentum", "Melee");
-        db.insertSpecialization("Herald", "SupportDPS", "Warsinger", "Resonance", "Ranged");
-        db.insertSpecialization("Herald", "SupportDPS", "Dirge", "Resonance", "Ranged");
+
+        db.insertSpecialization("Warrior", "Tank", "Bulwark", "Resolve", "Melee", 0.35, 0.05, 0.9,
+                                0.3, "Constitution", 1, 0, 0, 1, "armor_aura_5", 0.05, 0.75);
+
+        db.insertSpecialization("Warrior", "OffTank", "Vanguard", "Resolve", "Melee", 0.55, 0.0,
+                                0.75, 0.2, "Strength", 1, 0, 0, 0, "armor_aura_5", 0.05, 0.9);
+
+        db.insertSpecialization("Conduit", "Healer", "Mender", "Attunement", "Caster", 0.1, 1.0,
+                                0.15, 0.4, "Intellect", 0, 1, 1, 1, "magic_resist_5", 0.0, 1.1);
+
+        db.insertSpecialization("Conduit", "SupportHealer", "Siphon", "Mana", "Caster", 0.3, 0.7,
+                                0.35, 0.7, "Intellect", 0, 1, 1, 1, "mana_regen_3", 0.05, 1.1);
+
+        db.insertSpecialization("Invoker", "PureDPS", "Arcanist", "Essence", "Caster", 1.0, 0.0,
+                                0.15, 0.25, "Intellect", 1, 0, 0, 0, "spell_amp_5", 0.1, 1.15);
+
+        db.insertSpecialization("Invoker", "PureDPS", "Elementalist", "Essence", "Caster", 0.95,
+                                0.0, 0.15, 0.3, "Intellect", 1, 0, 0, 0, "elemental_amp_5", 0.1,
+                                1.25);
+
+        db.insertSpecialization("Reaver", "SupportDPS", "Exsanguinate", "Momentum", "Melee", 0.75,
+                                0.0, 0.3, 0.55, "Agility", 1, 0, 0, 0, "physical_amp_5", 0.2, 0.95);
+
+        db.insertSpecialization("Reaver", "PureDPS", "Striker", "Momentum", "Melee", 1.05, 0.0, 0.2,
+                                0.2, "Agility", 1, 0, 0, 0, "bleed_amp_5", 0.25, 0.9);
+
+        db.insertSpecialization("Herald", "SupportDPS", "Warsinger", "Resonance", "Ranged", 0.6,
+                                0.0, 0.25, 0.8, "Agility", 1, 0, 1, 1, "haste_aura_5", 0.05, 1.05);
+
+        db.insertSpecialization("Herald", "SupportDPS", "Dirge", "Resonance", "Ranged", 0.55, 0.0,
+                                0.25, 0.85, "Agility", 0, 1, 1, 1, "damage_taken_5", 0.1, 1.05);
     }
 
     if (db.isEmpty("players")) {
@@ -38,7 +59,6 @@ void Seeder::seed(Database& db) {
         db.insertPlayer("Vol'jin", "Conduit", "Mender", 93.0f, 60);
         db.insertPlayer("Mok'Nathal", "Invoker", "Arcanist", 92.0f, 60);
         db.insertPlayer("Sylvanas", "Reaver", "Striker", 91.0f, 60);
-        
     }
 
     if (db.isEmpty("bosses")) {

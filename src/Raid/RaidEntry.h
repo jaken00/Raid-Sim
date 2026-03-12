@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 
+#include "../characters/player.h"
 #include "Boss.h"
 #include "Raid.h"
-#include "characters/player.h"
 
 /* This is the Raid Entry attempt of an Entire Raid. It is made up of a number of EncounterEntires
  */

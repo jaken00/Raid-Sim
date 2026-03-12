@@ -1,8 +1,8 @@
 #include <string>
 #include <vector>
 
+#include "../enum.h"
 #include "Spec.h"
-#include "enum.h"
 
 class CharacterClass {
 private:

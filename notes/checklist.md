@@ -16,13 +16,13 @@ Phase 2 — The Sim (Week 2)
 
  - [ ] Write resolveAttempt() — returns result from roster + boss
     - [ ] This requires building out spec class so that we can get DPS/HPS/Defense modiers to get the parties totals
-        - [ ] DPS Linked
-        - [ ] HPS Linked
-        - [ ] Defense Linked
+        - [x] DPS Linked
+        - [x] HPS Linked
+        - [x] Defense Linked
         - [ ] Totals Calculated
         - [ ] Damage Type added to each Specialization
         - [ ] Add boss Damage Reduction Calculation
-        - [ ] Add movement modifers to the fight / Decide if this lives in the boss or if it lives in the RaidEncounter (It lives i nthe boss)
+        - [ ] Add movement modifers to the fight / Decide if this lives in the boss or if it lives in the RaidEncounter (It lives in the boss)
         - [ ] Add FightAffinityStruct to the boss (This lives in JSON we load up per boss?) -> Cleave, AOE, Movement, Etc
         - [ ] Add secondary stat multiplers calcualtions as well as adding to the specs them selves 
         - [ ] Add healerState for mana and effective HPS calculation 

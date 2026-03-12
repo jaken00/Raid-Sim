@@ -12,7 +12,7 @@ RaidEntry Fight::attemptBoss() {
     float hps_power = 0;
     float defense_power = 0;
 
-    float dps_power = 0.95;
+    float raid_dps_modifier = 0;
 
     for (int i = 0; i <= players.size(); i++) {
         float player_dps =

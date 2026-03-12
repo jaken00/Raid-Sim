@@ -152,10 +152,20 @@ bool Database::insertClass(const std::string& name) {
 
 bool Database::insertSpecialization(const std::string& parent_class, const std::string& role,
                                     const std::string& name, const std::string& resource,
-                                    const std::string& attack_range) {
+                                    const std::string& attack_range, double dps_weight,
+                                    double hps_weight, double defensive_weight,
+                                    double utility_weight, const std::string& primary_stat,
+                                    int can_interrupt, int can_dispel, int provides_shield,
+                                    int provides_external_cd, const std::string& raid_buff,
+                                    double execute_bonus, double aoe_modifier) {
     const char* sql =
-        "INSERT INTO specialization (parent_class, role, name, resource, attack_range) VALUES (?, "
-        "?, ?, ?, ?);";
+        "INSERT INTO specialization ("
+        "parent_class, role, name, resource, attack_range, "
+        "dps_weight, hps_weight, defensive_weight, utility_weight, "
+        "primary_stat, can_interrupt, can_dispel, provides_shield, provides_external_cd, "
+        "raid_buff, execute_bonus, aoe_modifier"
+        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -163,15 +173,33 @@ bool Database::insertSpecialization(const std::string& parent_class, const std::
         return false;
     }
 
-    sqlite3_bind_text(stmt, 1, parent_class.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 2, role.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 3, name.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 4, resource.c_str(), -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 5, attack_range.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, parent_class.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 2, role.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 3, name.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 4, resource.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 5, attack_range.c_str(), -1, SQLITE_TRANSIENT);
+
+    sqlite3_bind_double(stmt, 6, dps_weight);
+    sqlite3_bind_double(stmt, 7, hps_weight);
+    sqlite3_bind_double(stmt, 8, defensive_weight);
+    sqlite3_bind_double(stmt, 9, utility_weight);
+
+    sqlite3_bind_text(stmt, 10, primary_stat.c_str(), -1, SQLITE_TRANSIENT);
+
+    sqlite3_bind_int(stmt, 11, can_interrupt);
+    sqlite3_bind_int(stmt, 12, can_dispel);
+    sqlite3_bind_int(stmt, 13, provides_shield);
+    sqlite3_bind_int(stmt, 14, provides_external_cd);
+
+    sqlite3_bind_text(stmt, 15, raid_buff.c_str(), -1, SQLITE_TRANSIENT);
+
+    sqlite3_bind_double(stmt, 16, execute_bonus);
+    sqlite3_bind_double(stmt, 17, aoe_modifier);
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
     if (!ok)
-        std::cerr << "Insert class failed: " << sqlite3_errmsg(m_db) << "\n";
+        std::cerr << "Insert specialization failed: " << sqlite3_errmsg(m_db) << "\n";
+
     sqlite3_finalize(stmt);
     return ok;
 }

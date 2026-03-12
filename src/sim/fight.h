@@ -5,7 +5,7 @@
 
 #include "../Raid/Boss.h"
 #include "../Raid/RaidEntry.h"
-#include "characters/player.h"
+#include "../characters/player.h"
 
 class Fight {
 private:

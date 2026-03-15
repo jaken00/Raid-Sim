@@ -23,3 +23,16 @@ struct Stats {
     int penetration;
     int armorBreak;
 };
+
+enum class BuffType{
+    Damage,
+    Heal,
+    Defensive,
+    Mana_Buff,
+    Stat_Buff
+};
+
+struct RaidBuff {
+    std::string name;
+    BuffType buffType;
+};

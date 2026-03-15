@@ -4,6 +4,36 @@ Fight::Fight(const std::vector<Player*>& players, Boss* boss) : players(players)
 
 Fight::~Fight() {}
 
+float Fight::getPlayerDPS(){
+
+    float total_dps = 0.0;
+
+    for (int i = 0; i <= players.size(); i++) {
+        Spec player_spec = players[i]->GetSpec();
+        float player_dps =
+            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getDPSWeight();
+
+        total_dps += player_dps;
+    }
+
+
+    return total_dps;
+}
+float Fight::getPlayerHPS(){
+
+    return 1.0;
+}
+float Fight::getPlayerDefense(){
+
+    return 1.0;
+}
+float Fight::getPlayerUtility(){
+
+    return 1.0;
+}
+
+
+
 RaidEntry Fight::attemptBoss() {
     int avg_ilvl;
     std::vector<std::string> modifers;  // need to change this to an actual modifer class or enum?

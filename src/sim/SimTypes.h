@@ -1,4 +1,4 @@
-
+#include <string>
 
 struct FightAffinityProfile {
     float single_target_modifier;  // pure patchwerk DPS
@@ -10,6 +10,7 @@ struct FightAffinityProfile {
 };
 
 struct HealerState {
+    std::string spec_name;
     float current_mana;
     float max_mana;
     float mana_per_second_cost;

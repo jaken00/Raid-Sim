@@ -12,6 +12,11 @@ private:
     std::vector<Player*> players;
     Boss* boss;
 
+    float getPlayerDPS();
+    float getPlayerHPS();
+    float getPlayerDefense();
+    float getPlayerUtility(); // figure out what this means and what this really does? I think this is imporatnt -> Maybe buffer or utility type? HPS buffer / Def / DPS
+
 public:
     Fight(const std::vector<Player*>& players, Boss* boss);
     ~Fight();

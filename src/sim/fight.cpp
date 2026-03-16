@@ -19,17 +19,51 @@ float Fight::getPlayerDPS(){
 
     return total_dps;
 }
+
 float Fight::getPlayerHPS(){
 
-    return 1.0;
+    float total_hps = 0.0;
+
+    for (int i = 0; i <= players.size(); i++) {
+        Spec player_spec = players[i]->GetSpec();
+        float player_hps =
+            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getHPSweight();
+
+        total_hps += player_hps;
+    }
+
+
+    return total_hps;
 }
 float Fight::getPlayerDefense(){
 
-    return 1.0;
+    float total_defense = 0.0;
+
+    for (int i = 0; i <= players.size(); i++) {
+        Spec player_spec = players[i]->GetSpec();
+        float player_defense =
+            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getDefenseWeight();
+
+        total_defense += player_defense;
+    }
+
+
+    return total_defense;
 }
 float Fight::getPlayerUtility(){
 
-    return 1.0;
+    float total_utility = 0.0;
+
+    for (int i = 0; i <= players.size(); i++) {
+        Spec player_spec = players[i]->GetSpec();
+        float player_utility =
+            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getUtilityWeight();
+
+        total_utility += player_utility;
+    }
+
+
+    return player_utility;
 }
 
 

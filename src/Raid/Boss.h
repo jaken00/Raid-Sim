@@ -3,8 +3,16 @@
 #include <string>
 #include <vector>
 
-#include "BossMechanic.h"
 #include "Raid.h"
+
+
+
+struct BossMechanic {
+    std::string name;
+    float damageValue;
+    bool needsInterrupt;
+
+};
 
 class Boss {
 private:

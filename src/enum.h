@@ -16,12 +16,6 @@ enum class CastType {
     INSTANT
 };
 
-enum class AttackRange {
-    Melee, 
-    Healer,
-    Caster,
-    Ranged
-};
 
 enum class DamageType {
     Physical,

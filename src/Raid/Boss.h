@@ -11,7 +11,13 @@ struct BossMechanic {
     std::string name;
     float damageValue;
     bool needsInterrupt;
+    
 
+};
+
+struct Phase {
+    BossMechanic mechanicAssociated;
+    int phaseNumber;
 };
 
 class Boss {
@@ -23,10 +29,10 @@ private:
     Raid* raid;
     float currentHP;
     float maxHP;
-    std::vector<BossMechanic> mechanics;
+    std::vector<Phase*> bossPhases;
 
 public:
     Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP, int phaseCount, int currentPhase,
-         const std::vector<BossMechanic>& mechanics);
+         const std::vector<Phase*> bossPhases);
     ~Boss();
 };

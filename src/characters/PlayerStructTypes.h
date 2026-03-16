@@ -24,6 +24,17 @@ struct Stats {
     int armorBreak;
 };
 
+enum class Slot{
+    Head,
+    Neck,
+    Shoulders,
+    Chest,
+    Legs,
+    Feet,
+    MainHand,
+    OffHand
+};
+
 enum class BuffType{
     Damage,
     Heal,

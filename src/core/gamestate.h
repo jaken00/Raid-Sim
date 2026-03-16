@@ -2,7 +2,6 @@
 
 #include "../Raid/Boss.h"
 #include "../Raid/Raid.h"
-#include "../characters/CharacterClass.h"
 #include "../raid/RaidEntry.h"
 #include "../sim/fight.h"
 

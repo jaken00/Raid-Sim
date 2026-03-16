@@ -2,15 +2,8 @@
 
 #include "PlayerStructTypes.h"
 
-class Items {
-private:
-    /* data */
-public:
-    Items(std::string itemName, std::string slot, float ilvl, Stats stats);
-
-    ~Items();
+struct Items {
+    Slot itemSlot;
+    float ilvl;
+    Stats itemStats;
 };
-
-Items::Items(std::string itemName, std::string slot, float ilvl, Stats stats) {}
-
-Items::~Items() {}

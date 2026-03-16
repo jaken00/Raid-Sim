@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-#include "CharacterClass.h"
 #include "Items.h"
 #include "Spec.h"
 
@@ -11,7 +10,7 @@ enum class Attitude { Positive, Neutral, Toxic };
 
 class Player {
 public:
-    Player(int id, const std::string& name, CharacterClass* characterClass,
+    Player(int id, const std::string& name, 
            const Spec& spec,  // Mayve this shouldnt be const? this can change no?
            float itemLevel, std::vector<Items*> items,
            float performanceRating,  // Current Stars (FM style)
@@ -21,7 +20,6 @@ public:
     // Accessors
     int GetId() const;
     const std::string& GetName() const;
-    CharacterClass* GetCharacterClass() const;
     const Spec& GetSpec() const;
     float GetItemLevel() const;
     float GetPerformanceRating() const;
@@ -41,7 +39,6 @@ public:
 private:
     int id;
     std::string name;
-    CharacterClass* characterClass;
     Spec spec;
     float itemLevel;
     std::vector<Items*> items;
@@ -52,13 +49,12 @@ private:
     std::vector<std::string> raidHistory;
 };
 
-inline Player::Player(int id, const std::string& name, CharacterClass* characterClass,
+inline Player::Player(int id, const std::string& name, 
                       const Spec& spec, float itemLevel, std::vector<Items*> items,
                       float performanceRating, float attendancePercent, Attitude attitude,
                       float potential)
     : id(id),
       name(name),
-      characterClass(characterClass),
       spec(spec),
       itemLevel(itemLevel),
       items(items),
@@ -79,10 +75,6 @@ inline int Player::GetId() const {
 
 inline const std::string& Player::GetName() const {
     return name;
-}
-
-inline CharacterClass* Player::GetCharacterClass() const {
-    return characterClass;
 }
 
 inline const Spec& Player::GetSpec() const {

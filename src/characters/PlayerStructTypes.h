@@ -15,13 +15,8 @@ struct Stats {
     int expertise;
     int criticalStrike;
     int haste;
-    int attackPower;
-    int spellPower;
-    int healPower;
     int armor;
     int resistance;
-    int penetration;
-    int armorBreak;
 };
 
 enum class Slot{

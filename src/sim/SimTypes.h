@@ -18,4 +18,3 @@ struct HealerState {
     float hps_at_oom;
 };
 
-enum class DamageType { PHYSICAL, FIRE, FROST, SHADOW, HOLY, ARCANE, NATURE, BLOOD };

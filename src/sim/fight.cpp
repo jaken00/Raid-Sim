@@ -78,7 +78,8 @@ RaidEntry Fight::attemptBoss() {
     float player_utility_power = getPlayerUtility();
 
     float raid_dps_modifier = 0;
-    //next have getters for boss dps and phases and then we loop through the boss phases here and do the calculations. Maybe need to change the DB to have health per phase and stuff like that? 
+    //next have getters for boss dps and phases and then we loop through the boss phases here and do the calculations. 
+    //Maybe need to change the DB to have health per phase and stuff like that? 
 
     
 }

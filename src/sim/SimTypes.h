@@ -18,3 +18,16 @@ struct HealerState {
     float hps_at_oom;
 };
 
+struct DefensiveState {
+    float shield_absorb;
+    float damage_reduction_pct;
+    float battle_ressurection_charges; 
+}; 
+
+//Result of the Phase Fight call
+struct PhaseResult {
+    int survivied;
+    float boss_hp_at_end;
+    float actual_duration;
+    int deaths;
+};

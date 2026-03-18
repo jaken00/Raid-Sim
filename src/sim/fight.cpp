@@ -67,19 +67,3 @@ float Fight::getPlayerUtility(){
 }
 
 
-
-RaidEntry Fight::attemptBoss() {
-    int avg_ilvl;
-    std::vector<std::string> modifers;  // need to change this to an actual modifer class or enum?
-
-    float player_dps_power = getPlayerDPS();
-    float player_hps_power = getPlayerHPS();
-    float player_defense_power = getPlayerDefense();
-    float player_utility_power = getPlayerUtility();
-
-    float raid_dps_modifier = 0;
-    //next have getters for boss dps and phases and then we loop through the boss phases here and do the calculations. 
-    //Maybe need to change the DB to have health per phase and stuff like that? 
-
-    
-}

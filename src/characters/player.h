@@ -26,7 +26,10 @@ public:
     float GetAttendancePercent() const;
     Attitude GetAttitude() const;
     float GetPotential() const;
+    
     int GetTotalCritStrike() const;
+    int GetTotalHaste() const;
+
     const std::vector<std::string>& GetRaidHistory() const;  // This should prob be raid entries
 
     // Mutators / updaters

@@ -26,3 +26,15 @@ float Fight::crit_multiplier(const Player &p){
     return crit_multiplier;
 
 }
+
+float Fight::haste_multiplier(const Player& p){
+        Spec player_spec = p.GetSpec(); 
+    auto stat_weight_struct = player_spec.getStatWeights();
+    
+    // haste mult = 1 + (haste rating / 100) * spec stat weight
+    int haste = p.GetTotalHaste();
+
+    float haste_multiplier = 1 + (haste / 100) * stat_weight_struct.haste;
+
+    return haste_multiplier;
+}

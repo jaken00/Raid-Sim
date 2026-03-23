@@ -36,6 +36,8 @@ public:
 
     void AddRaidHistoryEntry(const std::string& entry);
 
+    Stats& getTotalStats();
+
 private:
     int id;
     std::string name;
@@ -130,3 +132,4 @@ inline void Player::SetAttitude(Attitude newAttitude) {
 inline void Player::AddRaidHistoryEntry(const std::string& entry) {
     raidHistory.push_back(entry);
 }
+

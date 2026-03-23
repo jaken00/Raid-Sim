@@ -1,64 +1,20 @@
 #include "fight.h"
 
-Fight::Fight(const std::vector<Player*>& players, Boss* boss) : players(players), boss(boss) {}
+Fight::Fight(const std::vector<Player*> players, Boss& boss) : players(players), boss(boss) {}
 
 Fight::~Fight() {}
 
-float Fight::getPlayerDPS(){
+float Fight::ilvl_factor(int player_ilvl, int boss_tuning_ilvl){
+    float tuning_factor = 2.8f;
 
-    float total_dps = 0.0;
+    float delta = (player_ilvl - boss_tuning_ilvl) / boss_tuning_ilvl;
+    float factor = 1.0f + (delta * tuning_factor); 
 
-    for (int i = 0; i <= players.size(); i++) {
-        Spec player_spec = players[i]->GetSpec();
-        float player_dps =
-            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getDPSWeight();
-
-        total_dps += player_dps;
-    }
-
-
-    return total_dps;
-}
-
-std::vector<HealerState*> Fight::getHealerState() {
-    std::vector<HealerState*> healerStateHolder;
-
-    HealerState* newHealerState = new HealerState{};
-    healerStateHolder.push_back(newHealerState);
-
-    return healerStateHolder; //TODO: Look at this as a unique pointer maybe to get rid of manual memory management. 
+    return std::clamp(0.4f, factor, 1.25f); // Clamp the fucntion min .4 penalty and max 1.25 bonus (can change later for farming old raids??)
 }
 
 
-float Fight::getPlayerDefense(){
+float Fight::crit_multiplier(const Player &p){
+    float current_player_crit = p.GetItemLevel(); // -> Need to add a function to get curret player Stats (can be &)
 
-    float total_defense = 0.0;
-
-    for (int i = 0; i <= players.size(); i++) {
-        Spec player_spec = players[i]->GetSpec();
-        float player_defense =
-            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getDefenseWeight();
-
-        total_defense += player_defense;
-    }
-
-
-    return total_defense;
 }
-float Fight::getPlayerUtility(){
-
-    float total_utility = 0.0;
-
-    for (int i = 0; i <= players.size(); i++) {
-        Spec player_spec = players[i]->GetSpec();
-        float player_utility =
-            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getUtilityWeight();
-
-        total_utility += player_utility;
-    }
-
-
-    return total_utility;
-}
-
-

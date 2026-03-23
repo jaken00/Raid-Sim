@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
+
 
 #include "../Raid/Boss.h"
 #include "../Raid/RaidEntry.h"
@@ -40,7 +42,7 @@ private:
 
 
 public:
-    Fight(const std::vector<Player*>& players, Boss* boss);
+    Fight(const std::vector<Player*> players, Boss& boss);
     ~Fight();
     RaidEntry attemptBoss();
     PhaseResult attemptPhase();

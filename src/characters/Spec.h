@@ -11,6 +11,14 @@ enum class AttackRange {
     Ranged
 };
 
+struct SpecStatWeights {
+    float critStrike;
+    float haste;
+    float expertise;
+    float constitution; //Higher defense actively hurts dps values
+    
+};
+
 
 class Spec {
 private:
@@ -31,6 +39,9 @@ private:
     float execute_bonus; 
     float aoe_modifier;
     FightAffinityProfile specFightProfile;
+    SpecStatWeights specStatWeights;
+
+    void setSpecWeights();
     
 public:
     Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
@@ -43,6 +54,8 @@ public:
     float getHPSweight();
     float getDefenseWeight();
     float getUtilityWeight();
+    SpecStatWeights getStatWeights();
+    void initSpec();
 };
 
 inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
@@ -67,7 +80,9 @@ inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRang
       execute_bonus(execute_bonus),
       aoe_modifier(aoe_modifier),
       specFightProfile(specFightProfile)
-{}
+{
+    initSpec();
+}
 
 inline Spec::~Spec() {}
 
@@ -86,3 +101,7 @@ inline float Spec::getDefenseWeight() {
 inline float Spec::getUtilityWeight() {
     return utility_weight;
 }
+
+inline SpecStatWeights Spec::getStatWeights() {
+    return specStatWeights;
+} 

@@ -26,6 +26,7 @@ public:
     float GetAttendancePercent() const;
     Attitude GetAttitude() const;
     float GetPotential() const;
+    int GetTotalCritStrike() const;
     const std::vector<std::string>& GetRaidHistory() const;  // This should prob be raid entries
 
     // Mutators / updaters
@@ -36,7 +37,7 @@ public:
 
     void AddRaidHistoryEntry(const std::string& entry);
 
-    Stats& getTotalStats();
+    
 
 private:
     int id;

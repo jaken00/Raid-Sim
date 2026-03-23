@@ -1,18 +1,17 @@
 #include "player.h"
 
+ int Player::GetTotalCritStrike() const {
 
-Stats& Player::getTotalStats(){
 
-
-    Stats player_stats = {};
+    int total_crit = 0;
     
     for(int i = 0; i < this->items.size(); i++){
         Stats itemStats = items[i]->itemStats;
 
-        player_stats.criticalStrike += itemStats.criticalStrike;
+        total_crit += itemStats.criticalStrike;
 
     }
-    //Band Aid fix
-    return player_stats;  
+    
+    return total_crit;
     
 }

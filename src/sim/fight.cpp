@@ -20,21 +20,16 @@ float Fight::getPlayerDPS(){
     return total_dps;
 }
 
-float Fight::getPlayerHPS(){
+std::vector<HealerState*> Fight::getHealerState() {
+    std::vector<HealerState*> healerStateHolder;
 
-    float total_hps = 0.0;
+    HealerState* newHealerState = new HealerState{};
+    healerStateHolder.push_back(newHealerState);
 
-    for (int i = 0; i <= players.size(); i++) {
-        Spec player_spec = players[i]->GetSpec();
-        float player_hps =
-            players[i]->GetItemLevel() * players[i]->GetPerformanceRating() * player_spec.getHPSweight();
-
-        total_hps += player_hps;
-    }
-
-
-    return total_hps;
+    return healerStateHolder; //TODO: Look at this as a unique pointer maybe to get rid of manual memory management. 
 }
+
+
 float Fight::getPlayerDefense(){
 
     float total_defense = 0.0;

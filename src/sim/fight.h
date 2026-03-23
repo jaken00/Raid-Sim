@@ -20,7 +20,7 @@ private:
     Boss& boss;
 
     float getPlayerDPS();
-    std::vector<HealerState*> getPlayerHPS();
+    std::vector<HealerState*> getHealerState();
     float getPlayerDefense();
     float getPlayerUtility(); // figure out what this means and what this really does? I think this is imporatnt -> Maybe buffer or utility type? HPS buffer / Def / DPS
     

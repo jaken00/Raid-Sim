@@ -31,3 +31,10 @@ struct PhaseResult {
     float actual_duration;
     int deaths;
 };
+
+struct RaidResult {
+    int survived;
+    bool killedBoss;
+    std::vector<Player*> playerDeaths;
+      
+};

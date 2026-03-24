@@ -17,6 +17,12 @@ void Spec::setSpecWeights(){
     this->specStatWeights = statWeights;
 }
 
+void Spec::setFightAffinityProfile(){
+
+
+}
+
 void Spec::initSpec(){
     setSpecWeights();
+    setFightAffinityProfile(0);
 }

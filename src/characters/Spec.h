@@ -20,6 +20,7 @@ struct SpecStatWeights {
 };
 
 
+
 class Spec {
 private:
     std::string name;
@@ -42,19 +43,20 @@ private:
     SpecStatWeights specStatWeights;
 
     void setSpecWeights();
+    void setFightAffinityProfile();
     
 public:
     Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
          DamageType specDamageType, float hps_weight, float defense_weight, float utility_weight,
          std::string primary_stat, bool can_interrupt, bool can_dispel, bool provides_shield,
-         bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier,
-         FightAffinityProfile specFightProfile);
+         bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier);
     ~Spec();
     float getDPSWeight();
     float getHPSweight();
     float getDefenseWeight();
     float getUtilityWeight();
     SpecStatWeights getStatWeights();
+    FightAffinityProfile getFightAffinityProfile();
     void initSpec();
 };
 
@@ -62,7 +64,7 @@ inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRang
            DamageType specDamageType, float hps_weight, float defense_weight, float utility_weight,
            std::string primary_stat, bool can_interrupt, bool can_dispel, bool provides_shield,
            bool provides_external_cd, RaidBuff raid_buff, float execute_bonus,
-           float aoe_modifier, FightAffinityProfile specFightProfile)
+           float aoe_modifier)
     : name(name),
       resouceUsed(resouceUsed),
       attackRange(attackRange),

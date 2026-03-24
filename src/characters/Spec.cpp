@@ -24,5 +24,5 @@ void Spec::setFightAffinityProfile(){
 
 void Spec::initSpec(){
     setSpecWeights();
-    setFightAffinityProfile(0);
+    setFightAffinityProfile();
 }

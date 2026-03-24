@@ -30,7 +30,7 @@ private:
     float crit_multiplier(const Player& p);
     float haste_multiplier(const Player& p);
     float resist_profile(DamageType playerDamageType, DamageType bossDamageType);
-    float get_fight_affinity(const Player& p);
+    float get_fight_affinity(const Player& p, Phase phase);
 
     float effective_mana_cost_per_second(HealerState& h);
     float effective_hps(const HealerState &h, float phase_duration);

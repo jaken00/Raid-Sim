@@ -13,16 +13,12 @@ enum class GuildLevel {
 };
 
 
-
 class Guild
 {
     private:
         std::string guildName;
         std::vector<Player*> guildMembers;
         GuildLevel guildLevel;
-
-
-
 
     public:
         Guild(/* args */);

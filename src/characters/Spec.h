@@ -1,4 +1,5 @@
 #include <string>
+#include <map>
 
 #include "../enum.h"
 #include "../sim/SimTypes.h"
@@ -19,6 +20,14 @@ struct SpecStatWeights {
     
 };
 
+struct PlayerFightProfile {
+    float single_target_modifier;  // pure patchwerk DPS
+    float aoe_modifier;            // 4+ targets
+    float cleave_modifier;         // 2–3 targets, council/adds
+    float movement_modifier;       // DoTs and instants love movement
+    float execute_modifier;        // bonus below 20% boss HP -> 0 if not executer
+    float melee_hostile_penalty;   // bosses with ground effects, cleave, frontal
+};
 
 
 class Spec {
@@ -39,11 +48,13 @@ private:
     RaidBuff raid_buff; 
     float execute_bonus; 
     float aoe_modifier;
-    FightAffinityProfile specFightProfile;
+    PlayerFightProfile specFightProfile;
     SpecStatWeights specStatWeights;
+    std::map<DamageType, float> playerDamageTypeProfile; // this is good for defensive numbers
+
 
     void setSpecWeights();
-    void setFightAffinityProfile();
+    void setPlayerFightAffinityProfile();
     
 public:
     Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
@@ -56,7 +67,7 @@ public:
     float getDefenseWeight();
     float getUtilityWeight();
     SpecStatWeights getStatWeights();
-    FightAffinityProfile getFightAffinityProfile();
+    PlayerFightProfile getPlayerFightAffinityProfile();
     void initSpec();
 };
 
@@ -107,3 +118,7 @@ inline float Spec::getUtilityWeight() {
 inline SpecStatWeights Spec::getStatWeights() {
     return specStatWeights;
 } 
+
+inline PlayerFightProfile Spec::getPlayerFightAffinityProfile(){
+    return specFightProfile;
+}

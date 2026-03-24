@@ -38,3 +38,16 @@ float Fight::haste_multiplier(const Player& p){
 
     return haste_multiplier;
 }
+
+float Fight::get_fight_affinity(const Player& p, Phase phase){
+
+    Spec player_spec = p.GetSpec();
+    std::vector<std::string> lookupList;
+
+
+
+
+
+    player_spec.getPlayerFightAffinityProfile();
+
+}

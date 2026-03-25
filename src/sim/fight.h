@@ -29,7 +29,7 @@ private:
     float ilvl_factor(int player_ilvl, int boss_tuning_ilvl);
     float crit_multiplier(const Player& p);
     float haste_multiplier(const Player& p);
-    float resist_profile(DamageType playerDamageType, DamageType bossDamageType);
+    float resist_profile(const Player& p);
     float get_fight_affinity(const Player& p, Phase phase);
 
     float effective_mana_cost_per_second(HealerState& h);
@@ -39,7 +39,7 @@ private:
     bool combatResurectionNeeded(DefensiveState& defensiveState);
 
     FightState updateFightState(FightState& fightState);
-
+    
 
 public:
     Fight(const std::vector<Player*> players, Boss& boss);

@@ -1,12 +1,12 @@
 #include <string>
 
-struct FightAffinityProfile {
-    float single_target_modifier;  // pure patchwerk DPS
-    float aoe_modifier;            // 4+ targets
-    float cleave_modifier;         // 2–3 targets, council/adds
-    float movement_modifier;       // DoTs and instants love movement
-    float execute_modifier;        // bonus below 20% boss HP
-    float melee_hostile_penalty;   // bosses with ground effects, cleave, frontal
+enum struct FightAffinityProfile {
+     single_target_modifier,  // pure patchwerk DPS
+     aoe_modifier,            // 4+ targets
+     cleave_modifier,         // 2–3 targets, council/adds
+     movement_modifier,       // DoTs and instants love movement
+     execute_modifier,        // bonus below 20% boss HP
+     melee_hostile_penalty,   // bosses with ground effects, cleave, frontal
 };
 
 struct HealerState {

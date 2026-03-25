@@ -38,16 +38,31 @@ float Fight::haste_multiplier(const Player& p){
 
     return haste_multiplier;
 }
+float Fight::resist_profile(const Player& p){
+    Spec player_spec = p.GetSpec();
+    DamageType player_damage = player_spec.getDamageType();
+
+    float damage_resist = boss.getBossResistType(player_damage);
+
+    return damage_resist;
+}
+
 
 float Fight::get_fight_affinity(const Player& p, Phase phase){
 
     Spec player_spec = p.GetSpec();
-    std::vector<std::string> lookupList;
 
+    float fight_affinity_float;
 
+    for(int i = 0; i < phase.fightTypes.size(); i++){
+          auto currentFightType = phase.fightTypes[i];
+          fight_affinity_float = player_spec.getFightAffinity(currentFightType);
+    }
 
+    return fight_affinity_float;
 
+}
 
-    player_spec.getPlayerFightAffinityProfile();
-
+PhaseResult Fight::attemptPhase(){
+    //Do the fight part! 
 }

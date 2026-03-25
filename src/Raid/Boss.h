@@ -6,6 +6,7 @@
 
 
 #include "Raid.h"
+#include "../enum.h"
 
 
 
@@ -30,6 +31,7 @@ struct Phase {
     BossMechanic mechanicAssociated;
     int phaseNumber;
     bool is_execute_phase;
+    std::vector<FightAffinityProfile> fightTypes;
 };
 
 class Boss {
@@ -43,12 +45,14 @@ private:
     float maxHP;
     std::vector<Phase*> bossPhases;
     DamageType bossDamagetype;
-    std::map<DamageType, float> resistMap;
+    std::map<DamageType, float> resistMap; 
 
 public:
     Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP, int phaseCount, int currentPhase,
          const std::vector<Phase*> bossPhases);
     ~Boss();
+
+    float getBossResistType(DamageType damageType);
 
 
 

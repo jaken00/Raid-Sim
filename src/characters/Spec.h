@@ -20,16 +20,6 @@ struct SpecStatWeights {
     
 };
 
-struct PlayerFightProfile {
-    float single_target_modifier;  // pure patchwerk DPS
-    float aoe_modifier;            // 4+ targets
-    float cleave_modifier;         // 2–3 targets, council/adds
-    float movement_modifier;       // DoTs and instants love movement
-    float execute_modifier;        // bonus below 20% boss HP -> 0 if not executer
-    float melee_hostile_penalty;   // bosses with ground effects, cleave, frontal
-};
-
-
 class Spec {
 private:
     std::string name;
@@ -48,13 +38,12 @@ private:
     RaidBuff raid_buff; 
     float execute_bonus; 
     float aoe_modifier;
-    PlayerFightProfile specFightProfile;
     SpecStatWeights specStatWeights;
     std::map<DamageType, float> playerDamageTypeProfile; // this is good for defensive numbers
+    std::map<FightAffinityProfile, float> fightAffinityProfile;
 
 
     void setSpecWeights();
-    void setPlayerFightAffinityProfile();
     
 public:
     Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
@@ -67,8 +56,9 @@ public:
     float getDefenseWeight();
     float getUtilityWeight();
     SpecStatWeights getStatWeights();
-    PlayerFightProfile getPlayerFightAffinityProfile();
     void initSpec();
+    DamageType getDamageType();
+    float getFightAffinity(FightAffinityProfile fightType);
 };
 
 inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
@@ -91,8 +81,7 @@ inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRang
       provides_external_cd(provides_external_cd),
       raid_buff(raid_buff),
       execute_bonus(execute_bonus),
-      aoe_modifier(aoe_modifier),
-      specFightProfile(specFightProfile)
+      aoe_modifier(aoe_modifier)
 {
     initSpec();
 }
@@ -119,6 +108,7 @@ inline SpecStatWeights Spec::getStatWeights() {
     return specStatWeights;
 } 
 
-inline PlayerFightProfile Spec::getPlayerFightAffinityProfile(){
-    return specFightProfile;
+
+inline DamageType Spec::getDamageType(){
+    return specDamageType;
 }

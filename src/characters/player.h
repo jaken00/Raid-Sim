@@ -32,6 +32,8 @@ public:
     int GetTotalCritStrike() const;
     int GetTotalHaste() const;
 
+
+
     const std::vector<std::string>& GetRaidHistory() const;  // This should prob be raid entries
 
     // Mutators / updaters
@@ -41,8 +43,6 @@ public:
     void SetAttitude(Attitude newAttitude);
 
     void AddRaidHistoryEntry(const std::string& entry);
-    
-    float getSpecifiedDamageType(DamageType damageType);
     
 
 private:
@@ -56,9 +56,8 @@ private:
     Attitude attitude;
     float potential;
     std::vector<std::string> raidHistory;
-    
 
-    void setPlayerDamageTypeProfile();
+    
 };
 
 inline Player::Player(int id, const std::string& name, 

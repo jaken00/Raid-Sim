@@ -1,68 +1,81 @@
 #include "seeder.h"
 
+#include <nlohmann/json.hpp>
+#include <fstream>
 #include <iostream>
+#include <set>
+
+using json = nlohmann::json;
+
+#ifndef DATA_DIR
+#define DATA_DIR "src/data"
+#endif
+
+static json loadJson(const std::string& filename) {
+    std::string path = std::string(DATA_DIR) + "/" + filename;
+    std::ifstream f(path);
+    if (!f.is_open()) {
+        std::cerr << "Seeder: failed to open " << path << "\n";
+        return nullptr;
+    }
+    return json::parse(f);
+}
 
 void Seeder::seed(Database& db) {
-    if (db.isEmpty("classes")) {
-        std::cout << "Seeding classes...\n";
-        db.insertClass("Warrior");
-        db.insertClass("Conduit");
-        db.insertClass("Invoker");
-        db.insertClass("Reaver");
-        db.insertClass("Herald");
-    }
+    if (db.isEmpty("classes") || db.isEmpty("specialization")) {
+        std::cout << "Seeding classes and specializations from specs.json...\n";
+        json specs = loadJson("specs.json");
+        if (specs.is_null()) return;
 
-    if (db.isEmpty("specialization")) {
-        std::cout << "Seeding specializations...\n";
+        std::set<std::string> seenClasses;
+        for (auto& s : specs["specializations"]) {
+            std::string cls = s["class"];
+            if (seenClasses.insert(cls).second)
+                db.insertClass(cls);
+        }
 
-        db.insertSpecialization("Warrior", "Tank", "Bulwark", "Resolve", "Melee", 0.35, 0.05, 0.9,
-                                0.3, "Constitution", 1, 0, 0, 1, "armor_aura_5", 0.05, 0.75);
-
-        db.insertSpecialization("Warrior", "OffTank", "Vanguard", "Resolve", "Melee", 0.55, 0.0,
-                                0.75, 0.2, "Strength", 1, 0, 0, 0, "armor_aura_5", 0.05, 0.9);
-
-        db.insertSpecialization("Conduit", "Healer", "Mender", "Attunement", "Caster", 0.1, 1.0,
-                                0.15, 0.4, "Intellect", 0, 1, 1, 1, "magic_resist_5", 0.0, 1.1);
-
-        db.insertSpecialization("Conduit", "SupportHealer", "Siphon", "Mana", "Caster", 0.3, 0.7,
-                                0.35, 0.7, "Intellect", 0, 1, 1, 1, "mana_regen_3", 0.05, 1.1);
-
-        db.insertSpecialization("Invoker", "PureDPS", "Arcanist", "Essence", "Caster", 1.0, 0.0,
-                                0.15, 0.25, "Intellect", 1, 0, 0, 0, "spell_amp_5", 0.1, 1.15);
-
-        db.insertSpecialization("Invoker", "PureDPS", "Elementalist", "Essence", "Caster", 0.95,
-                                0.0, 0.15, 0.3, "Intellect", 1, 0, 0, 0, "elemental_amp_5", 0.1,
-                                1.25);
-
-        db.insertSpecialization("Reaver", "SupportDPS", "Exsanguinate", "Momentum", "Melee", 0.75,
-                                0.0, 0.3, 0.55, "Agility", 1, 0, 0, 0, "physical_amp_5", 0.2, 0.95);
-
-        db.insertSpecialization("Reaver", "PureDPS", "Striker", "Momentum", "Melee", 1.05, 0.0, 0.2,
-                                0.2, "Agility", 1, 0, 0, 0, "bleed_amp_5", 0.25, 0.9);
-
-        db.insertSpecialization("Herald", "SupportDPS", "Warsinger", "Resonance", "Ranged", 0.6,
-                                0.0, 0.25, 0.8, "Agility", 1, 0, 1, 1, "haste_aura_5", 0.05, 1.05);
-
-        db.insertSpecialization("Herald", "SupportDPS", "Dirge", "Resonance", "Ranged", 0.55, 0.0,
-                                0.25, 0.85, "Agility", 0, 1, 1, 1, "damage_taken_5", 0.1, 1.05);
+        for (auto& s : specs["specializations"]) {
+            db.insertSpecialization(
+                s["class"], s["role"], s["name"],
+                s["resource"], s["attack_range"],
+                s["dps_weight"], s["hps_weight"],
+                s["defense_weight"], s["utility_weight"],
+                s["primary_stat"],
+                s["can_interrupt"] ? 1 : 0,
+                s["can_dispel"] ? 1 : 0,
+                s["provides_shield"] ? 1 : 0,
+                s["provides_external_cd"] ? 1 : 0,
+                s["raid_buff"],
+                s["execute_bonus"], s["aoe_modifier"]
+            );
+        }
     }
 
     if (db.isEmpty("players")) {
-        std::cout << "Seeding players...\n";
-        db.insertPlayer("Arthas", "Warrior", "Bulwark", 100.0f, 60);
-        db.insertPlayer("Anduin", "Conduit", "Mender", 98.0f, 60);
-        db.insertPlayer("Jaina", "Invoker", "Elementalist", 99.0f, 60);
-        db.insertPlayer("Sylvanas", "Reaver", "Exsanguinate", 97.0f, 60);
-        db.insertPlayer("Malfurion", "Herald", "Warsinger", 96.0f, 60);
-        db.insertPlayer("Thrall", "Herald", "Dirge", 95.0f, 60);
-        db.insertPlayer("Garrosh", "Warrior", "Vanguard", 94.0f, 60);
-        db.insertPlayer("Vol'jin", "Conduit", "Mender", 93.0f, 60);
-        db.insertPlayer("Mok'Nathal", "Invoker", "Arcanist", 92.0f, 60);
-        db.insertPlayer("Sylvanas", "Reaver", "Striker", 91.0f, 60);
+        std::cout << "Seeding players from players.json...\n";
+        json players = loadJson("players.json");
+        if (players.is_null()) return;
+
+        for (auto& p : players["players"]) {
+            db.insertPlayer(p["name"], p["class"], p["spec"],
+                            p["item_level"].get<float>(), p["level"]);
+        }
     }
 
     if (db.isEmpty("bosses")) {
-        std::cout << "Seeding bosses...\n";
-        db.insertBoss("Flamelord", 100, 75000, 75000, 1, 2, 4, false, false);
+        std::cout << "Seeding bosses from bosses.json...\n";
+        json bosses = loadJson("bosses.json");
+        if (bosses.is_null()) return;
+
+        for (auto& b : bosses["bosses"]) {
+            db.insertBoss(
+                b["name"],
+                b["tuning_ilvl"], b["hps_threshold"], b["dps_threshold"],
+                b["interrupt_coverage_needed"], b["tank_minimum"],
+                b["dispel_coverage_needed"],
+                b["rewards_physical_buffs"].get<bool>(),
+                b["punishes_melee_heavy"].get<bool>()
+            );
+        }
     }
 }

@@ -131,7 +131,7 @@
       "provides_external_cd": false,
       "raid_buff": "physical_amp_5",
       "execute_bonus": 0.2,
-      "aoe_modifier": 0.95
+      "aoe_modifier": 0.96
     },
     {
       "class": "Reaver",

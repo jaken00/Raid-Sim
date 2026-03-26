@@ -6,7 +6,7 @@
       "spec": "Bulwark",
       "item_level": 100.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -17,7 +17,7 @@
       "spec": "Mender",
       "item_level": 98.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -28,7 +28,7 @@
       "spec": "Elementalist",
       "item_level": 99.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -39,7 +39,7 @@
       "spec": "Exsanguinate",
       "item_level": 97.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -50,7 +50,7 @@
       "spec": "Warsinger",
       "item_level": 96.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -61,7 +61,7 @@
       "spec": "Dirge",
       "item_level": 95.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -72,7 +72,7 @@
       "spec": "Vanguard",
       "item_level": 94.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -83,7 +83,7 @@
       "spec": "Mender",
       "item_level": 93.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -94,7 +94,7 @@
       "spec": "Arcanist",
       "item_level": 92.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5
@@ -105,7 +105,7 @@
       "spec": "Striker",
       "item_level": 91.0,
       "level": 60,
-      "performance_rating": 3.0,
+      "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 3.5

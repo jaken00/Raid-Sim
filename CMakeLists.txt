@@ -8,14 +8,19 @@ find_package(SDL2 REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-# Fetch ImGui
+# Fetch dependencies
 include(FetchContent)
 FetchContent_Declare(
     imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
     GIT_TAG v1.91.0
 )
-FetchContent_MakeAvailable(imgui)
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.3
+)
+FetchContent_MakeAvailable(imgui nlohmann_json)
 
 set(IMGUI_SOURCES
     ${imgui_SOURCE_DIR}/imgui.cpp
@@ -41,9 +46,14 @@ target_include_directories(RaidSim PRIVATE
     ${imgui_SOURCE_DIR}/backends
 )
 
+target_compile_definitions(RaidSim PRIVATE
+    DATA_DIR="${CMAKE_SOURCE_DIR}/src/data"
+)
+
 target_link_libraries(RaidSim
     SDL2::SDL2main
     SDL2::SDL2
     ${SQLite3_LIBRARIES}
     OpenGL::GL
+    nlohmann_json::nlohmann_json
 )

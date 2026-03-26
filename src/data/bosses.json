@@ -2,9 +2,14 @@
   "bosses": [
     {
       "name": "Flamelord",
-      "id": 1,
-      "max_hp": 75000,
-      "ilvl_threshold": 100,
+      "tuning_ilvl": 100,
+      "hps_threshold": 75000,
+      "dps_threshold": 75000,
+      "interrupt_coverage_needed": 1,
+      "tank_minimum": 2,
+      "dispel_coverage_needed": 4,
+      "rewards_physical_buffs": false,
+      "punishes_melee_heavy": false,
       "damage_type": "Fire",
       "resistance_profile": {
         "Physical": 0.0,

@@ -39,11 +39,12 @@ private:
     float execute_bonus; 
     float aoe_modifier;
     SpecStatWeights specStatWeights;
-    std::map<DamageType, float> playerDamageTypeProfile; // this is good for defensive numbers
+    //std::map<DamageType, float> playerDamageTypeProfile; // this is good for defensive numbers
     std::map<FightAffinityProfile, float> fightAffinityProfile;
 
 
     void setSpecWeights();
+    void setSpecFightAffinity();
     
 public:
     Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,

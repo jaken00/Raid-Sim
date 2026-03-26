@@ -233,6 +233,20 @@ bool Database::insertBoss(const std::string& name, int tuning_ilvl, int hps_thre
     return ok;
 }
 
+/*
+How this works is we pass in a reference to an empty Struct. We then query the db.
+The db returns data then we load the struct  
+ HERE: 
+ out.name = name ? reinterpret_cast<const char*>(name) : "";
+        out.class_name = cls ? reinterpret_cast<const char*>(cls) : "";
+        out.spec = spec ? reinterpret_cast<const char*>(spec) : "";
+        out.ilvl = static_cast<float>(sqlite3_column_double(stmt, 3));
+        out.level = sqlite3_column_int(stmt, 4);
+
+    and return the bool as true. 
+*/
+
+
 bool Database::getFirstPlayer(PlayerRow& out) {
     const char* sql = "SELECT name, class, spec, ilvl, level FROM players ORDER BY id LIMIT 1;";
     sqlite3_stmt* stmt = nullptr;

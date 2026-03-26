@@ -1,0 +1,57 @@
+{
+  "bosses": [
+    {
+      "name": "Flamelord",
+      "id": 1,
+      "max_hp": 75000,
+      "ilvl_threshold": 100,
+      "damage_type": "Fire",
+      "resistance_profile": {
+        "Physical": 0.0,
+        "Fire": 0.5,
+        "Storm": 0.0,
+        "Frost": -0.25,
+        "Shadow": 0.0,
+        "Radiant": 0.0
+      },
+      "phases": [
+        {
+          "phase_number": 1,
+          "hp_start_pct": 1.0,
+          "hp_end_pct": 0.6,
+          "is_execute_phase": false,
+          "fight_types": ["single_target_modifier"],
+          "mechanic": {
+            "name": "Flame Breath",
+            "damage_value": 4500.0,
+            "needs_interrupt": false
+          }
+        },
+        {
+          "phase_number": 2,
+          "hp_start_pct": 0.6,
+          "hp_end_pct": 0.35,
+          "is_execute_phase": false,
+          "fight_types": ["single_target_modifier", "aoe_modifier"],
+          "mechanic": {
+            "name": "Inferno Nova",
+            "damage_value": 6500.0,
+            "needs_interrupt": true
+          }
+        },
+        {
+          "phase_number": 3,
+          "hp_start_pct": 0.35,
+          "hp_end_pct": 0.0,
+          "is_execute_phase": true,
+          "fight_types": ["single_target_modifier", "execute_modifier"],
+          "mechanic": {
+            "name": "Molten Rage",
+            "damage_value": 9000.0,
+            "needs_interrupt": true
+          }
+        }
+      ]
+    }
+  ]
+}

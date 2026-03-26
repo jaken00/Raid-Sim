@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 
 #include "../Raid/Boss.h"
@@ -26,7 +27,7 @@ private:
     float getPlayerDefense();
     float getPlayerUtility(); // figure out what this means and what this really does? I think this is imporatnt -> Maybe buffer or utility type? HPS buffer / Def / DPS
     
-    float ilvl_factor(int player_ilvl, int boss_tuning_ilvl);
+    float ilvl_factor(float player_ilvl, float boss_tuning_ilvl);
     float crit_multiplier(const Player& p);
     float haste_multiplier(const Player& p);
     float resist_profile(const Player& p);

@@ -4,7 +4,7 @@ Fight::Fight(const std::vector<Player*> players, Boss& boss) : players(players),
 
 Fight::~Fight() {}
 
-float Fight::ilvl_factor(int player_ilvl, int boss_tuning_ilvl){
+float Fight::ilvl_factor(float player_ilvl, float boss_tuning_ilvl){
     float tuning_factor = 2.8f;
 
     float delta = (player_ilvl - boss_tuning_ilvl) / boss_tuning_ilvl;
@@ -64,5 +64,38 @@ float Fight::get_fight_affinity(const Player& p, Phase phase){
 }
 
 PhaseResult Fight::attemptPhase(){
-    //Do the fight part! 
+    
+    PhaseResult phase_end_result;
+    float total_dps;
+    float base_dps;
+
+    Phase currentPhase = boss.getCurrentPhase();
+
+    float boss_phase_hp_pool = (currentPhase.hp_start_pct - currentPhase.hp_end_pct) * boss.getMaxHP();
+
+    for(int i = 0 ; i < players.size(); i++){
+        Spec player_spec = players[i]->GetSpec(); 
+        float ilvl_calculation = ilvl_factor(players[i]->GetItemLevel(), boss.GetBossilvl());
+        base_dps = ilvl_calculation * players[i]->GetPerformanceRating() * player_spec.getDPSWeight();
+        float crit_multiplier_final = crit_multiplier(*players[i]);
+        float haste_multiplier_final = haste_multiplier(*players[i]);
+        float boss_resist = resist_profile(*players[i]);
+        float fight_affinity = get_fight_affinity(*players[i], boss.getCurrentPhase());
+
+        float player_dps = base_dps * crit_multiplier_final * haste_multiplier_final * boss_resist * fight_affinity;
+
+        total_dps += player_dps;
+    }
+
+    float phase_duration = boss_phase_hp_pool / total_dps;
+    std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
+
+    phase_end_result.actual_duration = phase_duration;
+    phase_end_result.boss_hp_at_end = 0.0;
+    phase_end_result.deaths = 0;
+    phase_end_result.survivied = players.size();
+
+    return phase_end_result;
+
+
 }

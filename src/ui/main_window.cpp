@@ -9,7 +9,7 @@ void DrawMainWindow(Database& db) {
     BossRow boss;
 
     bool hasPlayer = db.getFirstPlayer(player);
-    bool hasBoss = db.getFirstBoss(boss);
+    bool hasBoss = db.getFirstBoss(boss); // we arent really creating a boss or player here.
 
     if (hasPlayer) {
         ImGui::Text("Player");

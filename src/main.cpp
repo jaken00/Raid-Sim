@@ -9,6 +9,7 @@
 #include "data/seeder.h"
 #include "db/database.h"
 #include "ui/main_window.h"
+#include "sim/fight.h"
 
 int main(int argc, char* argv[]) {
     Database db("raid.db");
@@ -51,6 +52,8 @@ int main(int argc, char* argv[]) {
 
     bool running = true;
     SDL_Event event;
+
+    
 
     while (running) {
         while (SDL_PollEvent(&event)) {

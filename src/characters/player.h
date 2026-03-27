@@ -14,7 +14,7 @@ class Player {
 public:
     Player(int id, const std::string& name,
            const Spec& spec,  // Mayve this shouldnt be const? this can change no?
-           float itemLevel, std::vector<Items*> items,
+           float itemLevel, std::vector<Items> items,
            float performanceRating,  // Current Stars (FM style)
            float attendancePercent, Attitude attitude,
            float potential,          // Potential Stars
@@ -53,7 +53,7 @@ private:
     std::string name;
     Spec spec;
     float itemLevel;
-    std::vector<Items*> items;
+    std::vector<Items> items;
     float performanceRating;
     float attendancePercent;
     Attitude attitude;
@@ -65,7 +65,7 @@ private:
 };
 
 inline Player::Player(int id, const std::string& name,
-                      const Spec& spec, float itemLevel, std::vector<Items*> items,
+                      const Spec& spec, float itemLevel, std::vector<Items> items,
                       float performanceRating, float attendancePercent, Attitude attitude,
                       float potential, const std::string& itemClass)
     : id(id),

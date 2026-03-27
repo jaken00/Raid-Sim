@@ -1,11 +1,12 @@
 #include <vector>
-
+#include <map>
 #include "../Raid/Boss.h"
 #include "../Raid/Raid.h"
 #include "../raid/RaidEntry.h"
 #include "../sim/fight.h"
+#include "../db/database.h"
 
-class gamestate {
+class GameState {
 private:
     std::vector<Player> players;
     int ilvl_avg;
@@ -14,10 +15,9 @@ private:
     std::vector<RaidEntry> raid_entries;
 
 public:
-    gamestate(std::vector<Player> players, Boss boss);
-    ~gamestate();
+    GameState();
+    RaidEntry attemptRaid(const Raid &raid, std::vector<const Player*> players);
+    void loadPlayers(Database& db);
+    void loadBoss(Database& db);
 };
 
-gamestate::gamestate(std::vector<Player> players, Boss boss) : players(players), boss(boss) {}
-
-gamestate::~gamestate() {}

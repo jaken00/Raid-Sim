@@ -53,7 +53,6 @@ int main(int argc, char* argv[]) {
     bool running = true;
     SDL_Event event;
 
-    
 
     while (running) {
         while (SDL_PollEvent(&event)) {

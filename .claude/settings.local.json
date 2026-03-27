@@ -5,7 +5,7 @@
       "Bash(wc:*)",
       "Bash(dpkg -l)",
       "Bash(sudo apt-get:*)",
-      "Bash(pkg-config:*jake)"
+      "Bash(find /c/programming/dev/Raid-Sim -maxdepth 2 -name CMakeLists.txt -o -name *.cmake)"
     ]
   }
 }

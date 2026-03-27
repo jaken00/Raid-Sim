@@ -380,6 +380,60 @@ bool Database::insertBossPhase(int boss_id, int phase_number, float hp_start_pct
     return ok;
 }
 
+bool Database::getAllSpecs(std::vector<SpecRow>& out) {
+    const char* sql =
+        "SELECT name, resource, attack_range, dps_weight, hps_weight, defensive_weight, utility_weight, "
+        "primary_stat, can_interrupt, can_dispel, provides_shield, provides_external_cd, "
+        "raid_buff, execute_bonus, aoe_modifier, spec_damage_type, stat_haste, stat_crit, stat_expertise, "
+        "fap_single_target, fap_aoe, fap_cleave, fap_movement, fap_execute, fap_melee_hostile "
+        "FROM specialization ORDER BY name;";
+
+    sqlite3_stmt* stmt = nullptr;
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed (getAllSpecs): " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        SpecRow row;
+        auto getText = [&](int col) -> std::string {
+            const unsigned char* txt = sqlite3_column_text(stmt, col);
+            return txt ? reinterpret_cast<const char*>(txt) : "";
+        };
+
+        row.name               = getText(0);
+        row.resource           = getText(1);
+        row.attack_range       = getText(2);
+        row.dps_weight         = static_cast<float>(sqlite3_column_double(stmt, 3));
+        row.hps_weight         = static_cast<float>(sqlite3_column_double(stmt, 4));
+        row.defensive_weight   = static_cast<float>(sqlite3_column_double(stmt, 5));
+        row.utility_weight     = static_cast<float>(sqlite3_column_double(stmt, 6));
+        row.primary_stat       = getText(7);
+        row.can_interrupt      = sqlite3_column_int(stmt, 8) != 0;
+        row.can_dispel         = sqlite3_column_int(stmt, 9) != 0;
+        row.provides_shield    = sqlite3_column_int(stmt, 10) != 0;
+        row.provides_external_cd = sqlite3_column_int(stmt, 11) != 0;
+        row.raid_buff          = getText(12);
+        row.execute_bonus      = static_cast<float>(sqlite3_column_double(stmt, 13));
+        row.aoe_modifier       = static_cast<float>(sqlite3_column_double(stmt, 14));
+        row.spec_damage_type   = getText(15);
+        row.stat_haste         = static_cast<float>(sqlite3_column_double(stmt, 16));
+        row.stat_crit          = static_cast<float>(sqlite3_column_double(stmt, 17));
+        row.stat_expertise     = static_cast<float>(sqlite3_column_double(stmt, 18));
+        row.fap_single_target  = static_cast<float>(sqlite3_column_double(stmt, 19));
+        row.fap_aoe            = static_cast<float>(sqlite3_column_double(stmt, 20));
+        row.fap_cleave         = static_cast<float>(sqlite3_column_double(stmt, 21));
+        row.fap_movement       = static_cast<float>(sqlite3_column_double(stmt, 22));
+        row.fap_execute        = static_cast<float>(sqlite3_column_double(stmt, 23));
+        row.fap_melee_hostile  = static_cast<float>(sqlite3_column_double(stmt, 24));
+
+        out.push_back(row);
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
+}
+
 /*
 getAllPlayers queries all rows from players, then for each player fetches their items from
 player_items and attaches them. Returns false only on a prepare failure.

@@ -22,6 +22,34 @@ struct PlayerRow {
     std::vector<ItemRow> items;
 };
 
+struct SpecRow {
+    std::string name;
+    std::string resource;
+    std::string attack_range;
+    float dps_weight;
+    float hps_weight;
+    float defensive_weight;
+    float utility_weight;
+    std::string primary_stat;
+    bool can_interrupt;
+    bool can_dispel;
+    bool provides_shield;
+    bool provides_external_cd;
+    std::string raid_buff;
+    float execute_bonus;
+    float aoe_modifier;
+    std::string spec_damage_type;
+    float stat_haste;
+    float stat_crit;
+    float stat_expertise;
+    float fap_single_target;
+    float fap_aoe;
+    float fap_cleave;
+    float fap_movement;
+    float fap_execute;
+    float fap_melee_hostile;
+};
+
 struct BossRow {
     std::string name;
     std::string raid;
@@ -82,6 +110,7 @@ public:
                          bool mechanic_needs_interrupt);
 
     // Queries
+    bool getAllSpecs(std::vector<SpecRow>& out);
     bool getAllPlayers(std::vector<PlayerRow>& out);
     bool getFirstPlayer(PlayerRow& out);
     bool getFirstBoss(BossRow& out);

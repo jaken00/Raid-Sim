@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <set>
+#include <string>
 
 using json = nlohmann::json;
 
@@ -21,7 +22,20 @@ static json loadJson(const std::string& filename) {
     return json::parse(f);
 }
 
+// Joins a JSON array of strings into a comma-separated string.
+static std::string joinFightTypes(const json& arr) {
+    std::string result;
+    for (const auto& ft : arr) {
+        if (!result.empty()) result += ",";
+        result += ft.get<std::string>();
+    }
+    return result;
+}
+
 void Seeder::seed(Database& db) {
+    // -------------------------------------------------------------------------
+    // Specs + Classes
+    // -------------------------------------------------------------------------
     if (db.isEmpty("classes") || db.isEmpty("specialization")) {
         std::cout << "Seeding classes and specializations from specs.json...\n";
         json specs = loadJson("specs.json");
@@ -35,6 +49,9 @@ void Seeder::seed(Database& db) {
         }
 
         for (auto& s : specs["specializations"]) {
+            const auto& sw  = s["spec_stat_weight"];
+            const auto& fap = s["fight_affinity_profile"];
+
             db.insertSpecialization(
                 s["class"], s["role"], s["name"],
                 s["resource"], s["attack_range"],
@@ -42,40 +59,110 @@ void Seeder::seed(Database& db) {
                 s["defense_weight"], s["utility_weight"],
                 s["primary_stat"],
                 s["can_interrupt"] ? 1 : 0,
-                s["can_dispel"] ? 1 : 0,
+                s["can_dispel"]    ? 1 : 0,
                 s["provides_shield"] ? 1 : 0,
                 s["provides_external_cd"] ? 1 : 0,
                 s["raid_buff"],
-                s["execute_bonus"], s["aoe_modifier"]
+                s["execute_bonus"], s["aoe_modifier"],
+                // New fields
+                s["spec_damage_type"],
+                sw["Haste"].get<double>(),
+                sw["CriticalStrike"].get<double>(),
+                sw["Expertise"].get<double>(),
+                fap["single_target_modifier"].get<double>(),
+                fap["aoe_modifier"].get<double>(),
+                fap["cleave_modifier"].get<double>(),
+                fap["movement_modifier"].get<double>(),
+                fap["execute_modifier"].get<double>(),
+                fap["melee_hostile_penalty"].get<double>()
             );
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Players
+    // -------------------------------------------------------------------------
     if (db.isEmpty("players")) {
         std::cout << "Seeding players from players.json...\n";
         json players = loadJson("players.json");
         if (players.is_null()) return;
 
         for (auto& p : players["players"]) {
-            db.insertPlayer(p["name"], p["class"], p["spec"],
-                            p["item_level"].get<float>(), p["level"]);
+            int playerId = db.insertPlayer(
+                p["name"], p["class"], p["spec"],
+                p["item_level"].get<float>(),
+                p["performance_rating"].get<float>(),
+                p["attendance_percent"].get<float>(),
+                p["potential"].get<float>(),
+                p["item_class"],
+                p["attitude"]
+            );
+
+            if (playerId < 0) {
+                std::cerr << "Seeder: failed to insert player " << p["name"] << "\n";
+                continue;
+            }
+
+            for (auto& item : p["items"]) {
+                db.insertPlayerItem(playerId, item["slot"], item["name"]);
+            }
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Bosses
+    // -------------------------------------------------------------------------
     if (db.isEmpty("bosses")) {
         std::cout << "Seeding bosses from bosses.json...\n";
         json bosses = loadJson("bosses.json");
         if (bosses.is_null()) return;
 
         for (auto& b : bosses["bosses"]) {
-            db.insertBoss(
+            const auto& rp = b["resistance_profile"];
+
+            int bossId = db.insertBoss(
                 b["name"],
-                b["tuning_ilvl"], b["hps_threshold"], b["dps_threshold"],
-                b["interrupt_coverage_needed"], b["tank_minimum"],
-                b["dispel_coverage_needed"],
+                b["raid"],
+                b["max_hp"].get<float>(),
+                b["phase_count"].get<int>(),
+                b["tuning_ilvl"].get<int>(),
+                b["hps_threshold"].get<int>(),
+                b["dps_threshold"].get<int>(),
+                b["interrupt_coverage_needed"].get<int>(),
+                b["tank_minimum"].get<int>(),
+                b["dispel_coverage_needed"].get<int>(),
                 b["rewards_physical_buffs"].get<bool>(),
-                b["punishes_melee_heavy"].get<bool>()
+                b["punishes_melee_heavy"].get<bool>(),
+                b["damage_type"],
+                rp["Physical"].get<double>(),
+                rp["Fire"].get<double>(),
+                rp["Storm"].get<double>(),
+                rp["Frost"].get<double>(),
+                rp["Shadow"].get<double>(),
+                rp["Radiant"].get<double>()
             );
+
+            if (bossId < 0) {
+                std::cerr << "Seeder: failed to insert boss " << b["name"] << "\n";
+                continue;
+            }
+
+            for (auto& phase : b["phases"]) {
+                std::string fightTypesCsv = joinFightTypes(phase["fight_types"]);
+                const auto& mech = phase["mechanic"];
+
+                db.insertBossPhase(
+                    bossId,
+                    phase["phase_number"].get<int>(),
+                    phase["hp_start_pct"].get<float>(),
+                    phase["hp_end_pct"].get<float>(),
+                    phase["is_execute_phase"].get<bool>(),
+                    fightTypesCsv,
+                    mech["name"],
+                    mech["damage_value"].get<float>(),
+                    mech["needs_interrupt"].get<bool>()
+                );
+            }
         }
     }
 }

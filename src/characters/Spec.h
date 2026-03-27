@@ -6,8 +6,7 @@
 #include "PlayerStructTypes.h"
 
 enum class AttackRange {
-    Melee, 
-    Healer,
+    Melee,
     Caster,
     Ranged
 };
@@ -43,21 +42,18 @@ private:
     std::map<FightAffinityProfile, float> fightAffinityProfile;
 
 
-    void setSpecWeights();
-    void setSpecFightAffinity();
-    
 public:
     Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
          DamageType specDamageType, float hps_weight, float defense_weight, float utility_weight,
          std::string primary_stat, bool can_interrupt, bool can_dispel, bool provides_shield,
-         bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier);
+         bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier,
+         SpecStatWeights statWeights, std::map<FightAffinityProfile, float> affinityProfile);
     ~Spec();
     float getDPSWeight();
     float getHPSweight();
     float getDefenseWeight();
     float getUtilityWeight();
     SpecStatWeights getStatWeights();
-    void initSpec();
     DamageType getDamageType();
     float getFightAffinity(FightAffinityProfile fightType);
 };
@@ -65,8 +61,8 @@ public:
 inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
            DamageType specDamageType, float hps_weight, float defense_weight, float utility_weight,
            std::string primary_stat, bool can_interrupt, bool can_dispel, bool provides_shield,
-           bool provides_external_cd, RaidBuff raid_buff, float execute_bonus,
-           float aoe_modifier)
+           bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier,
+           SpecStatWeights statWeights, std::map<FightAffinityProfile, float> affinityProfile)
     : name(name),
       resouceUsed(resouceUsed),
       attackRange(attackRange),
@@ -82,10 +78,10 @@ inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRang
       provides_external_cd(provides_external_cd),
       raid_buff(raid_buff),
       execute_bonus(execute_bonus),
-      aoe_modifier(aoe_modifier)
-{
-    initSpec();
-}
+      aoe_modifier(aoe_modifier),
+      specStatWeights(statWeights),
+      fightAffinityProfile(affinityProfile)
+{}
 
 inline Spec::~Spec() {}
 

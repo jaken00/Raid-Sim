@@ -2,20 +2,41 @@
 #include <sqlite3.h>
 
 #include <string>
+#include <vector>
+
+struct ItemRow {
+    std::string slot;
+    std::string name;
+};
 
 struct PlayerRow {
     std::string name;
     std::string class_name;
     std::string spec;
+    std::string item_class;
+    std::string attitude;
     float ilvl;
-    int level;
+    float performance_rating;
+    float attendance_percent;
+    float potential;
+    std::vector<ItemRow> items;
 };
 
 struct BossRow {
     std::string name;
+    std::string raid;
+    std::string damage_type;
     int tuning_ilvl;
     int hps_threshold;
     int dps_threshold;
+    int phase_count;
+    float max_hp;
+    float resist_physical;
+    float resist_fire;
+    float resist_storm;
+    float resist_frost;
+    float resist_shadow;
+    float resist_radiant;
 };
 
 class Database {
@@ -25,21 +46,43 @@ public:
 
     bool init();
     bool isEmpty(const std::string& table);
-    bool insertPlayer(const std::string& name, const std::string& cls, const std::string& spec,
-                      float ilvl, int level);
+
+    // Players
+    int  insertPlayer(const std::string& name, const std::string& cls, const std::string& spec,
+                      float ilvl, float performance_rating, float attendance_percent,
+                      float potential, const std::string& item_class,
+                      const std::string& attitude);
+    bool insertPlayerItem(int player_id, const std::string& slot, const std::string& item_name);
+
+    // Specializations
     bool insertClass(const std::string& name);
     bool insertSpecialization(const std::string& parent_class, const std::string& role,
                               const std::string& name, const std::string& resource,
-                              const std::string& attack_range, double dps_weight, double hps_weight,
-                              double defensive_weight, double utility_weight,
+                              const std::string& attack_range, double dps_weight,
+                              double hps_weight, double defensive_weight, double utility_weight,
                               const std::string& primary_stat, int can_interrupt, int can_dispel,
                               int provides_shield, int provides_external_cd,
                               const std::string& raid_buff, double execute_bonus,
-                              double aoe_modifier);
-    bool insertBoss(const std::string& name, int tuning_ilvl, int hps_threshold, int dps_threshold,
-                    int interrupt_coverage_needed, int tank_minimum, int dispel_coverage_needed,
-                    bool rewards_physical_buffs, bool punishes_melee_heavy);
+                              double aoe_modifier, const std::string& spec_damage_type,
+                              double stat_haste, double stat_crit, double stat_expertise,
+                              double fap_single_target, double fap_aoe, double fap_cleave,
+                              double fap_movement, double fap_execute, double fap_melee_hostile);
 
+    // Bosses
+    int  insertBoss(const std::string& name, const std::string& raid, float max_hp,
+                    int phase_count, int tuning_ilvl, int hps_threshold, int dps_threshold,
+                    int interrupt_coverage_needed, int tank_minimum, int dispel_coverage_needed,
+                    bool rewards_physical_buffs, bool punishes_melee_heavy,
+                    const std::string& damage_type,
+                    double resist_physical, double resist_fire, double resist_storm,
+                    double resist_frost, double resist_shadow, double resist_radiant);
+    bool insertBossPhase(int boss_id, int phase_number, float hp_start_pct, float hp_end_pct,
+                         bool is_execute_phase, const std::string& fight_types_csv,
+                         const std::string& mechanic_name, float mechanic_damage_value,
+                         bool mechanic_needs_interrupt);
+
+    // Queries
+    bool getAllPlayers(std::vector<PlayerRow>& out);
     bool getFirstPlayer(PlayerRow& out);
     bool getFirstBoss(BossRow& out);
 

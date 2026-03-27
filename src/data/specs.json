@@ -17,7 +17,21 @@
       "provides_external_cd": true,
       "raid_buff": "armor_aura_5",
       "execute_bonus": 0.05,
-      "aoe_modifier": 0.75
+      "aoe_modifier": 0.75,
+      "spec_damage_type": "Physical",
+      "spec_stat_weight": {
+        "Haste": 0.6,
+        "CriticalStrike": 0.5,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 1.0,
+        "aoe_modifier": 0.75,
+        "cleave_modifier": 0.85,
+        "movement_modifier": 0.7,
+        "execute_modifier": 1.05,
+        "melee_hostile_penalty": 0.85
+      }
     },
     {
       "class": "Warrior",
@@ -36,7 +50,21 @@
       "provides_external_cd": false,
       "raid_buff": "armor_aura_5",
       "execute_bonus": 0.05,
-      "aoe_modifier": 0.9
+      "aoe_modifier": 0.9,
+      "spec_damage_type": "Physical",
+      "spec_stat_weight": {
+        "Haste": 0.7,
+        "CriticalStrike": 0.8,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 1.0,
+        "aoe_modifier": 0.9,
+        "cleave_modifier": 0.95,
+        "movement_modifier": 0.75,
+        "execute_modifier": 1.05,
+        "melee_hostile_penalty": 0.8
+      }
     },
     {
       "class": "Conduit",
@@ -55,7 +83,21 @@
       "provides_external_cd": true,
       "raid_buff": "magic_resist_5",
       "execute_bonus": 0.0,
-      "aoe_modifier": 1.1
+      "aoe_modifier": 1.1,
+      "spec_damage_type": "Radiant",
+      "spec_stat_weight": {
+        "Haste": 0.9,
+        "CriticalStrike": 0.6,
+        "Expertise": 0.8
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 0.9,
+        "aoe_modifier": 1.1,
+        "cleave_modifier": 1.0,
+        "movement_modifier": 0.85,
+        "execute_modifier": 1.0,
+        "melee_hostile_penalty": 0.9
+      }
     },
     {
       "class": "Conduit",
@@ -74,7 +116,21 @@
       "provides_external_cd": true,
       "raid_buff": "mana_regen_3",
       "execute_bonus": 0.05,
-      "aoe_modifier": 1.1
+      "aoe_modifier": 1.1,
+      "spec_damage_type": "Shadow",
+      "spec_stat_weight": {
+        "Haste": 0.8,
+        "CriticalStrike": 0.7,
+        "Expertise": 0.7
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 0.95,
+        "aoe_modifier": 1.1,
+        "cleave_modifier": 1.05,
+        "movement_modifier": 0.9,
+        "execute_modifier": 1.05,
+        "melee_hostile_penalty": 0.9
+      }
     },
     {
       "class": "Invoker",
@@ -93,7 +149,21 @@
       "provides_external_cd": false,
       "raid_buff": "spell_amp_5",
       "execute_bonus": 0.1,
-      "aoe_modifier": 1.15
+      "aoe_modifier": 1.15,
+      "spec_damage_type": "Storm",
+      "spec_stat_weight": {
+        "Haste": 0.8,
+        "CriticalStrike": 0.9,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 1.0,
+        "aoe_modifier": 1.15,
+        "cleave_modifier": 1.1,
+        "movement_modifier": 0.75,
+        "execute_modifier": 1.1,
+        "melee_hostile_penalty": 1.0
+      }
     },
     {
       "class": "Invoker",
@@ -112,7 +182,21 @@
       "provides_external_cd": false,
       "raid_buff": "elemental_amp_5",
       "execute_bonus": 0.1,
-      "aoe_modifier": 1.25
+      "aoe_modifier": 1.25,
+      "spec_damage_type": "Fire",
+      "spec_stat_weight": {
+        "Haste": 0.75,
+        "CriticalStrike": 1.0,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 0.9,
+        "aoe_modifier": 1.25,
+        "cleave_modifier": 1.15,
+        "movement_modifier": 0.8,
+        "execute_modifier": 1.0,
+        "melee_hostile_penalty": 1.0
+      }
     },
     {
       "class": "Reaver",
@@ -131,7 +215,21 @@
       "provides_external_cd": false,
       "raid_buff": "physical_amp_5",
       "execute_bonus": 0.2,
-      "aoe_modifier": 0.96
+      "aoe_modifier": 0.96,
+      "spec_damage_type": "Physical",
+      "spec_stat_weight": {
+        "Haste": 0.85,
+        "CriticalStrike": 0.9,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 1.0,
+        "aoe_modifier": 0.96,
+        "cleave_modifier": 0.98,
+        "movement_modifier": 0.9,
+        "execute_modifier": 1.2,
+        "melee_hostile_penalty": 0.85
+      }
     },
     {
       "class": "Reaver",
@@ -150,7 +248,21 @@
       "provides_external_cd": false,
       "raid_buff": "bleed_amp_5",
       "execute_bonus": 0.25,
-      "aoe_modifier": 0.9
+      "aoe_modifier": 0.9,
+      "spec_damage_type": "Physical",
+      "spec_stat_weight": {
+        "Haste": 0.9,
+        "CriticalStrike": 1.0,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 1.05,
+        "aoe_modifier": 0.9,
+        "cleave_modifier": 0.95,
+        "movement_modifier": 0.8,
+        "execute_modifier": 1.25,
+        "melee_hostile_penalty": 0.8
+      }
     },
     {
       "class": "Herald",
@@ -169,7 +281,21 @@
       "provides_external_cd": true,
       "raid_buff": "haste_aura_5",
       "execute_bonus": 0.05,
-      "aoe_modifier": 1.05
+      "aoe_modifier": 1.05,
+      "spec_damage_type": "Storm",
+      "spec_stat_weight": {
+        "Haste": 0.95,
+        "CriticalStrike": 0.7,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 0.85,
+        "aoe_modifier": 1.05,
+        "cleave_modifier": 1.0,
+        "movement_modifier": 1.1,
+        "execute_modifier": 1.05,
+        "melee_hostile_penalty": 1.0
+      }
     },
     {
       "class": "Herald",
@@ -188,7 +314,21 @@
       "provides_external_cd": true,
       "raid_buff": "damage_taken_5",
       "execute_bonus": 0.1,
-      "aoe_modifier": 1.05
+      "aoe_modifier": 1.05,
+      "spec_damage_type": "Shadow",
+      "spec_stat_weight": {
+        "Haste": 0.85,
+        "CriticalStrike": 0.65,
+        "Expertise": 0.0
+      },
+      "fight_affinity_profile": {
+        "single_target_modifier": 0.9,
+        "aoe_modifier": 1.05,
+        "cleave_modifier": 1.0,
+        "movement_modifier": 1.1,
+        "execute_modifier": 1.1,
+        "melee_hostile_penalty": 1.0
+      }
     }
   ]
 }

@@ -10,15 +10,6 @@
 
 
 
-struct BossResistanceProfile {
-    float Physical;
-    float Fire;
-    float Storm;
-    float Frost;
-    float Shadow;
-    float Radiant;
-};
-
 struct BossMechanic {
     std::string name;
     float damageValue;
@@ -52,8 +43,10 @@ private:
     Phase current_phase;
 
 public:
-    Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP, int phaseCount, int currentPhase, 
-        float ilvl_threshhold, const std::vector<Phase*> bossPhases);
+    Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP,
+         int phaseCount, int currentPhase, float ilvl_threshhold,
+         const std::vector<Phase*> bossPhases, DamageType bossDamagetype,
+         std::map<DamageType, float> resistMap);
     ~Boss();
 
     float getBossResistType(DamageType damageType);
@@ -64,8 +57,6 @@ public:
 
 
 };
-
-Boss::~Boss(){}
 
 inline float Boss::GetBossilvl(){
     return ilvl_threshhold;

@@ -5,110 +5,210 @@
       "class": "Warrior",
       "spec": "Bulwark",
       "item_level": 100.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Plate",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Warlord's Helm" },
+        { "slot": "Neck",       "name": "Placeholder Warlord's Gorget" },
+        { "slot": "Shoulders",  "name": "Placeholder Warlord's Pauldrons" },
+        { "slot": "Chest",      "name": "Placeholder Warlord's Breastplate" },
+        { "slot": "Legs",       "name": "Placeholder Warlord's Greaves" },
+        { "slot": "Feet",       "name": "Placeholder Warlord's Sabatons" },
+        { "slot": "MainHand",   "name": "Placeholder Warlord's Sword" },
+        { "slot": "OffHand",    "name": "Placeholder Warlord's Shield" }
+      ]
     },
     {
       "name": "Anduin",
       "class": "Conduit",
       "spec": "Mender",
       "item_level": 98.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Cloth",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Mender's Cowl" },
+        { "slot": "Neck",       "name": "Placeholder Mender's Pendant" },
+        { "slot": "Shoulders",  "name": "Placeholder Mender's Mantle" },
+        { "slot": "Chest",      "name": "Placeholder Mender's Robes" },
+        { "slot": "Legs",       "name": "Placeholder Mender's Leggings" },
+        { "slot": "Feet",       "name": "Placeholder Mender's Slippers" },
+        { "slot": "MainHand",   "name": "Placeholder Mender's Staff" },
+        { "slot": "OffHand",    "name": "Placeholder Mender's Tome" }
+      ]
     },
     {
       "name": "Jaina",
       "class": "Invoker",
       "spec": "Elementalist",
       "item_level": 99.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Cloth",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Invoker's Crown" },
+        { "slot": "Neck",       "name": "Placeholder Invoker's Amulet" },
+        { "slot": "Shoulders",  "name": "Placeholder Invoker's Shoulders" },
+        { "slot": "Chest",      "name": "Placeholder Invoker's Vestments" },
+        { "slot": "Legs",       "name": "Placeholder Invoker's Leggings" },
+        { "slot": "Feet",       "name": "Placeholder Invoker's Sandals" },
+        { "slot": "MainHand",   "name": "Placeholder Invoker's Wand" },
+        { "slot": "OffHand",    "name": "Placeholder Invoker's Orb" }
+      ]
     },
     {
       "name": "Sylvanas",
       "class": "Reaver",
       "spec": "Exsanguinate",
       "item_level": 97.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Leather",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Reaver's Hood" },
+        { "slot": "Neck",       "name": "Placeholder Reaver's Choker" },
+        { "slot": "Shoulders",  "name": "Placeholder Reaver's Spaulders" },
+        { "slot": "Chest",      "name": "Placeholder Reaver's Tunic" },
+        { "slot": "Legs",       "name": "Placeholder Reaver's Legwraps" },
+        { "slot": "Feet",       "name": "Placeholder Reaver's Boots" },
+        { "slot": "MainHand",   "name": "Placeholder Reaver's Blade" },
+        { "slot": "OffHand",    "name": "Placeholder Reaver's Dagger" }
+      ]
     },
     {
       "name": "Malfurion",
       "class": "Herald",
       "spec": "Warsinger",
       "item_level": 96.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Mail",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Herald's Helm" },
+        { "slot": "Neck",       "name": "Placeholder Herald's Necklace" },
+        { "slot": "Shoulders",  "name": "Placeholder Herald's Shoulderguards" },
+        { "slot": "Chest",      "name": "Placeholder Herald's Hauberk" },
+        { "slot": "Legs",       "name": "Placeholder Herald's Chainleggings" },
+        { "slot": "Feet",       "name": "Placeholder Herald's Warboots" },
+        { "slot": "MainHand",   "name": "Placeholder Herald's Shortbow" },
+        { "slot": "OffHand",    "name": "Placeholder Herald's Quiver" }
+      ]
     },
     {
       "name": "Thrall",
       "class": "Herald",
       "spec": "Dirge",
       "item_level": 95.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Mail",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Dirge's Helm" },
+        { "slot": "Neck",       "name": "Placeholder Dirge's Necklace" },
+        { "slot": "Shoulders",  "name": "Placeholder Dirge's Shoulderguards" },
+        { "slot": "Chest",      "name": "Placeholder Dirge's Hauberk" },
+        { "slot": "Legs",       "name": "Placeholder Dirge's Chainleggings" },
+        { "slot": "Feet",       "name": "Placeholder Dirge's Warboots" },
+        { "slot": "MainHand",   "name": "Placeholder Dirge's Shortbow" },
+        { "slot": "OffHand",    "name": "Placeholder Dirge's Quiver" }
+      ]
     },
     {
       "name": "Garrosh",
       "class": "Warrior",
       "spec": "Vanguard",
       "item_level": 94.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Plate",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Vanguard's Helm" },
+        { "slot": "Neck",       "name": "Placeholder Vanguard's Gorget" },
+        { "slot": "Shoulders",  "name": "Placeholder Vanguard's Pauldrons" },
+        { "slot": "Chest",      "name": "Placeholder Vanguard's Breastplate" },
+        { "slot": "Legs",       "name": "Placeholder Vanguard's Greaves" },
+        { "slot": "Feet",       "name": "Placeholder Vanguard's Sabatons" },
+        { "slot": "MainHand",   "name": "Placeholder Vanguard's Axe" },
+        { "slot": "OffHand",    "name": "Placeholder Vanguard's Shield" }
+      ]
     },
     {
       "name": "Vol'jin",
       "class": "Conduit",
       "spec": "Mender",
       "item_level": 93.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Cloth",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Mender's Cowl" },
+        { "slot": "Neck",       "name": "Placeholder Mender's Pendant" },
+        { "slot": "Shoulders",  "name": "Placeholder Mender's Mantle" },
+        { "slot": "Chest",      "name": "Placeholder Mender's Robes" },
+        { "slot": "Legs",       "name": "Placeholder Mender's Leggings" },
+        { "slot": "Feet",       "name": "Placeholder Mender's Slippers" },
+        { "slot": "MainHand",   "name": "Placeholder Mender's Staff" },
+        { "slot": "OffHand",    "name": "Placeholder Mender's Tome" }
+      ]
     },
     {
       "name": "Mok'Nathal",
       "class": "Invoker",
       "spec": "Arcanist",
       "item_level": 92.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Cloth",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Arcanist's Crown" },
+        { "slot": "Neck",       "name": "Placeholder Arcanist's Amulet" },
+        { "slot": "Shoulders",  "name": "Placeholder Arcanist's Shoulders" },
+        { "slot": "Chest",      "name": "Placeholder Arcanist's Vestments" },
+        { "slot": "Legs",       "name": "Placeholder Arcanist's Leggings" },
+        { "slot": "Feet",       "name": "Placeholder Arcanist's Sandals" },
+        { "slot": "MainHand",   "name": "Placeholder Arcanist's Wand" },
+        { "slot": "OffHand",    "name": "Placeholder Arcanist's Orb" }
+      ]
     },
     {
       "name": "Sylvanas",
       "class": "Reaver",
       "spec": "Striker",
       "item_level": 91.0,
-      "level": 60,
       "performance_rating": 60.0,
       "attendance_percent": 100.0,
       "attitude": "Neutral",
-      "potential": 3.5
+      "potential": 70,
+      "item_class": "Leather",
+      "items": [
+        { "slot": "Head",       "name": "Placeholder Striker's Hood" },
+        { "slot": "Neck",       "name": "Placeholder Striker's Choker" },
+        { "slot": "Shoulders",  "name": "Placeholder Striker's Spaulders" },
+        { "slot": "Chest",      "name": "Placeholder Striker's Tunic" },
+        { "slot": "Legs",       "name": "Placeholder Striker's Legwraps" },
+        { "slot": "Feet",       "name": "Placeholder Striker's Boots" },
+        { "slot": "MainHand",   "name": "Placeholder Striker's Blade" },
+        { "slot": "OffHand",    "name": "Placeholder Striker's Dagger" }
+      ]
     }
   ]
 }

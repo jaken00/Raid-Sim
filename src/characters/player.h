@@ -12,12 +12,13 @@ enum class Attitude { Positive, Neutral, Toxic };
 
 class Player {
 public:
-    Player(int id, const std::string& name, 
+    Player(int id, const std::string& name,
            const Spec& spec,  // Mayve this shouldnt be const? this can change no?
            float itemLevel, std::vector<Items*> items,
            float performanceRating,  // Current Stars (FM style)
            float attendancePercent, Attitude attitude,
-           float potential);  // Potential Stars
+           float potential,          // Potential Stars
+           const std::string& itemClass);
 
     // Accessors
     int GetId() const;
@@ -28,7 +29,8 @@ public:
     float GetAttendancePercent() const;
     Attitude GetAttitude() const;
     float GetPotential() const;
-    
+    const std::string& GetItemClass() const;
+
     int GetTotalCritStrike() const;
     int GetTotalHaste() const;
 
@@ -41,6 +43,7 @@ public:
     void SetPerformanceRating(float newPerformanceRating);
     void SetAttendancePercent(float newAttendancePercent);
     void SetAttitude(Attitude newAttitude);
+    void SetItemClass(const std::string& newItemClass);
 
     void AddRaidHistoryEntry(const std::string& entry);
     
@@ -55,15 +58,16 @@ private:
     float attendancePercent;
     Attitude attitude;
     float potential;
+    std::string itemClass;
     std::vector<std::string> raidHistory;
 
     
 };
 
-inline Player::Player(int id, const std::string& name, 
+inline Player::Player(int id, const std::string& name,
                       const Spec& spec, float itemLevel, std::vector<Items*> items,
                       float performanceRating, float attendancePercent, Attitude attitude,
-                      float potential)
+                      float potential, const std::string& itemClass)
     : id(id),
       name(name),
       spec(spec),
@@ -72,7 +76,8 @@ inline Player::Player(int id, const std::string& name,
       performanceRating(performanceRating),
       attendancePercent(attendancePercent),
       attitude(attitude),
-      potential(potential) {
+      potential(potential),
+      itemClass(itemClass) {
     if (this->attendancePercent < 0.0f) {
         this->attendancePercent = 0.0f;
     } else if (this->attendancePercent > 100.0f) {
@@ -112,6 +117,10 @@ inline float Player::GetPotential() const {
     return potential;
 }
 
+inline const std::string& Player::GetItemClass() const {
+    return itemClass;
+}
+
 inline const std::vector<std::string>& Player::GetRaidHistory() const {
     return raidHistory;
 }
@@ -136,6 +145,10 @@ inline void Player::SetAttendancePercent(float newAttendancePercent) {
 
 inline void Player::SetAttitude(Attitude newAttitude) {
     attitude = newAttitude;
+}
+
+inline void Player::SetItemClass(const std::string& newItemClass) {
+    itemClass = newItemClass;
 }
 
 inline void Player::AddRaidHistoryEntry(const std::string& entry) {

@@ -14,29 +14,34 @@ Phase 1 — Core Data (Week 1)
 
 Phase 2 — The Sim (Week 2)
 
- - [ ] Write resolveAttempt() — returns result from roster + boss
-    - [ ] This requires building out spec class so that we can get DPS/HPS/Defense modiers to get the parties totals
-        - [x] DPS Linked
-        - [x] HPS Linked
-        - [x] Defense Linked
-        - [ ] Totals Calculated
-        - [ ] Damage Type added to each Specialization
-        - [ ] Add boss Damage Reduction Calculation
-        - [ ] Add movement modifers to the fight / Decide if this lives in the boss or if it lives in the RaidEncounter (It lives in the boss)
-        - [ ] Add FightAffinityStruct to the boss (This lives in JSON we load up per boss?) -> Cleave, AOE, Movement, Etc
-        - [ ] Add secondary stat multiplers calcualtions as well as adding to the specs them selves 
-        - [ ] Add healerState for mana and effective HPS calculation 
-        - [ ] Calculate Phase duration by DPS numbers
-        - [ ] Add in DPS variance (determined by current skill level)
-        - [ ] Add in Phases and Phase Result calculation (AOE, Burn, HP start and end)  
-        - [ ] Reolve deaths and who dies in a phase
-        - [ ] Create a function for a chance to roll that a random player dies or wipes the raid due to a mechanic
-        - [ ] Recalculate dps on death
-        - [ ] BossMechanicCheck struct that outlines that boss mechanics
-        - [ ] Account for ability weights (15 total abilites select 8)
-        - [ ] Need Weights and tuning for: DPS_Weight, Stats_Weights, Affinity (Cleave, AOE, Single Target), Boss Resistances and Dmg Type, BOss Fight Type, Phase AOE DMG Per Player, Boss Tuning Ilvl Floor, Player Consistancy (Varible lvl)
- - [ ] Generate human-readable log lines from result
- - [ ] Display attempt log in ImGui
+● Yes. Right now Boss is loaded with empty phases {}
+  because loadBosses in loader.cpp just passes {}.
+  You need:
+
+  1. A getBossPhases query in database.h/.cpp — takes
+   a boss_id (or boss name), returns the phase rows
+  2. A PhaseRow struct in database.h — mirrors the
+  boss_phases table columns
+  3. Build Phase objects from those rows in
+  loader.cpp — convert the fight_types CSV string
+  back into a vector<FightAffinityProfile>, fill the
+  rest of the fields
+  4. Pass the phases into the Boss constructor
+  instead of {}
+
+  The boss_phases table already has everything you
+  need — phase_number, hp_start_pct, hp_end_pct,
+  is_execute_phase, fight_types (stored as CSV),
+  mechanic_name, mechanic_damage_value,
+  mechanic_needs_interrupt.
+
+  The trickiest part is the fight_types CSV — it's
+  stored as a comma-separated string like
+  "single_target,aoe" so you'll need a small helper
+  to split it and convert each token to a
+  FightAffinityProfile enum value.
+
+  Want me to implement all of that?
 
 Phase 3 — The Loop (Week 3)
 

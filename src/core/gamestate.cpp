@@ -1,25 +1,27 @@
 #include "gamestate.h"
+GameState::GameState() {}
 
-RaidEntry GameState::attemptRaid(const Raid &raid, std::vector<const Player*> players){
 
+PhaseResult GameState::attemptRaid(Raid &raid){
+    std::vector<Player*> playerPtrs;
+
+    for(Player& p : players){
+        playerPtrs.push_back(&p);
+    }
+    
+    Fight fightAttempt = Fight(playerPtrs, boss);
+    PhaseResult fightResults = fightAttempt.attemptPhase();
+
+    return fightResults;
+
+}   
+
+
+
+void GameState::runLoader(Database& db){
+    Loader loader = Loader();
+    players = loader.loadPlayers(db);
+    boss = loader.loadBosses(db);
+    
 }
 
-static AttackRange parseAttackRange(std::string s){
-    if(s == "Ranged") return AttackRange::Ranged;
-    if(s == "Melee") return AttackRange::Melee;
-    return AttackRange::Caster;
-}
-
-
-void GameState::loadPlayers(Database& db){
-    std::vector<PlayerRow> rows;
-    std::map<std::string, Spec> spec_mapping;
-
-    db.getAllPlayers(rows);
-
-    /*
-        1. Write Conversion functions for all strings to Enums Like above.
-        2. 
-    */
-
-}

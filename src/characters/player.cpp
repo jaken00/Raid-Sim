@@ -6,7 +6,7 @@
     int total_crit = 0;
     
     for(int i = 0; i < this->items.size(); i++){
-        Stats itemStats = items[i]->itemStats;
+        Stats itemStats = items[i].itemStats;
 
         total_crit += itemStats.criticalStrike;
 
@@ -21,7 +21,7 @@ int Player::GetTotalHaste() const{
     int total_haste = 0;
     
     for(int i = 0; i < this->items.size(); i++){
-        Stats itemStats = items[i]->itemStats;
+        Stats itemStats = items[i].itemStats;
 
         total_haste += itemStats.haste;
 

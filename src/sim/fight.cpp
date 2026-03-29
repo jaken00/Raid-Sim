@@ -52,7 +52,7 @@ float Fight::get_fight_affinity(const Player& p, Phase phase){
 
     Spec player_spec = p.GetSpec();
 
-    float fight_affinity_float;
+    float fight_affinity_float = 1.0f;
 
     for(int i = 0; i < phase.fightTypes.size(); i++){
           auto currentFightType = phase.fightTypes[i];
@@ -66,10 +66,12 @@ float Fight::get_fight_affinity(const Player& p, Phase phase){
 PhaseResult Fight::attemptPhase(){
     
     PhaseResult phase_end_result;
-    float total_dps;
-    float base_dps;
+    float total_dps = 0.0f;
+    float base_dps = 0.0f;
 
     Phase currentPhase = boss.getCurrentPhase();
+    currentPhase.hp_start_pct = 1.0f;
+    currentPhase.hp_end_pct = 0.0f;
 
     float boss_phase_hp_pool = (currentPhase.hp_start_pct - currentPhase.hp_end_pct) * boss.getMaxHP();
 
@@ -82,16 +84,17 @@ PhaseResult Fight::attemptPhase(){
         float boss_resist = resist_profile(*players[i]);
         float fight_affinity = get_fight_affinity(*players[i], boss.getCurrentPhase());
 
-        float player_dps = base_dps * crit_multiplier_final * haste_multiplier_final * boss_resist * fight_affinity;
+        float player_dps = base_dps * crit_multiplier_final * haste_multiplier_final * (1.0f - boss_resist) * fight_affinity;
 
         total_dps += player_dps;
     }
-
+    std::cout << "TOTAL DPS: "<< total_dps << std::endl;
     float phase_duration = boss_phase_hp_pool / total_dps;
     std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
 
     phase_end_result.actual_duration = phase_duration;
     phase_end_result.boss_hp_at_end = 0.0;
+    phase_end_result.total_dps = total_dps;
     phase_end_result.deaths = 0;
     phase_end_result.survivied = players.size();
 

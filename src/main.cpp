@@ -9,7 +9,7 @@
 #include "data/seeder.h"
 #include "db/database.h"
 #include "ui/main_window.h"
-#include "sim/fight.h"
+#include "core/gamestate.h"
 
 int main(int argc, char* argv[]) {
     Database db("raid.db");
@@ -53,6 +53,12 @@ int main(int argc, char* argv[]) {
     bool running = true;
     SDL_Event event;
 
+    GameState gameState;    
+
+    Raid raid = Raid();
+
+    gameState.runLoader(db);
+    PhaseResult result = gameState.attemptRaid(raid);
 
     while (running) {
         while (SDL_PollEvent(&event)) {
@@ -65,7 +71,7 @@ int main(int argc, char* argv[]) {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        DrawMainWindow(db);
+        DrawMainWindow(result);
 
         ImGui::Render();
         glViewport(0, 0, 1280, 720);

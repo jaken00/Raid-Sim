@@ -5,15 +5,8 @@ enum class Role {
     Tank,
     OffTank,
     Healer,
-    SupportHealer,
-    SupportDPS,
-    PureDPS
-};
-
-enum class CastType {
-    CAST,
-    CHANNEL,
-    INSTANT
+    Buffer,
+    DPS
 };
 
 

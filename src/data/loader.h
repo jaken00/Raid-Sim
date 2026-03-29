@@ -1,8 +1,13 @@
 #pragma once
 #include "../db/database.h"
+#include "../characters/player.h"
+#include "../Raid/Boss.h"
+#include <vector>
+#include <string>
+#include <iostream>
 
 class Loader {
 public:
-    static void loadPlayers(Database& db);
-    static void loadBosses(Database& db);
+    std::vector<Player> loadPlayers(Database& db);
+    Boss loadBosses(Database& db);
 };

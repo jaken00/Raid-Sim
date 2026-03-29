@@ -1,4 +1,4 @@
-
+#pragma once
 
 class Raid {
 private:
@@ -8,6 +8,6 @@ public:
     ~Raid();
 };
 
-Raid::Raid(/* args */) {}
+inline Raid::Raid(/* args */) {}
 
-Raid::~Raid() {}
+inline Raid::~Raid() {}

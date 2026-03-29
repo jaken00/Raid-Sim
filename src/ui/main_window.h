@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../db/database.h"
+#include "../Raid/RaidEntry.h"
 
-void DrawMainWindow(Database& db);
+void DrawMainWindow(const PhaseResult& entry);
 

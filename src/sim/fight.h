@@ -45,7 +45,7 @@ private:
 public:
     Fight(const std::vector<Player*> players, Boss& boss);
     ~Fight();
-    RaidEntry attemptBoss();
+    
     PhaseResult attemptPhase();
 
 };

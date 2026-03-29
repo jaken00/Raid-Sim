@@ -7,7 +7,7 @@
 
 #include "Raid.h"
 #include "../enum.h"
-
+#include "../sim/SimTypes.h"
 
 
 struct BossMechanic {
@@ -47,12 +47,15 @@ public:
          int phaseCount, int currentPhase, float ilvl_threshhold,
          const std::vector<Phase*> bossPhases, DamageType bossDamagetype,
          std::map<DamageType, float> resistMap);
+    Boss() : id(0), phaseCount(0),currentPhaseNumber(0),ilvl_threshhold(0), raid(nullptr), currentHP(0), maxHP(0), bossDamagetype(DamageType::Physical) {} //default construor
+
     ~Boss();
 
     float getBossResistType(DamageType damageType);
     float GetBossilvl();
     Phase getCurrentPhase();
     
+    std::string GetName() const;
     float getMaxHP(); 
 
 
@@ -68,4 +71,8 @@ inline Phase Boss::getCurrentPhase(){
 
 inline float Boss::getMaxHP(){
     return maxHP; 
+}
+
+inline std::string Boss::GetName() const {
+    return name;
 }

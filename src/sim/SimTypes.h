@@ -1,4 +1,8 @@
+#pragma once
 #include <string>
+#include <vector>
+
+class Player;
 
 enum struct FightAffinityProfile {
      single_target_modifier,  // pure patchwerk DPS
@@ -29,6 +33,7 @@ struct PhaseResult {
     int survivied;
     float boss_hp_at_end;
     float actual_duration;
+    float total_dps;
     int deaths;
 };
 

@@ -35,8 +35,13 @@ add_executable(RaidSim
     src/main.cpp
     src/db/database.cpp
     src/data/seeder.cpp
+    src/data/loader.cpp
     src/ui/main_window.cpp
     src/sim/fight.cpp
+    src/core/gamestate.cpp
+    src/characters/player.cpp
+    src/characters/Spec.cpp
+    src/Raid/Boss.cpp
     ${IMGUI_SOURCES}
 )
 

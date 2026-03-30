@@ -55,10 +55,9 @@ int main(int argc, char* argv[]) {
 
     GameState gameState;    
 
-    Raid raid = Raid();
 
     gameState.runLoader(db);
-    PhaseResult result = gameState.attemptRaid(raid);
+    PhaseResult result = gameState.attemptRaid();
 
     while (running) {
         while (SDL_PollEvent(&event)) {

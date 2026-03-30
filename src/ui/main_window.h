@@ -1,6 +1,6 @@
 #pragma once
+#include "../sim/SimTypes.h"
 
-#include "../Raid/RaidEntry.h"
 
 void DrawMainWindow(const PhaseResult& entry);
 

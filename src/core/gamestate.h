@@ -5,7 +5,6 @@
 #include <iostream>
 #include "../Raid/Boss.h"
 #include "../Raid/Raid.h"
-#include "../raid/RaidEntry.h"
 #include "../sim/fight.h"
 #include "../db/database.h"
 #include "../data/loader.h"
@@ -16,11 +15,11 @@ private:
     int ilvl_avg;
     Boss boss;
     Raid raid;
-    std::vector<RaidEntry> raid_entries;
+    std::vector<RaidResult> raid_results;
 
 public:
     GameState();
-    PhaseResult attemptRaid(Raid &raid);
+    PhaseResult attemptRaid();
     void runLoader(Database& db);
 };
 

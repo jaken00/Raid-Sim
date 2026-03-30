@@ -1,13 +1,14 @@
 #pragma once
+#include <string>
+#include <vector>
 
-class Raid {
-private:
-    /* data */
-public:
-    Raid(/* args */);
-    ~Raid();
+class Player;
+class Boss;
+
+
+
+struct Raid {
+    std::string name;
+    std::vector<Boss*> boss_list;
+    std::vector<Player*> player_list;
 };
-
-inline Raid::Raid(/* args */) {}
-
-inline Raid::~Raid() {}

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
 
 class Player;
 
@@ -28,7 +29,6 @@ struct DefensiveState {
     float battle_ressurection_charges; 
 }; 
 
-//Result of the Phase Fight call
 struct PhaseResult {
     int survivied;
     float boss_hp_at_end;
@@ -37,9 +37,22 @@ struct PhaseResult {
     int deaths;
 };
 
-struct RaidResult {
+struct EncounterResult{
     int survived;
-    bool killedBoss;
-    std::vector<Player*> playerDeaths;
+    float boss_hp_at_end;
+    float actual_duration;
+    float total_dps;
+    float total_hps;
+    std::map<Player*, float> player_dps;
+    std::map<Player*, float> player_hps;  
+     
+};
+
+struct RaidResult {
+    float total_duration;
+    std::vector<Player*> player_deaths;
+    std::map<Player*, float> total_dps;    
+    std::map<Player*, float> total_hps;
       
 };
+

@@ -2,7 +2,7 @@
 GameState::GameState() {}
 
 
-PhaseResult GameState::attemptRaid(Raid &raid){
+PhaseResult GameState::attemptRaid(){
     std::vector<Player*> playerPtrs;
 
     for(Player& p : players){

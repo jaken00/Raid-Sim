@@ -531,7 +531,7 @@ bool Database::getFirstPlayer(PlayerRow& out) {
 
 bool Database::getFirstBoss(BossRow& out) {
     const char* sql =
-        "SELECT name, raid, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
+        "SELECT id, name, raid, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
         "damage_type, resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant "
         "FROM bosses ORDER BY id LIMIT 1;";
     sqlite3_stmt* stmt = nullptr;
@@ -548,25 +548,92 @@ bool Database::getFirstBoss(BossRow& out) {
             return txt ? reinterpret_cast<const char*>(txt) : "";
         };
 
-        out.name            = getText(0);
-        out.raid            = getText(1);
-        out.max_hp          = static_cast<float>(sqlite3_column_double(stmt, 2));
-        out.phase_count     = sqlite3_column_int(stmt, 3);
-        out.tuning_ilvl     = sqlite3_column_int(stmt, 4);
-        out.hps_threshold   = sqlite3_column_int(stmt, 5);
-        out.dps_threshold   = sqlite3_column_int(stmt, 6);
-        out.damage_type     = getText(7);
-        out.resist_physical = static_cast<float>(sqlite3_column_double(stmt, 8));
-        out.resist_fire     = static_cast<float>(sqlite3_column_double(stmt, 9));
-        out.resist_storm    = static_cast<float>(sqlite3_column_double(stmt, 10));
-        out.resist_frost    = static_cast<float>(sqlite3_column_double(stmt, 11));
-        out.resist_shadow   = static_cast<float>(sqlite3_column_double(stmt, 12));
-        out.resist_radiant  = static_cast<float>(sqlite3_column_double(stmt, 13));
+        int boss_id         = sqlite3_column_int(stmt, 0);
+        out.name            = getText(1);
+        out.raid            = getText(2);
+        out.max_hp          = static_cast<float>(sqlite3_column_double(stmt, 3));
+        out.phase_count     = sqlite3_column_int(stmt, 4);
+        out.tuning_ilvl     = sqlite3_column_int(stmt, 5);
+        out.hps_threshold   = sqlite3_column_int(stmt, 6);
+        out.dps_threshold   = sqlite3_column_int(stmt, 7);
+        out.damage_type     = getText(8);
+        out.resist_physical = static_cast<float>(sqlite3_column_double(stmt, 9));
+        out.resist_fire     = static_cast<float>(sqlite3_column_double(stmt, 10));
+        out.resist_storm    = static_cast<float>(sqlite3_column_double(stmt, 11));
+        out.resist_frost    = static_cast<float>(sqlite3_column_double(stmt, 12));
+        out.resist_shadow   = static_cast<float>(sqlite3_column_double(stmt, 13));
+        out.resist_radiant  = static_cast<float>(sqlite3_column_double(stmt, 14));
+
+        sqlite3_finalize(stmt);
+        stmt = nullptr;
+
+        getBossPhases(boss_id, out.phases);
         ok = true;
+    } else {
+        sqlite3_finalize(stmt);
+        stmt = nullptr;
+    }
+
+    return ok;
+}
+int Database::getBossID(const std::string& boss_name) {
+    const char* sql =
+        "SELECT id FROM bosses "
+        "WHERE name = ?;";
+
+    sqlite3_stmt* stmt;
+    int boss_id = -1;
+
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) == SQLITE_OK) {
+
+        // Bind parameter (index starts at 1)
+        sqlite3_bind_text(stmt, 1, boss_name.c_str(), -1, SQLITE_TRANSIENT);
+
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            boss_id = sqlite3_column_int(stmt, 0);
+        }
     }
 
     sqlite3_finalize(stmt);
-    return ok;
+    return boss_id;
+}
+bool Database::getBossPhases(int boss_id, std::vector<PhaseRow>& out) {
+    const char* sql =
+        "SELECT phase_number, hp_start_pct, hp_end_pct, is_execute_phase, "
+        "fight_types, mechanic_name, mechanic_damage_value, mechanic_needs_interrupt "
+        "FROM boss_phases "
+        "WHERE boss_id = ? ORDER BY phase_number;";
+
+    sqlite3_stmt* stmt = nullptr;
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed (getBossPhases): " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+
+    sqlite3_bind_int(stmt, 1, boss_id);
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        PhaseRow row;
+
+        auto getText = [&](int col) -> std::string {
+            const unsigned char* txt = sqlite3_column_text(stmt, col);
+            return txt ? reinterpret_cast<const char*>(txt) : "";
+        };
+
+        row.phase_number     = sqlite3_column_int(stmt, 0);
+        row.hp_start_pct     = static_cast<float>(sqlite3_column_double(stmt, 1));
+        row.hp_end_pct       = static_cast<float>(sqlite3_column_double(stmt, 2));
+        row.is_execute_phase = sqlite3_column_int(stmt, 3) != 0;
+        row.fight_types      = getText(4);
+        row.mechanic_name    = getText(5);
+        row.damage_value     = static_cast<float>(sqlite3_column_double(stmt, 6));
+        row.need_interrupt   = sqlite3_column_int(stmt, 7) != 0;
+
+        out.push_back(row);
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
 }
 
 bool Database::exec(const std::string& sql) {

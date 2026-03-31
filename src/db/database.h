@@ -50,6 +50,17 @@ struct SpecRow {
     float fap_melee_hostile;
 };
 
+struct PhaseRow {
+    int phase_number;
+    float hp_start_pct;
+    float hp_end_pct;
+    bool is_execute_phase;
+    std::string fight_types; //NEED TO ADD CONVERSION FUCNTION
+    std::string mechanic_name;
+    float damage_value;
+    bool need_interrupt;
+};
+
 struct BossRow {
     std::string name;
     std::string raid;
@@ -65,10 +76,7 @@ struct BossRow {
     float resist_frost;
     float resist_shadow;
     float resist_radiant;
-};
-
-struct PhaseRow {
-
+    std::vector<PhaseRow> phases;
 };
 
 class Database {
@@ -118,11 +126,13 @@ public:
     bool getAllPlayers(std::vector<PlayerRow>& out);
     bool getFirstPlayer(PlayerRow& out);
     bool getFirstBoss(BossRow& out);
-    bool getBossPhases(PhaseRow& out);
+
+    int getBossID(const std::string& boss_name);
 
 private:
     std::string m_path;
     sqlite3* m_db = nullptr;
 
     bool exec(const std::string& sql);
+    bool getBossPhases(int boss_id, std::vector<PhaseRow>& out);
 };

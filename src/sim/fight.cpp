@@ -10,7 +10,7 @@ float Fight::ilvl_factor(float player_ilvl, float boss_tuning_ilvl){
     float delta = (player_ilvl - boss_tuning_ilvl) / boss_tuning_ilvl;
     float factor = 1.0f + (delta * tuning_factor);
 
-    return std::clamp(0.4f, factor, 1.25f); // Clamp the fucntion min .4 penalty and max 1.25 bonus (can change later for farming old raids??)
+    return std::clamp(factor, 0.4f , 1.25f); // Clamp the fucntion min .4 penalty and max 1.25 bonus (can change later for farming old raids??)
 }
 
 float Fight::crit_multiplier(const Player &p){

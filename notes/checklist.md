@@ -41,7 +41,40 @@ Phase 2 — The Sim (Week 2)
   to split it and convert each token to a
   FightAffinityProfile enum value.
 
-  Want me to implement all of that?
+   Summary Table
+
+  ┌─────────────────┬──────────┬─────────────────────────────────────────────────────┬───────────────────────────────┐
+  │    Category     │ Severity │                        Issue                        │           Location            │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Reliability     │ Critical │ Missing return — UB                                 │ loader.cpp:136, fight.cpp:108 │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Reliability     │ Critical │ std::clamp args swapped — wrong DPS formula         │ fight.cpp:13                  │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Reliability     │ Critical │ Boss phases never loaded — dead data path           │ loader.cpp:153                │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Reliability     │ High     │ get_fight_affinity clobbers loop result             │ fight.cpp:57                  │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Reliability     │ High     │ Division by zero on zero DPS                        │ fight.cpp:92                  │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Reliability     │ High     │ OOB access in AdvancePhase on empty vector          │ Boss.cpp:36                   │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Security        │ Medium   │ SQL injection in isEmpty()                          │ database.cpp:144              │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Performance     │ Medium   │ N+1 query in getAllPlayers()                        │ database.cpp:476              │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Performance     │ Low      │ Spec copied by value in hot loop                    │ fight.cpp:17,31,42,79         │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Maintainability │ High     │ 9 declared methods with no implementation           │ fight.h                       │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Maintainability │ Medium   │ Mixed naming conventions throughout                 │ project-wide                  │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Maintainability │ Medium   │ Typos in public identifiers (survivied, threshhold) │ SimTypes.h, Boss.h            │
+  ├─────────────────┼──────────┼─────────────────────────────────────────────────────┼───────────────────────────────┤
+  │ Maintainability │ Medium   │ Magic numbers in simulation formula                 │ fight.cpp:8-13                │
+  └─────────────────┴──────────┴─────────────────────────────────────────────────────┴───────────────────────────────┘
+
+  The three Critical reliability issues (std::clamp swap, missing returns, phases never loaded) should be fixed first as
+   they mean the simulation currently produces incorrect results or undefined behavior on every run.
 
 Phase 3 — The Loop (Week 3)
 

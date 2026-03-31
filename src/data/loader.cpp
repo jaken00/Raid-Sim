@@ -116,6 +116,25 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
     return players;
 }
 
+
+
+static Phase phaseBuilder(const PhaseRow& pr){
+    Phase phase;
+
+    phase.phaseNumber = pr.phase_number;
+    phase.hp_start_pct = pr.hp_start_pct;
+    phase.hp_end_pct = pr.hp_end_pct;
+    phase.is_execute_phase = pr.is_execute_phase;
+    
+    BossMechanic bossMech;
+    bossMech.damageValue = pr.damage_value;
+    bossMech.name = pr.mechanic_name;
+    bossMech.needsInterrupt = pr.need_interrupt;
+
+    phase.mechanicAssociated = bossMech;
+
+}
+
 Boss Loader::loadBosses(Database& db) {
     BossRow row;
     db.getFirstBoss(row);
@@ -128,11 +147,12 @@ Boss Loader::loadBosses(Database& db) {
         { DamageType::Shadow,   row.resist_shadow   },
         { DamageType::Radiant,  row.resist_radiant  },
     };
+    
+    
 
     return Boss(
         row.name, 0, nullptr, row.max_hp, row.max_hp,
-        row.phase_count, 1, (float)row.tuning_ilvl,
-        {},
+        row.phase_count, 1, (float)row.tuning_ilvl,{},
         parseDamageType(row.damage_type),
         resistMap
     );

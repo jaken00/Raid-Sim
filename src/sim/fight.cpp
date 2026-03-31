@@ -102,3 +102,8 @@ PhaseResult Fight::attemptPhase(){
 
 
 }
+
+
+EncounterResult Fight::attemptFight(){
+    
+}

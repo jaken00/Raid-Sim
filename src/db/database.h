@@ -67,6 +67,10 @@ struct BossRow {
     float resist_radiant;
 };
 
+struct PhaseRow {
+
+};
+
 class Database {
 public:
     Database(const std::string& path);
@@ -114,6 +118,7 @@ public:
     bool getAllPlayers(std::vector<PlayerRow>& out);
     bool getFirstPlayer(PlayerRow& out);
     bool getFirstBoss(BossRow& out);
+    bool getBossPhases(PhaseRow& out);
 
 private:
     std::string m_path;

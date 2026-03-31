@@ -54,6 +54,8 @@ public:
     float getBossResistType(DamageType damageType);
     float GetBossilvl();
     Phase getCurrentPhase();
+    float GetCurrentHP();
+    void AdvancePhase();
     
     std::string GetName() const;
     float getMaxHP(); 
@@ -75,4 +77,7 @@ inline float Boss::getMaxHP(){
 
 inline std::string Boss::GetName() const {
     return name;
+}
+inline float Boss::GetCurrentHP() {
+    return currentHP;
 }

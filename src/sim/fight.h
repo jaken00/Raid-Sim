@@ -46,5 +46,6 @@ public:
     ~Fight();
     
     PhaseResult attemptPhase();
+    EncounterResult attemptFight();
 
 };

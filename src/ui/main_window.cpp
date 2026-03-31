@@ -23,7 +23,6 @@ void DrawMainWindow(const PhaseResult& entry) {
     ImGui::Separator();
     ImGui::Text("Duration: %.1f", entry.actual_duration);
     ImGui::Text("Total DPS: %.1f", entry.total_dps);
-    //ImGui::Text("Interrupt Coverage: %.1f%%", entry.interrupt_coverage_percent);
 
     ImGui::Spacing();
 

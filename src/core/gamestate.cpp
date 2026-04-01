@@ -2,7 +2,7 @@
 GameState::GameState() {}
 
 
-PhaseResult GameState::attemptRaid(){
+EncounterResult GameState::attemptRaid(){
     std::vector<Player*> playerPtrs;
 
     for(Player& p : players){
@@ -10,7 +10,7 @@ PhaseResult GameState::attemptRaid(){
     }
     
     Fight fightAttempt = Fight(playerPtrs, boss);
-    PhaseResult fightResults = fightAttempt.attemptPhase();
+    EncounterResult fightResults = fightAttempt.attemptFight();
 
     return fightResults;
 

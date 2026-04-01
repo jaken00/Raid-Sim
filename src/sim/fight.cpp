@@ -87,6 +87,8 @@ PhaseResult Fight::attemptPhase(){
         float player_dps = base_dps * crit_multiplier_final * haste_multiplier_final * (1.0f - boss_resist) * fight_affinity;
 
         total_dps += player_dps;
+
+        //ADD IN VARIANCE
     }
     std::cout << "TOTAL DPS: "<< total_dps << std::endl;
     float phase_duration = boss_phase_hp_pool / total_dps;
@@ -97,6 +99,7 @@ PhaseResult Fight::attemptPhase(){
     phase_end_result.total_dps = total_dps;
     phase_end_result.deaths = 0;
     phase_end_result.survivied = players.size();
+    phase_end_result.completed = true; // FIX THIS HARDCODED COMPLETION
 
     return phase_end_result;
 
@@ -105,5 +108,23 @@ PhaseResult Fight::attemptPhase(){
 
 
 EncounterResult Fight::attemptFight(){
-    
+    int phase_count = boss.GetPhaseCount();
+
+    EncounterResult fight_encounter;
+
+    for(int i = 0; i < phase_count; i++){
+        PhaseResult result = attemptPhase();
+        if(result.completed){
+            fight_encounter.total_dps += result.total_dps;
+            fight_encounter.actual_duration += result.actual_duration;
+            fight_encounter.boss_hp_at_end = result.boss_hp_at_end;
+        }
+        boss.AdvancePhase();
+    }
+
+
+    fight_encounter.survived = 10;
+
+    return fight_encounter;
+
 }

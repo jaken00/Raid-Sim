@@ -2,20 +2,13 @@
 
 #include <imgui.h>
 
-void DrawMainWindow(const PhaseResult& entry) {
+void DrawMainWindow(const EncounterResult& entry) {
     ImGui::Begin("Raid Manager");
-
-    // Result banner
-    if (entry.deaths == 0) {
-        ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "RESULT: SUCCESS");
-    } else {
-        ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "RESULT: WIPE");
-    }
-
     ImGui::Separator();
 
     // Boss summary
-
+    ImGui::Text("Boss Summary");
+    ImGui::Text("Duration: %.1f", entry.boss_hp_at_end);
     ImGui::Spacing();
 
     // Raid output
@@ -23,11 +16,12 @@ void DrawMainWindow(const PhaseResult& entry) {
     ImGui::Separator();
     ImGui::Text("Duration: %.1f", entry.actual_duration);
     ImGui::Text("Total DPS: %.1f", entry.total_dps);
+    
 
     ImGui::Spacing();
 
     // Deaths
-    ImGui::Text("Deaths: %d", (int)entry.deaths);
+    //ImGui::Text("Deaths: %d", (int)entry.deaths);
     ImGui::Spacing();
 
     // Roster

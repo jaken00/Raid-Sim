@@ -19,7 +19,7 @@ private:
 
 public:
     GameState();
-    PhaseResult attemptRaid();
+    EncounterResult attemptRaid();
     void runLoader(Database& db);
 };
 

@@ -59,6 +59,7 @@ public:
     
     std::string GetName() const;
     float getMaxHP(); 
+    int GetPhaseCount();
 
 
 };
@@ -80,4 +81,8 @@ inline std::string Boss::GetName() const {
 }
 inline float Boss::GetCurrentHP() {
     return currentHP;
+}
+
+inline int Boss::GetPhaseCount(){
+    return phaseCount;
 }

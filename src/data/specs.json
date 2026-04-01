@@ -204,7 +204,7 @@
       "name": "Exsanguinate",
       "resource": "Momentum",
       "attack_range": "Melee",
-      "dps_weight": 0.75,
+      "dps_weight": 0.78,
       "hps_weight": 0.0,
       "defense_weight": 0.3,
       "utility_weight": 0.55,

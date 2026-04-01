@@ -8,7 +8,7 @@ A C++ project using SDL2, built with CMake and MSYS2 UCRT64.
 2. Open the **MSYS2 UCRT64** shell and install the required packages:
 
 ```bash
-pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-SDL2
+pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-sqlite3
 ```
 
 ## Build

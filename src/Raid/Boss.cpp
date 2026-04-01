@@ -14,7 +14,8 @@ Boss::Boss(const std::string& name, int id, Raid* raid, float currentHP, float m
       maxHP(maxHP),
       bossPhases(bossPhases),
       bossDamagetype(bossDamagetype),
-      resistMap(resistMap)
+      resistMap(resistMap),
+      current_phase(bossPhases.empty() ? Phase{} : *bossPhases[0])
 {}
 
 Boss::~Boss() {}
@@ -33,7 +34,7 @@ void Boss::AdvancePhase(){
         return;
     }
 
-    current_phase = *bossPhases[next_phase_number];
+    current_phase = *bossPhases[next_phase_number - 1];
 
     
 }

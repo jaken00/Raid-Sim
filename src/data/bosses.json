@@ -3,7 +3,7 @@
     {
       "name": "Flamelord",
       "raid": "Test Raid",
-      "max_hp": 15000000,
+      "max_hp": 15000,
       "phase_count": 3,
       "tuning_ilvl": 100,
       "hps_threshold": 75000,

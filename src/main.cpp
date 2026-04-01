@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
 
     gameState.runLoader(db);
-    PhaseResult result = gameState.attemptRaid();
+    EncounterResult result = gameState.attemptRaid();
 
     while (running) {
         while (SDL_PollEvent(&event)) {

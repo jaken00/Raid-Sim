@@ -12,6 +12,7 @@ enum struct FightAffinityProfile {
      movement_modifier,       // DoTs and instants love movement
      execute_modifier,        // bonus below 20% boss HP
      melee_hostile_penalty,   // bosses with ground effects, cleave, frontal
+     MISSING_PROFILE
 };
 
 struct HealerState {
@@ -35,6 +36,7 @@ struct PhaseResult {
     float actual_duration;
     float total_dps;
     int deaths;
+    bool completed;
 };
 
 struct EncounterResult{

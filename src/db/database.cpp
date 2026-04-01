@@ -636,6 +636,10 @@ bool Database::getBossPhases(int boss_id, std::vector<PhaseRow>& out) {
     return true;
 }
 
+bool Database::clearTable(const std::string& table) {
+    return exec("DELETE FROM " + table + ";");
+}
+
 bool Database::exec(const std::string& sql) {
     char* err = nullptr;
     if (sqlite3_exec(m_db, sql.c_str(), nullptr, nullptr, &err) != SQLITE_OK) {

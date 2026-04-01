@@ -2,5 +2,5 @@
 #include "../sim/SimTypes.h"
 
 
-void DrawMainWindow(const PhaseResult& entry);
+void DrawMainWindow(const EncounterResult& entry);
 

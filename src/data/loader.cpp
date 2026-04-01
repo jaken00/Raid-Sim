@@ -116,6 +116,31 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
     return players;
 }
 
+static FightAffinityProfile fightAffinityProfileMatch(std::string s){
+    /*
+    enum struct FightAffinityProfile {
+     single_target_modifier,  // pure patchwerk DPS
+     aoe_modifier,            // 4+ targets
+     cleave_modifier,         // 2–3 targets, council/adds
+     movement_modifier,       // DoTs and instants love movement
+     execute_modifier,        // bonus below 20% boss HP
+     melee_hostile_penalty,   // bosses with ground effects, cleave, frontal
+};
+    */
+
+    if(s == "single_target_modifier") return FightAffinityProfile::single_target_modifier;
+    if(s == "aoe_modifier") return FightAffinityProfile::aoe_modifier;
+    if(s == "cleave_modifier") return FightAffinityProfile::cleave_modifier;
+    if(s == "movement_modifier") return FightAffinityProfile::movement_modifier;
+    if(s == "execute_modifier") return FightAffinityProfile::execute_modifier;
+    if(s == "melee_hostile_penalty") return FightAffinityProfile::melee_hostile_penalty;
+    
+    return FightAffinityProfile::MISSING_PROFILE;
+    
+
+
+}
+
 
 
 static Phase phaseBuilder(const PhaseRow& pr){
@@ -133,6 +158,24 @@ static Phase phaseBuilder(const PhaseRow& pr){
 
     phase.mechanicAssociated = bossMech;
 
+
+    std::string data = pr.fight_types;
+    std::stringstream ss(data);
+
+    std::vector<std::string> fight_types_split;
+    std::string token; 
+
+    while(std::getline(ss , token, ',')){
+        fight_types_split.push_back(token);
+    }
+
+    for(std::string word : fight_types_split){
+        phase.fightTypes.push_back(fightAffinityProfileMatch(word));
+    }
+
+    return phase;
+    
+
 }
 
 Boss Loader::loadBosses(Database& db) {
@@ -147,12 +190,14 @@ Boss Loader::loadBosses(Database& db) {
         { DamageType::Shadow,   row.resist_shadow   },
         { DamageType::Radiant,  row.resist_radiant  },
     };
-    
-    
+
+    std::vector<Phase*> phases;
+    for (const PhaseRow& pr : row.phases)
+        phases.push_back(new Phase(phaseBuilder(pr)));
 
     return Boss(
         row.name, 0, nullptr, row.max_hp, row.max_hp,
-        row.phase_count, 1, (float)row.tuning_ilvl,{},
+        row.phase_count, 1, (float)row.tuning_ilvl, phases,
         parseDamageType(row.damage_type),
         resistMap
     );

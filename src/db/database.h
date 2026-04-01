@@ -86,6 +86,7 @@ public:
 
     bool init();
     bool isEmpty(const std::string& table);
+    bool clearTable(const std::string& table);
 
     // Players
     int  insertPlayer(const std::string& name, const std::string& cls, const std::string& spec,

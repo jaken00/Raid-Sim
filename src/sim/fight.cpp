@@ -4,6 +4,8 @@ Fight::Fight(const std::vector<Player*> players, Boss& boss) : players(players),
 
 Fight::~Fight() {}
 
+/* ##### DPS FUNCTIONS #####*/
+
 float Fight::ilvl_factor(float player_ilvl, float boss_tuning_ilvl){
     float tuning_factor = 2.8f;
 
@@ -47,7 +49,6 @@ float Fight::resist_profile(const Player& p){
     return damage_resist;
 }
 
-
 float Fight::get_fight_affinity(const Player& p, Phase phase){
 
     Spec player_spec = p.GetSpec();
@@ -62,6 +63,35 @@ float Fight::get_fight_affinity(const Player& p, Phase phase){
     return fight_affinity_float;
 
 }
+
+/* ##### HEALING FUNCTIONS #####*/
+
+float Fight::effective_mana_cost_per_second(HealerState& h){
+    float proc_chance = h.player->GetTotalExpertise() / 500.0f; 
+    float proc_chance_capped = std::min(proc_chance, 0.35f);
+    float mana_saved_factor = 1.0f - (proc_chance_capped * 0.6); // proc saves 60% mana
+
+    return h.mana_per_second_cost * mana_saved_factor;
+}
+
+float Fight::effective_hps(HealerState &h, float phase_duration){
+    float actual_cost = effective_mana_cost_per_second(h);
+    float mana_needed = h.mana_per_second_cost * phase_duration;
+
+    if(mana_needed <= h.current_mana) {
+        h.current_mana = h.current_mana - mana_needed;
+        return h.hps_at_full_mana;
+    }
+
+    float full_time = h.current_mana / actual_cost;
+    float oom_time = phase_duration - full_time;
+
+    return (h.hps_at_full_mana * full_time + h.hps_at_oom * oom_time) / phase_duration;
+
+}
+
+
+/* ##### ENCOUNTER/RAID FUNCTIONS #####*/
 
 PhaseResult Fight::attemptPhase(){
     
@@ -90,9 +120,9 @@ PhaseResult Fight::attemptPhase(){
 
         //ADD IN VARIANCE
     }
-    std::cout << "TOTAL DPS: "<< total_dps << std::endl;
     float phase_duration = boss_phase_hp_pool / total_dps;
-    std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
+    BossMechanic current_mechanic = currentPhase.mechanicAssociated;
+    float boss_damage = current_mechanic.damageValue * players.size() * phase_duration;
 
     phase_end_result.actual_duration = phase_duration;
     phase_end_result.boss_hp_at_end = 0.0;
@@ -101,11 +131,16 @@ PhaseResult Fight::attemptPhase(){
     phase_end_result.survivied = players.size();
     phase_end_result.completed = true; // FIX THIS HARDCODED COMPLETION
 
+
+    std::cout << "TOTAL DPS: "<< total_dps << std::endl;
+    
+    std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
+    std::cout << "BOSS DAMAGE: "<< boss_damage << std::endl;
+
     return phase_end_result;
 
 
 }
-
 
 EncounterResult Fight::attemptFight(){
     int phase_count = boss.GetPhaseCount();
@@ -121,7 +156,6 @@ EncounterResult Fight::attemptFight(){
         }
         boss.AdvancePhase();
     }
-
 
     fight_encounter.survived = 10;
 

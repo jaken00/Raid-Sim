@@ -31,7 +31,7 @@
           "fight_types": ["single_target_modifier"],
           "mechanic": {
             "name": "Flame Breath",
-            "damage_value": 4500.0,
+            "damage_value": 450.0,
             "needs_interrupt": false
           }
         },
@@ -43,7 +43,7 @@
           "fight_types": ["single_target_modifier", "aoe_modifier"],
           "mechanic": {
             "name": "Inferno Nova",
-            "damage_value": 6500.0,
+            "damage_value": 650.0,
             "needs_interrupt": true
           }
         },
@@ -55,7 +55,7 @@
           "fight_types": ["single_target_modifier", "execute_modifier"],
           "mechanic": {
             "name": "Molten Rage",
-            "damage_value": 9000.0,
+            "damage_value": 900.0,
             "needs_interrupt": true
           }
         }

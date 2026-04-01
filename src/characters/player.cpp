@@ -29,3 +29,17 @@ int Player::GetTotalHaste() const{
     
     return total_haste;
 }
+
+int Player::GetTotalExpertise() const{
+    
+    int total_expertise = 0;
+    
+    for(int i = 0; i < this->items.size(); i++){
+        Stats itemStats = items[i].itemStats;
+
+        total_expertise += itemStats.expertise;
+
+    }
+    
+    return total_expertise;
+}

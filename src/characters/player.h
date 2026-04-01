@@ -33,6 +33,7 @@ public:
 
     int GetTotalCritStrike() const;
     int GetTotalHaste() const;
+    int GetTotalExpertise() const;
 
 
 

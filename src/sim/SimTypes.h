@@ -16,7 +16,7 @@ enum struct FightAffinityProfile {
 };
 
 struct HealerState {
-    std::string spec_name;
+    Player* player;
     float current_mana;
     float max_mana;
     float mana_per_second_cost;

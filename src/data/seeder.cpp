@@ -90,6 +90,7 @@ void Seeder::seedPlayers(Database& db) {
             p["performance_rating"].get<float>(),
             p["attendance_percent"].get<float>(),
             p["potential"].get<float>(),
+            p["max_hp"].get<float>(),
             p["item_class"],
             p["attitude"]
         );

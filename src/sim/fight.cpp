@@ -90,35 +90,99 @@ float Fight::effective_hps(HealerState &h, float phase_duration){
 
 }
 
+static float getVarianceFloor(float player_performance){
+    if(player_performance <= 50){
+        return .50f;
+    } else if (player_performance <= 60)
+    {
+        return .55f;
+    } else if (player_performance <= 70)
+    {
+        return .63f;
+    } else if (player_performance <= 80)
+    {
+        return .70f;
+    } else {
+        return .85f;
+    }
+}
+/*
+ilvl_factor	clamped at 1.25	1.25
+performance	100 / 100	1.0
+dps_weight	Striker	1.05
+crit_multiplier	1 + (crit/100) * 1.0	depends on item stats
+haste_multiplier	1 + (haste/100) * 0.9	depends on item stats
+boss_resist	1 - 0	1.0
+fight_affinity	Striker execute_modifier	1.25
+variance	MAX_VARIANCE	1.30
+Ignoring crit/haste (currently 0 since all items are placeholders):
+
+
+1.25 × 1.0 × 1.05 × 1.0 × 1.0 × 1.0 × 1.25 × 1.30 = ~2.14× MAX_DPS
+So if you want a godlike performance-100 Striker to hit say 20,000 DPS at 
+the absolute ceiling:
+
+
+MAX_DPS = 20000 / 2.14 ≈ 9,346
+A round MAX_DPS = 10,000 would put that ceiling at ~21,400.
+
+One thing to flag: crit_multiplier and haste_multiplier have no cap, 
+so once you add real item stats they could inflate this unboundedly. 
+You probably want to clamp those too — 
+something like std::clamp(crit_multiplier, 1.0f, 2.0f) once you 
+define your stat ranges
+
+
+*/
+
+
 
 /* ##### ENCOUNTER/RAID FUNCTIONS #####*/
 
 PhaseResult Fight::attemptPhase(){
-    
+    std::random_device rd; 
+    std::mt19937 gen(rd()); 
     PhaseResult phase_end_result;
     float total_dps = 0.0f;
     float base_dps = 0.0f;
 
     Phase currentPhase = boss.getCurrentPhase();
-    currentPhase.hp_start_pct = 1.0f;
-    currentPhase.hp_end_pct = 0.0f;
+    // WE ARENT USING ACTUACL PHASE NUMBERS
+    //currentPhase.hp_start_pct = 1.0f;
+    //currentPhase.hp_end_pct = 0.0f;
 
     float boss_phase_hp_pool = (currentPhase.hp_start_pct - currentPhase.hp_end_pct) * boss.getMaxHP();
-
+    
     for(int i = 0 ; i < players.size(); i++){
         Spec player_spec = players[i]->GetSpec(); 
         float ilvl_calculation = ilvl_factor(players[i]->GetItemLevel(), boss.GetBossilvl());
         base_dps = ilvl_calculation * players[i]->GetPerformanceRating() * player_spec.getDPSWeight();
+        
         float crit_multiplier_final = crit_multiplier(*players[i]);
         float haste_multiplier_final = haste_multiplier(*players[i]);
         float boss_resist = resist_profile(*players[i]);
         float fight_affinity = get_fight_affinity(*players[i], boss.getCurrentPhase());
+        std::uniform_real_distribution<float> dis(getVarianceFloor(players[i]->GetPerformanceRating()), MAX_VARIANCE);
 
-        float player_dps = base_dps * crit_multiplier_final * haste_multiplier_final * (1.0f - boss_resist) * fight_affinity;
+        float variance = dis(gen);
+        float real_boss_resist = 1.0f - boss_resist;
 
+        float player_dps = (base_dps * crit_multiplier_final * haste_multiplier_final * (1.0f - boss_resist) * fight_affinity) * variance;
+        std::cout << "ILVL CALCULATION: " << ilvl_calculation << std::endl;
+        std::cout << "GET PLAYER PERFORMACE: " << players[i]->GetPerformanceRating() << std::endl;
+        std::cout << "CRIT MULTIPLIER: " << crit_multiplier_final << std::endl;
+        std::cout << "HASTE MULTIPLIER: " << haste_multiplier_final << std::endl;
+        std::cout << "BOSS RESIST: " << real_boss_resist << std::endl;
+        std::cout << "FIGHT AFFINITY : " << fight_affinity << std::endl;
+        std::cout << "VARIANCE : " << variance << std::endl;
+        std::cout << "PLAYER DPS: " << player_dps << std::endl;
+        std::cout << "###########################################################" << std::endl;
+
+
+
+        
         total_dps += player_dps;
 
-        //ADD IN VARIANCE
     }
     float phase_duration = boss_phase_hp_pool / total_dps;
     BossMechanic current_mechanic = currentPhase.mechanicAssociated;
@@ -132,10 +196,10 @@ PhaseResult Fight::attemptPhase(){
     phase_end_result.completed = true; // FIX THIS HARDCODED COMPLETION
 
 
-    std::cout << "TOTAL DPS: "<< total_dps << std::endl;
+    //std::cout << "TOTAL DPS: "<< total_dps << std::endl;
     
-    std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
-    std::cout << "BOSS DAMAGE: "<< boss_damage << std::endl;
+    //std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
+    //std::cout << "BOSS DAMAGE: "<< boss_damage << std::endl;
 
     return phase_end_result;
 

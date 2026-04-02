@@ -110,7 +110,7 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
         players.push_back(Player(
             i, row.name, it->second, row.ilvl, items,
             row.performance_rating, row.attendance_percent,
-            parseAttitude(row.attitude), row.potential, row.item_class
+            parseAttitude(row.attitude), row.potential, row.max_hp, row.item_class
         ));
     }
     return players;

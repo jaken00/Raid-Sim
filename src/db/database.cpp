@@ -15,6 +15,7 @@ bool Database::init() {
         std::cerr << "Failed to open database: " << sqlite3_errmsg(m_db) << "\n";
         return false;
     }
+    
 
     const std::string create_players = R"(
         CREATE TABLE IF NOT EXISTS players (
@@ -26,6 +27,7 @@ bool Database::init() {
             performance_rating  REAL NOT NULL DEFAULT 0.0,
             attendance_percent  REAL NOT NULL DEFAULT 0.0,
             potential           REAL NOT NULL DEFAULT 0.0,
+            max_hp              REAL NOT NULL DEFAULT 0.0,
             item_class          TEXT NOT NULL DEFAULT '',
             attitude            TEXT NOT NULL DEFAULT 'Neutral'
         );
@@ -158,12 +160,12 @@ bool Database::isEmpty(const std::string& table) {
 // Returns the new row id, or -1 on failure.
 int Database::insertPlayer(const std::string& name, const std::string& cls,
                            const std::string& spec, float ilvl, float performance_rating,
-                           float attendance_percent, float potential,
+                           float attendance_percent, float potential, float max_hp,
                            const std::string& item_class, const std::string& attitude) {
     const char* sql =
         "INSERT INTO players "
-        "(name, class, spec, ilvl, performance_rating, attendance_percent, potential, item_class, attitude) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        "(name, class, spec, ilvl, performance_rating, attendance_percent, potential, max_hp, item_class, attitude) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -178,8 +180,9 @@ int Database::insertPlayer(const std::string& name, const std::string& cls,
     sqlite3_bind_double(stmt, 5, static_cast<double>(performance_rating));
     sqlite3_bind_double(stmt, 6, static_cast<double>(attendance_percent));
     sqlite3_bind_double(stmt, 7, static_cast<double>(potential));
-    sqlite3_bind_text  (stmt, 8, item_class.c_str(), -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text  (stmt, 9, attitude.c_str(),   -1, SQLITE_TRANSIENT);
+    sqlite3_bind_double(stmt, 8, static_cast<double>(max_hp));
+    sqlite3_bind_text  (stmt, 9, item_class.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt, 10, attitude.c_str(),  -1, SQLITE_TRANSIENT);
 
     int newId = -1;
     if (sqlite3_step(stmt) == SQLITE_DONE) {
@@ -441,7 +444,7 @@ player_items and attaches them. Returns false only on a prepare failure.
 bool Database::getAllPlayers(std::vector<PlayerRow>& out) {
     const char* sql =
         "SELECT id, name, class, spec, ilvl, performance_rating, "
-        "attendance_percent, potential, item_class, attitude "
+        "attendance_percent, potential, max_hp, item_class, attitude "
         "FROM players ORDER BY id;";
 
     sqlite3_stmt* stmt = nullptr;
@@ -469,8 +472,9 @@ bool Database::getAllPlayers(std::vector<PlayerRow>& out) {
         row.performance_rating = static_cast<float>(sqlite3_column_double(stmt, 5));
         row.attendance_percent = static_cast<float>(sqlite3_column_double(stmt, 6));
         row.potential          = static_cast<float>(sqlite3_column_double(stmt, 7));
-        row.item_class         = getText(8);
-        row.attitude           = getText(9);
+        row.max_hp             = static_cast<float>(sqlite3_column_double(stmt, 8));
+        row.item_class         = getText(9);
+        row.attitude           = getText(10);
 
         // Load items for this player
         sqlite3_stmt* item_stmt = nullptr;

@@ -18,6 +18,7 @@ public:
            float performanceRating,  // Current Stars (FM style)
            float attendancePercent, Attitude attitude,
            float potential,          // Potential Stars
+           float maxHp,
            const std::string& itemClass);
 
     // Accessors
@@ -29,6 +30,7 @@ public:
     float GetAttendancePercent() const;
     Attitude GetAttitude() const;
     float GetPotential() const;
+    float GetMaxHp() const;
     const std::string& GetItemClass() const;
 
     int GetTotalCritStrike() const;
@@ -59,6 +61,7 @@ private:
     float attendancePercent;
     Attitude attitude;
     float potential;
+    float maxHp;
     std::string itemClass;
     std::vector<std::string> raidHistory;
 
@@ -68,7 +71,7 @@ private:
 inline Player::Player(int id, const std::string& name,
                       const Spec& spec, float itemLevel, std::vector<Items> items,
                       float performanceRating, float attendancePercent, Attitude attitude,
-                      float potential, const std::string& itemClass)
+                      float potential, float maxHp, const std::string& itemClass)
     : id(id),
       name(name),
       spec(spec),
@@ -78,6 +81,7 @@ inline Player::Player(int id, const std::string& name,
       attendancePercent(attendancePercent),
       attitude(attitude),
       potential(potential),
+      maxHp(maxHp),
       itemClass(itemClass) {
     if (this->attendancePercent < 0.0f) {
         this->attendancePercent = 0.0f;
@@ -116,6 +120,10 @@ inline Attitude Player::GetAttitude() const {
 
 inline float Player::GetPotential() const {
     return potential;
+}
+
+inline float Player::GetMaxHp() const {
+    return maxHp;
 }
 
 inline const std::string& Player::GetItemClass() const {

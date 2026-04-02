@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-
+#include <random>
 
 #include "../Raid/Boss.h"
 #include "../characters/player.h"
@@ -21,6 +21,7 @@ private:
     std::vector<Player*> players;
     Boss& boss;
 
+    float MAX_VARIANCE = 1.30f;
     float getPlayerDPS();
     std::vector<HealerState*> getHealerState();
     float getPlayerDefense();

@@ -9,6 +9,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 3500,
       "item_class": "Plate",
       "items": [
         { "slot": "Head",       "name": "Placeholder Warlord's Helm" },
@@ -30,6 +31,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2200,
       "item_class": "Cloth",
       "items": [
         { "slot": "Head",       "name": "Placeholder Mender's Cowl" },
@@ -51,6 +53,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2100,
       "item_class": "Cloth",
       "items": [
         { "slot": "Head",       "name": "Placeholder Invoker's Crown" },
@@ -72,6 +75,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2400,
       "item_class": "Leather",
       "items": [
         { "slot": "Head",       "name": "Placeholder Reaver's Hood" },
@@ -93,6 +97,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2600,
       "item_class": "Mail",
       "items": [
         { "slot": "Head",       "name": "Placeholder Herald's Helm" },
@@ -114,6 +119,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2700,
       "item_class": "Mail",
       "items": [
         { "slot": "Head",       "name": "Placeholder Dirge's Helm" },
@@ -135,6 +141,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 3600,
       "item_class": "Plate",
       "items": [
         { "slot": "Head",       "name": "Placeholder Vanguard's Helm" },
@@ -156,6 +163,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2100,
       "item_class": "Cloth",
       "items": [
         { "slot": "Head",       "name": "Placeholder Mender's Cowl" },
@@ -177,6 +185,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2000,
       "item_class": "Cloth",
       "items": [
         { "slot": "Head",       "name": "Placeholder Arcanist's Crown" },
@@ -198,6 +207,7 @@
       "attendance_percent": 100.0,
       "attitude": "Neutral",
       "potential": 70,
+      "max_hp": 2200,
       "item_class": "Leather",
       "items": [
         { "slot": "Head",       "name": "Placeholder Striker's Hood" },

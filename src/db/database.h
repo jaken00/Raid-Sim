@@ -19,6 +19,7 @@ struct PlayerRow {
     float performance_rating;
     float attendance_percent;
     float potential;
+    float max_hp;
     std::vector<ItemRow> items;
 };
 
@@ -91,7 +92,7 @@ public:
     // Players
     int  insertPlayer(const std::string& name, const std::string& cls, const std::string& spec,
                       float ilvl, float performance_rating, float attendance_percent,
-                      float potential, const std::string& item_class,
+                      float potential, float max_hp, const std::string& item_class,
                       const std::string& attitude);
     bool insertPlayerItem(int player_id, const std::string& slot, const std::string& item_name);
 

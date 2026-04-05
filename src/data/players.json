@@ -12,14 +12,14 @@
       "max_hp": 3500,
       "item_class": "Plate",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Warlord's Helm" },
-        { "slot": "Neck",       "name": "Placeholder Warlord's Gorget" },
-        { "slot": "Shoulders",  "name": "Placeholder Warlord's Pauldrons" },
-        { "slot": "Chest",      "name": "Placeholder Warlord's Breastplate" },
-        { "slot": "Legs",       "name": "Placeholder Warlord's Greaves" },
-        { "slot": "Feet",       "name": "Placeholder Warlord's Sabatons" },
-        { "slot": "MainHand",   "name": "Placeholder Warlord's Sword" },
-        { "slot": "OffHand",    "name": "Placeholder Warlord's Shield" }
+        { "slot": "Head",      "name": "Placeholder Warlord's Helm",        "crit": 25, "haste": 30, "expertise": 5, "constitution": 45 },
+        { "slot": "Neck",      "name": "Placeholder Warlord's Gorget",      "crit": 20, "haste": 25, "expertise": 5, "constitution": 35 },
+        { "slot": "Shoulders", "name": "Placeholder Warlord's Pauldrons",   "crit": 22, "haste": 28, "expertise": 5, "constitution": 38 },
+        { "slot": "Chest",     "name": "Placeholder Warlord's Breastplate", "crit": 28, "haste": 32, "expertise": 5, "constitution": 48 },
+        { "slot": "Legs",      "name": "Placeholder Warlord's Greaves",     "crit": 26, "haste": 30, "expertise": 5, "constitution": 45 },
+        { "slot": "Feet",      "name": "Placeholder Warlord's Sabatons",    "crit": 20, "haste": 25, "expertise": 5, "constitution": 35 },
+        { "slot": "MainHand",  "name": "Placeholder Warlord's Sword",       "crit": 24, "haste": 30, "expertise": 5, "constitution": 42 },
+        { "slot": "OffHand",   "name": "Placeholder Warlord's Shield",      "crit": 22, "haste": 28, "expertise": 5, "constitution": 40 }
       ]
     },
     {
@@ -34,14 +34,14 @@
       "max_hp": 2200,
       "item_class": "Cloth",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Mender's Cowl" },
-        { "slot": "Neck",       "name": "Placeholder Mender's Pendant" },
-        { "slot": "Shoulders",  "name": "Placeholder Mender's Mantle" },
-        { "slot": "Chest",      "name": "Placeholder Mender's Robes" },
-        { "slot": "Legs",       "name": "Placeholder Mender's Leggings" },
-        { "slot": "Feet",       "name": "Placeholder Mender's Slippers" },
-        { "slot": "MainHand",   "name": "Placeholder Mender's Staff" },
-        { "slot": "OffHand",    "name": "Placeholder Mender's Tome" }
+        { "slot": "Head",      "name": "Placeholder Mender's Cowl",      "crit": 35, "haste": 45, "expertise": 0, "constitution": 15 },
+        { "slot": "Neck",      "name": "Placeholder Mender's Pendant",   "crit": 28, "haste": 35, "expertise": 0, "constitution": 12 },
+        { "slot": "Shoulders", "name": "Placeholder Mender's Mantle",    "crit": 30, "haste": 38, "expertise": 0, "constitution": 13 },
+        { "slot": "Chest",     "name": "Placeholder Mender's Robes",     "crit": 38, "haste": 48, "expertise": 0, "constitution": 16 },
+        { "slot": "Legs",      "name": "Placeholder Mender's Leggings",  "crit": 35, "haste": 45, "expertise": 0, "constitution": 15 },
+        { "slot": "Feet",      "name": "Placeholder Mender's Slippers",  "crit": 28, "haste": 35, "expertise": 0, "constitution": 12 },
+        { "slot": "MainHand",  "name": "Placeholder Mender's Staff",     "crit": 35, "haste": 45, "expertise": 0, "constitution": 14 },
+        { "slot": "OffHand",   "name": "Placeholder Mender's Tome",      "crit": 30, "haste": 40, "expertise": 0, "constitution": 12 }
       ]
     },
     {
@@ -56,14 +56,14 @@
       "max_hp": 2100,
       "item_class": "Cloth",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Invoker's Crown" },
-        { "slot": "Neck",       "name": "Placeholder Invoker's Amulet" },
-        { "slot": "Shoulders",  "name": "Placeholder Invoker's Shoulders" },
-        { "slot": "Chest",      "name": "Placeholder Invoker's Vestments" },
-        { "slot": "Legs",       "name": "Placeholder Invoker's Leggings" },
-        { "slot": "Feet",       "name": "Placeholder Invoker's Sandals" },
-        { "slot": "MainHand",   "name": "Placeholder Invoker's Wand" },
-        { "slot": "OffHand",    "name": "Placeholder Invoker's Orb" }
+        { "slot": "Head",      "name": "Placeholder Invoker's Crown",     "crit": 45, "haste": 38, "expertise": 0, "constitution": 10 },
+        { "slot": "Neck",      "name": "Placeholder Invoker's Amulet",    "crit": 35, "haste": 30, "expertise": 0, "constitution": 8  },
+        { "slot": "Shoulders", "name": "Placeholder Invoker's Shoulders", "crit": 38, "haste": 32, "expertise": 0, "constitution": 9  },
+        { "slot": "Chest",     "name": "Placeholder Invoker's Vestments", "crit": 48, "haste": 40, "expertise": 0, "constitution": 11 },
+        { "slot": "Legs",      "name": "Placeholder Invoker's Leggings",  "crit": 45, "haste": 38, "expertise": 0, "constitution": 10 },
+        { "slot": "Feet",      "name": "Placeholder Invoker's Sandals",   "crit": 35, "haste": 30, "expertise": 0, "constitution": 8  },
+        { "slot": "MainHand",  "name": "Placeholder Invoker's Wand",      "crit": 42, "haste": 35, "expertise": 0, "constitution": 10 },
+        { "slot": "OffHand",   "name": "Placeholder Invoker's Orb",       "crit": 38, "haste": 32, "expertise": 0, "constitution": 9  }
       ]
     },
     {
@@ -78,14 +78,14 @@
       "max_hp": 2400,
       "item_class": "Leather",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Reaver's Hood" },
-        { "slot": "Neck",       "name": "Placeholder Reaver's Choker" },
-        { "slot": "Shoulders",  "name": "Placeholder Reaver's Spaulders" },
-        { "slot": "Chest",      "name": "Placeholder Reaver's Tunic" },
-        { "slot": "Legs",       "name": "Placeholder Reaver's Legwraps" },
-        { "slot": "Feet",       "name": "Placeholder Reaver's Boots" },
-        { "slot": "MainHand",   "name": "Placeholder Reaver's Blade" },
-        { "slot": "OffHand",    "name": "Placeholder Reaver's Dagger" }
+        { "slot": "Head",      "name": "Placeholder Reaver's Hood",       "crit": 42, "haste": 25, "expertise": 32, "constitution": 8 },
+        { "slot": "Neck",      "name": "Placeholder Reaver's Choker",     "crit": 32, "haste": 20, "expertise": 25, "constitution": 6 },
+        { "slot": "Shoulders", "name": "Placeholder Reaver's Spaulders",  "crit": 35, "haste": 22, "expertise": 28, "constitution": 7 },
+        { "slot": "Chest",     "name": "Placeholder Reaver's Tunic",      "crit": 45, "haste": 27, "expertise": 35, "constitution": 9 },
+        { "slot": "Legs",      "name": "Placeholder Reaver's Legwraps",   "crit": 42, "haste": 25, "expertise": 32, "constitution": 8 },
+        { "slot": "Feet",      "name": "Placeholder Reaver's Boots",      "crit": 32, "haste": 20, "expertise": 25, "constitution": 6 },
+        { "slot": "MainHand",  "name": "Placeholder Reaver's Blade",      "crit": 40, "haste": 24, "expertise": 30, "constitution": 8 },
+        { "slot": "OffHand",   "name": "Placeholder Reaver's Dagger",     "crit": 35, "haste": 22, "expertise": 28, "constitution": 7 }
       ]
     },
     {
@@ -100,14 +100,14 @@
       "max_hp": 2600,
       "item_class": "Mail",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Herald's Helm" },
-        { "slot": "Neck",       "name": "Placeholder Herald's Necklace" },
-        { "slot": "Shoulders",  "name": "Placeholder Herald's Shoulderguards" },
-        { "slot": "Chest",      "name": "Placeholder Herald's Hauberk" },
-        { "slot": "Legs",       "name": "Placeholder Herald's Chainleggings" },
-        { "slot": "Feet",       "name": "Placeholder Herald's Warboots" },
-        { "slot": "MainHand",   "name": "Placeholder Herald's Shortbow" },
-        { "slot": "OffHand",    "name": "Placeholder Herald's Quiver" }
+        { "slot": "Head",      "name": "Placeholder Herald's Helm",            "crit": 30, "haste": 38, "expertise": 0, "constitution": 20 },
+        { "slot": "Neck",      "name": "Placeholder Herald's Necklace",        "crit": 24, "haste": 30, "expertise": 0, "constitution": 16 },
+        { "slot": "Shoulders", "name": "Placeholder Herald's Shoulderguards",  "crit": 26, "haste": 32, "expertise": 0, "constitution": 17 },
+        { "slot": "Chest",     "name": "Placeholder Herald's Hauberk",         "crit": 32, "haste": 40, "expertise": 0, "constitution": 21 },
+        { "slot": "Legs",      "name": "Placeholder Herald's Chainleggings",   "crit": 30, "haste": 38, "expertise": 0, "constitution": 20 },
+        { "slot": "Feet",      "name": "Placeholder Herald's Warboots",        "crit": 24, "haste": 30, "expertise": 0, "constitution": 16 },
+        { "slot": "MainHand",  "name": "Placeholder Herald's Shortbow",        "crit": 28, "haste": 35, "expertise": 0, "constitution": 18 },
+        { "slot": "OffHand",   "name": "Placeholder Herald's Quiver",          "crit": 26, "haste": 32, "expertise": 0, "constitution": 17 }
       ]
     },
     {
@@ -122,14 +122,14 @@
       "max_hp": 2700,
       "item_class": "Mail",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Dirge's Helm" },
-        { "slot": "Neck",       "name": "Placeholder Dirge's Necklace" },
-        { "slot": "Shoulders",  "name": "Placeholder Dirge's Shoulderguards" },
-        { "slot": "Chest",      "name": "Placeholder Dirge's Hauberk" },
-        { "slot": "Legs",       "name": "Placeholder Dirge's Chainleggings" },
-        { "slot": "Feet",       "name": "Placeholder Dirge's Warboots" },
-        { "slot": "MainHand",   "name": "Placeholder Dirge's Shortbow" },
-        { "slot": "OffHand",    "name": "Placeholder Dirge's Quiver" }
+        { "slot": "Head",      "name": "Placeholder Dirge's Helm",            "crit": 40, "haste": 38, "expertise": 0, "constitution": 15 },
+        { "slot": "Neck",      "name": "Placeholder Dirge's Necklace",        "crit": 32, "haste": 30, "expertise": 0, "constitution": 12 },
+        { "slot": "Shoulders", "name": "Placeholder Dirge's Shoulderguards",  "crit": 34, "haste": 32, "expertise": 0, "constitution": 13 },
+        { "slot": "Chest",     "name": "Placeholder Dirge's Hauberk",         "crit": 42, "haste": 40, "expertise": 0, "constitution": 16 },
+        { "slot": "Legs",      "name": "Placeholder Dirge's Chainleggings",   "crit": 40, "haste": 38, "expertise": 0, "constitution": 15 },
+        { "slot": "Feet",      "name": "Placeholder Dirge's Warboots",        "crit": 32, "haste": 30, "expertise": 0, "constitution": 12 },
+        { "slot": "MainHand",  "name": "Placeholder Dirge's Shortbow",        "crit": 38, "haste": 36, "expertise": 0, "constitution": 14 },
+        { "slot": "OffHand",   "name": "Placeholder Dirge's Quiver",          "crit": 35, "haste": 33, "expertise": 0, "constitution": 13 }
       ]
     },
     {
@@ -144,14 +144,14 @@
       "max_hp": 3600,
       "item_class": "Plate",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Vanguard's Helm" },
-        { "slot": "Neck",       "name": "Placeholder Vanguard's Gorget" },
-        { "slot": "Shoulders",  "name": "Placeholder Vanguard's Pauldrons" },
-        { "slot": "Chest",      "name": "Placeholder Vanguard's Breastplate" },
-        { "slot": "Legs",       "name": "Placeholder Vanguard's Greaves" },
-        { "slot": "Feet",       "name": "Placeholder Vanguard's Sabatons" },
-        { "slot": "MainHand",   "name": "Placeholder Vanguard's Axe" },
-        { "slot": "OffHand",    "name": "Placeholder Vanguard's Shield" }
+        { "slot": "Head",      "name": "Placeholder Vanguard's Helm",        "crit": 28, "haste": 32, "expertise": 5, "constitution": 48 },
+        { "slot": "Neck",      "name": "Placeholder Vanguard's Gorget",      "crit": 22, "haste": 26, "expertise": 5, "constitution": 38 },
+        { "slot": "Shoulders", "name": "Placeholder Vanguard's Pauldrons",   "crit": 24, "haste": 28, "expertise": 5, "constitution": 40 },
+        { "slot": "Chest",     "name": "Placeholder Vanguard's Breastplate", "crit": 30, "haste": 34, "expertise": 5, "constitution": 50 },
+        { "slot": "Legs",      "name": "Placeholder Vanguard's Greaves",     "crit": 28, "haste": 32, "expertise": 5, "constitution": 48 },
+        { "slot": "Feet",      "name": "Placeholder Vanguard's Sabatons",    "crit": 22, "haste": 26, "expertise": 5, "constitution": 38 },
+        { "slot": "MainHand",  "name": "Placeholder Vanguard's Axe",         "crit": 26, "haste": 30, "expertise": 5, "constitution": 45 },
+        { "slot": "OffHand",   "name": "Placeholder Vanguard's Shield",      "crit": 24, "haste": 28, "expertise": 5, "constitution": 42 }
       ]
     },
     {
@@ -166,14 +166,14 @@
       "max_hp": 2100,
       "item_class": "Cloth",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Mender's Cowl" },
-        { "slot": "Neck",       "name": "Placeholder Mender's Pendant" },
-        { "slot": "Shoulders",  "name": "Placeholder Mender's Mantle" },
-        { "slot": "Chest",      "name": "Placeholder Mender's Robes" },
-        { "slot": "Legs",       "name": "Placeholder Mender's Leggings" },
-        { "slot": "Feet",       "name": "Placeholder Mender's Slippers" },
-        { "slot": "MainHand",   "name": "Placeholder Mender's Staff" },
-        { "slot": "OffHand",    "name": "Placeholder Mender's Tome" }
+        { "slot": "Head",      "name": "Placeholder Mender's Cowl",     "crit": 32, "haste": 42, "expertise": 0, "constitution": 12 },
+        { "slot": "Neck",      "name": "Placeholder Mender's Pendant",  "crit": 25, "haste": 33, "expertise": 0, "constitution": 10 },
+        { "slot": "Shoulders", "name": "Placeholder Mender's Mantle",   "crit": 27, "haste": 35, "expertise": 0, "constitution": 11 },
+        { "slot": "Chest",     "name": "Placeholder Mender's Robes",    "crit": 34, "haste": 44, "expertise": 0, "constitution": 13 },
+        { "slot": "Legs",      "name": "Placeholder Mender's Leggings", "crit": 32, "haste": 42, "expertise": 0, "constitution": 12 },
+        { "slot": "Feet",      "name": "Placeholder Mender's Slippers", "crit": 25, "haste": 33, "expertise": 0, "constitution": 10 },
+        { "slot": "MainHand",  "name": "Placeholder Mender's Staff",    "crit": 30, "haste": 40, "expertise": 0, "constitution": 11 },
+        { "slot": "OffHand",   "name": "Placeholder Mender's Tome",     "crit": 28, "haste": 37, "expertise": 0, "constitution": 10 }
       ]
     },
     {
@@ -188,14 +188,14 @@
       "max_hp": 2000,
       "item_class": "Cloth",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Arcanist's Crown" },
-        { "slot": "Neck",       "name": "Placeholder Arcanist's Amulet" },
-        { "slot": "Shoulders",  "name": "Placeholder Arcanist's Shoulders" },
-        { "slot": "Chest",      "name": "Placeholder Arcanist's Vestments" },
-        { "slot": "Legs",       "name": "Placeholder Arcanist's Leggings" },
-        { "slot": "Feet",       "name": "Placeholder Arcanist's Sandals" },
-        { "slot": "MainHand",   "name": "Placeholder Arcanist's Wand" },
-        { "slot": "OffHand",    "name": "Placeholder Arcanist's Orb" }
+        { "slot": "Head",      "name": "Placeholder Arcanist's Crown",     "crit": 42, "haste": 35, "expertise": 0, "constitution": 9  },
+        { "slot": "Neck",      "name": "Placeholder Arcanist's Amulet",    "crit": 33, "haste": 28, "expertise": 0, "constitution": 7  },
+        { "slot": "Shoulders", "name": "Placeholder Arcanist's Shoulders", "crit": 35, "haste": 29, "expertise": 0, "constitution": 8  },
+        { "slot": "Chest",     "name": "Placeholder Arcanist's Vestments", "crit": 44, "haste": 37, "expertise": 0, "constitution": 10 },
+        { "slot": "Legs",      "name": "Placeholder Arcanist's Leggings",  "crit": 42, "haste": 35, "expertise": 0, "constitution": 9  },
+        { "slot": "Feet",      "name": "Placeholder Arcanist's Sandals",   "crit": 33, "haste": 28, "expertise": 0, "constitution": 7  },
+        { "slot": "MainHand",  "name": "Placeholder Arcanist's Wand",      "crit": 40, "haste": 33, "expertise": 0, "constitution": 9  },
+        { "slot": "OffHand",   "name": "Placeholder Arcanist's Orb",       "crit": 36, "haste": 30, "expertise": 0, "constitution": 8  }
       ]
     },
     {
@@ -210,14 +210,14 @@
       "max_hp": 2200,
       "item_class": "Leather",
       "items": [
-        { "slot": "Head",       "name": "Placeholder Striker's Hood" },
-        { "slot": "Neck",       "name": "Placeholder Striker's Choker" },
-        { "slot": "Shoulders",  "name": "Placeholder Striker's Spaulders" },
-        { "slot": "Chest",      "name": "Placeholder Striker's Tunic" },
-        { "slot": "Legs",       "name": "Placeholder Striker's Legwraps" },
-        { "slot": "Feet",       "name": "Placeholder Striker's Boots" },
-        { "slot": "MainHand",   "name": "Placeholder Striker's Blade" },
-        { "slot": "OffHand",    "name": "Placeholder Striker's Dagger" }
+        { "slot": "Head",      "name": "Placeholder Striker's Hood",     "crit": 38, "haste": 22, "expertise": 28, "constitution": 7 },
+        { "slot": "Neck",      "name": "Placeholder Striker's Choker",   "crit": 30, "haste": 18, "expertise": 22, "constitution": 5 },
+        { "slot": "Shoulders", "name": "Placeholder Striker's Spaulders","crit": 32, "haste": 19, "expertise": 24, "constitution": 6 },
+        { "slot": "Chest",     "name": "Placeholder Striker's Tunic",    "crit": 40, "haste": 23, "expertise": 30, "constitution": 8 },
+        { "slot": "Legs",      "name": "Placeholder Striker's Legwraps", "crit": 38, "haste": 22, "expertise": 28, "constitution": 7 },
+        { "slot": "Feet",      "name": "Placeholder Striker's Boots",    "crit": 30, "haste": 18, "expertise": 22, "constitution": 5 },
+        { "slot": "MainHand",  "name": "Placeholder Striker's Blade",    "crit": 36, "haste": 21, "expertise": 27, "constitution": 7 },
+        { "slot": "OffHand",   "name": "Placeholder Striker's Dagger",   "crit": 32, "haste": 19, "expertise": 24, "constitution": 6 }
       ]
     }
   ]

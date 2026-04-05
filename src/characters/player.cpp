@@ -43,3 +43,25 @@ int Player::GetTotalExpertise() const{
     
     return total_expertise;
 }
+
+int Player::GetTotalConstitution() const {
+    int total = 0;
+    for (const auto& item : items) total += item.itemStats.constitution;
+    return total;
+}
+
+
+void Player::setCurrentHealth(){
+    currentHealth = maxHp;
+}
+
+void Player::takeDamage(float damageValue){
+    currentHealth = currentHealth - damageValue;
+}
+
+void Player::buildHealerState(){
+    Role role = spec.role;
+
+    if(role != Role::Healer) return;
+
+}

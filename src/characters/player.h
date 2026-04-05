@@ -36,6 +36,9 @@ public:
     int GetTotalCritStrike() const;
     int GetTotalHaste() const;
     int GetTotalExpertise() const;
+    int GetTotalConstitution() const;
+    void takeDamage(float damageValue);
+    float getCurrentHealth();
 
 
 
@@ -49,6 +52,8 @@ public:
     void SetItemClass(const std::string& newItemClass);
 
     void AddRaidHistoryEntry(const std::string& entry);
+    void setCurrentHealth();
+    void buildHealerState();
     
 
 private:
@@ -64,6 +69,12 @@ private:
     float maxHp;
     std::string itemClass;
     std::vector<std::string> raidHistory;
+    float currentHealth;
+
+    HealerState healerState;
+
+    
+
 
     
 };
@@ -164,3 +175,7 @@ inline void Player::AddRaidHistoryEntry(const std::string& entry) {
     raidHistory.push_back(entry);
 }
 
+
+inline float Player::getCurrentHealth(){
+    return currentHealth;
+}

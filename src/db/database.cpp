@@ -35,10 +35,14 @@ bool Database::init() {
 
     const std::string create_player_items = R"(
         CREATE TABLE IF NOT EXISTS player_items (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            player_id   INTEGER NOT NULL,
-            slot        TEXT NOT NULL,
-            item_name   TEXT NOT NULL,
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            player_id    INTEGER NOT NULL,
+            slot         TEXT NOT NULL,
+            item_name    TEXT NOT NULL,
+            crit         INTEGER NOT NULL DEFAULT 0,
+            haste        INTEGER NOT NULL DEFAULT 0,
+            expertise    INTEGER NOT NULL DEFAULT 0,
+            constitution INTEGER NOT NULL DEFAULT 0,
             FOREIGN KEY (player_id) REFERENCES players(id)
         );
     )";
@@ -195,9 +199,11 @@ int Database::insertPlayer(const std::string& name, const std::string& cls,
 }
 
 bool Database::insertPlayerItem(int player_id, const std::string& slot,
-                                const std::string& item_name) {
+                                const std::string& item_name,
+                                int crit, int haste, int expertise, int constitution) {
     const char* sql =
-        "INSERT INTO player_items (player_id, slot, item_name) VALUES (?, ?, ?);";
+        "INSERT INTO player_items (player_id, slot, item_name, crit, haste, expertise, constitution) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -208,6 +214,10 @@ bool Database::insertPlayerItem(int player_id, const std::string& slot,
     sqlite3_bind_int (stmt, 1, player_id);
     sqlite3_bind_text(stmt, 2, slot.c_str(),      -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt, 3, item_name.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int (stmt, 4, crit);
+    sqlite3_bind_int (stmt, 5, haste);
+    sqlite3_bind_int (stmt, 6, expertise);
+    sqlite3_bind_int (stmt, 7, constitution);
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
     if (!ok)
@@ -388,7 +398,7 @@ bool Database::getAllSpecs(std::vector<SpecRow>& out) {
         "SELECT name, resource, attack_range, dps_weight, hps_weight, defensive_weight, utility_weight, "
         "primary_stat, can_interrupt, can_dispel, provides_shield, provides_external_cd, "
         "raid_buff, execute_bonus, aoe_modifier, spec_damage_type, stat_haste, stat_crit, stat_expertise, "
-        "fap_single_target, fap_aoe, fap_cleave, fap_movement, fap_execute, fap_melee_hostile "
+        "fap_single_target, fap_aoe, fap_cleave, fap_movement, fap_execute, fap_melee_hostile, role "
         "FROM specialization ORDER BY name;";
 
     sqlite3_stmt* stmt = nullptr;
@@ -429,6 +439,7 @@ bool Database::getAllSpecs(std::vector<SpecRow>& out) {
         row.fap_movement       = static_cast<float>(sqlite3_column_double(stmt, 22));
         row.fap_execute        = static_cast<float>(sqlite3_column_double(stmt, 23));
         row.fap_melee_hostile  = static_cast<float>(sqlite3_column_double(stmt, 24));
+        row.role               = getText(25);
 
         out.push_back(row);
     }
@@ -454,7 +465,8 @@ bool Database::getAllPlayers(std::vector<PlayerRow>& out) {
     }
 
     const char* items_sql =
-        "SELECT slot, item_name FROM player_items WHERE player_id = ? ORDER BY id;";
+        "SELECT slot, item_name, crit, haste, expertise, constitution "
+        "FROM player_items WHERE player_id = ? ORDER BY id;";
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         PlayerRow row;
@@ -484,8 +496,12 @@ bool Database::getAllPlayers(std::vector<PlayerRow>& out) {
                 ItemRow item;
                 const unsigned char* slot = sqlite3_column_text(item_stmt, 0);
                 const unsigned char* name = sqlite3_column_text(item_stmt, 1);
-                item.slot = slot ? reinterpret_cast<const char*>(slot) : "";
-                item.name = name ? reinterpret_cast<const char*>(name) : "";
+                item.slot         = slot ? reinterpret_cast<const char*>(slot) : "";
+                item.name         = name ? reinterpret_cast<const char*>(name) : "";
+                item.crit         = sqlite3_column_int(item_stmt, 2);
+                item.haste        = sqlite3_column_int(item_stmt, 3);
+                item.expertise    = sqlite3_column_int(item_stmt, 4);
+                item.constitution = sqlite3_column_int(item_stmt, 5);
                 row.items.push_back(item);
             }
             sqlite3_finalize(item_stmt);

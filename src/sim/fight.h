@@ -47,6 +47,9 @@ private:
 
     FightState updateFightState(FightState& fightState);
     
+    // ############### DAMAGE TO PLAYERS ############### //
+    void takeDamage(float boss_damage, Player& p);
+    std::vector<Player*> check_deaths();
 
 public:
     Fight(const std::vector<Player*> players, Boss& boss);

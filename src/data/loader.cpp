@@ -43,10 +43,14 @@ static Slot parseSlot(const std::string& s) {
 
 static Items buildItem(const ItemRow& r) {
     Items item;
-    item.name      = r.name;
-    item.itemSlot  = parseSlot(r.slot);
-    item.ilvl      = 0.0f;
-    item.itemStats = {};
+    item.name                    = r.name;
+    item.itemSlot                = parseSlot(r.slot);
+    item.ilvl                    = 0.0f;
+    item.itemStats               = {};
+    item.itemStats.criticalStrike = r.crit;
+    item.itemStats.haste         = r.haste;
+    item.itemStats.expertise     = r.expertise;
+    item.itemStats.constitution  = r.constitution;
     return item;
 }
 
@@ -72,7 +76,7 @@ static Spec buildSpec(const SpecRow& r) {
         { FightAffinityProfile::melee_hostile_penalty,  r.fap_melee_hostile },
     };
 
-    return Spec(r.name, res, parseAttackRange(r.attack_range), r.dps_weight,
+    return Spec(r.name, parseRole(r.role), res, parseAttackRange(r.attack_range), r.dps_weight,
                 parseDamageType(r.spec_damage_type), r.hps_weight,
                 r.defensive_weight, r.utility_weight, r.primary_stat,
                 r.can_interrupt, r.can_dispel, r.provides_shield,
@@ -112,7 +116,13 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
             row.performance_rating, row.attendance_percent,
             parseAttitude(row.attitude), row.potential, row.max_hp, row.item_class
         ));
+        
     }
+
+    for(Player player : players){
+        player.setCurrentHealth();
+    }
+
     return players;
 }
 

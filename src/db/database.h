@@ -7,6 +7,10 @@
 struct ItemRow {
     std::string slot;
     std::string name;
+    int crit;
+    int haste;
+    int expertise;
+    int constitution;
 };
 
 struct PlayerRow {
@@ -25,6 +29,7 @@ struct PlayerRow {
 
 struct SpecRow {
     std::string name;
+    std::string role;
     std::string resource;
     std::string attack_range;
     float dps_weight;
@@ -94,7 +99,8 @@ public:
                       float ilvl, float performance_rating, float attendance_percent,
                       float potential, float max_hp, const std::string& item_class,
                       const std::string& attitude);
-    bool insertPlayerItem(int player_id, const std::string& slot, const std::string& item_name);
+    bool insertPlayerItem(int player_id, const std::string& slot, const std::string& item_name,
+                          int crit, int haste, int expertise, int constitution);
 
     // Specializations
     bool insertClass(const std::string& name);

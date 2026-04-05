@@ -23,6 +23,7 @@ struct SpecStatWeights {
 class Spec {
 private:
     std::string name;
+    Role role;
     Resource resouceUsed; 
     AttackRange attackRange; 
     float dps_weight;
@@ -41,10 +42,13 @@ private:
     SpecStatWeights specStatWeights;
     //std::map<DamageType, float> playerDamageTypeProfile; // this is good for defensive numbers
     std::map<FightAffinityProfile, float> fightAffinityProfile;
+    HealerState healerState;
+
+    void buildHealerState();
 
 
 public:
-    Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
+    Spec(std::string name, Role role, Resource resouceUsed, AttackRange attackRange, float dps_weight,
          DamageType specDamageType, float hps_weight, float defense_weight, float utility_weight,
          std::string primary_stat, bool can_interrupt, bool can_dispel, bool provides_shield,
          bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier,
@@ -59,12 +63,13 @@ public:
     float getFightAffinity(FightAffinityProfile fightType);
 };
 
-inline Spec::Spec(std::string name, Resource resouceUsed, AttackRange attackRange, float dps_weight,
+inline Spec::Spec(std::string name, Role role, Resource resouceUsed, AttackRange attackRange, float dps_weight,
            DamageType specDamageType, float hps_weight, float defense_weight, float utility_weight,
            std::string primary_stat, bool can_interrupt, bool can_dispel, bool provides_shield,
            bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier,
            SpecStatWeights statWeights, std::map<FightAffinityProfile, float> affinityProfile)
     : name(name),
+      role(role),
       resouceUsed(resouceUsed),
       attackRange(attackRange),
       dps_weight(dps_weight),

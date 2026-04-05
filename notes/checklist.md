@@ -1,5 +1,5 @@
-- Generate items with stats for all players. 
-- Take into account Primary Stat amounts (int / agi / stregnth etc)
-- Take into account secondary stats (expertise, constitution, etc)
+
+
 - Add in Damage for Players (Taking Damage)
 - Add in BossMechancicRaid, boss mechanic tank (different damage amounts)
+- Generate/Get Healerstates for heaelrs

@@ -101,7 +101,9 @@ void Seeder::seedPlayers(Database& db) {
         }
 
         for (auto& item : p["items"])
-            db.insertPlayerItem(playerId, item["slot"], item["name"]);
+            db.insertPlayerItem(playerId, item["slot"], item["name"],
+                item["crit"].get<int>(), item["haste"].get<int>(),
+                item["expertise"].get<int>(), item["constitution"].get<int>());
     }
 }
 

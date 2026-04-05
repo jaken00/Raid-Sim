@@ -139,12 +139,29 @@ define your stat ranges
 
 /* ##### ENCOUNTER/RAID FUNCTIONS #####*/
 
+void Fight::takeDamage(float boss_damage, Player& p){ //might be over engineering and can just call it in the loop? (Maybe not sicne we have to recalculate hp values?)
+    p.takeDamage(boss_damage);
+}
+
+std::vector<Player*> Fight::check_deaths(){
+    std::vector<Player*> death_list; 
+    
+    for(auto p : players){
+        if(p->getCurrentHealth() <= 0){
+            death_list.push_back(p);
+        }
+    }
+
+    return death_list;
+}
+
 PhaseResult Fight::attemptPhase(){
     std::random_device rd; 
     std::mt19937 gen(rd()); 
     PhaseResult phase_end_result;
     float total_dps = 0.0f;
     float base_dps = 0.0f;
+    float total_hps = 0.0f;
 
     Phase currentPhase = boss.getCurrentPhase();
     // WE ARENT USING ACTUACL PHASE NUMBERS
@@ -168,6 +185,7 @@ PhaseResult Fight::attemptPhase(){
         float real_boss_resist = 1.0f - boss_resist;
 
         float player_dps = (base_dps * crit_multiplier_final * haste_multiplier_final * (1.0f - boss_resist) * fight_affinity) * variance;
+        /*
         std::cout << "ILVL CALCULATION: " << ilvl_calculation << std::endl;
         std::cout << "GET PLAYER PERFORMACE: " << players[i]->GetPerformanceRating() << std::endl;
         std::cout << "CRIT MULTIPLIER: " << crit_multiplier_final << std::endl;
@@ -177,6 +195,9 @@ PhaseResult Fight::attemptPhase(){
         std::cout << "VARIANCE : " << variance << std::endl;
         std::cout << "PLAYER DPS: " << player_dps << std::endl;
         std::cout << "###########################################################" << std::endl;
+        */
+        
+
 
 
 
@@ -187,6 +208,18 @@ PhaseResult Fight::attemptPhase(){
     float phase_duration = boss_phase_hp_pool / total_dps;
     BossMechanic current_mechanic = currentPhase.mechanicAssociated;
     float boss_damage = current_mechanic.damageValue * players.size() * phase_duration;
+    float damage_per_player = boss_damage / players.size();
+
+    for(auto p : players){
+        takeDamage(damage_per_player, *p);
+    }
+    std::vector<Player*> death_list = check_deaths();
+    if(death_list.size() >= 1){ // IS NOT EMPTY
+        //std::cout << "RECALCULATE DPS NUMBERS DUE TO DEATH" << std::endl;   //How do we calcualcate this? pick a random time during the pull? 
+    } else {
+        //std::cout << "NO ONE DIED" << std::endl;
+    }
+
 
     phase_end_result.actual_duration = phase_duration;
     phase_end_result.boss_hp_at_end = 0.0;
@@ -198,8 +231,8 @@ PhaseResult Fight::attemptPhase(){
 
     //std::cout << "TOTAL DPS: "<< total_dps << std::endl;
     
-    //std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
-    //std::cout << "BOSS DAMAGE: "<< boss_damage << std::endl;
+    std::cout << "PHASE DURATION: "<< phase_duration << std::endl;
+    std::cout << "BOSS DAMAGE: "<< boss_damage << std::endl;
 
     return phase_end_result;
 

@@ -111,7 +111,13 @@
             </TabItem>
 
             <TabItem Header="Specs">
-                <!-- TODO: add a DataGrid bound to SpecsView -->
+                <DataGrid x:Name="SpecsGrid"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="True"
+                          CanUserDeleteRows="True"
+                          SelectionUnit="Cell"
+                          Margin="4">
+                    <DataGrid.Columns>
             </TabItem>
 
             <TabItem Header="Players">

@@ -60,7 +60,7 @@ void Player::takeDamage(float damageValue){
 }
 
 void Player::buildHealerState(){
-    Role role = spec.role;
+    Role role = spec.role; //this failes because we dont import the Enum btw fun! 
 
     if(role != Role::Healer) return;
 

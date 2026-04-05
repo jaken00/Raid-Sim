@@ -1,0 +1,68 @@
+{
+  "spells": [
+    {
+      "id": 1,
+      "spell_name": "Fireball",
+      "mana_cost": 80,
+      "damage_type": "Fire",
+      "damage_value": 450,
+      "heal_value": 0,
+      "provides_shield": false,
+      "provides_buff": false,
+      "provides_debuff": true,
+      "shield_id": null,
+      "buff_id": null,
+      "debuff_id": 101,
+      "provides_dot": true,
+      "dot_id": 201
+    },
+    {
+      "id": 2,
+      "spell_name": "Holy Light",
+      "mana_cost": 60,
+      "damage_type": "Holy",
+      "damage_value": 0,
+      "heal_value": 380,
+      "provides_shield": true,
+      "provides_buff": true,
+      "provides_debuff": false,
+      "shield_id": 301,
+      "buff_id": 401,
+      "debuff_id": null,
+      "provides_dot": false,
+      "dot_id": null
+    },
+    {
+      "id": 3,
+      "spell_name": "Shadow Bolt",
+      "mana_cost": 70,
+      "damage_type": "Shadow",
+      "damage_value": 320,
+      "heal_value": 0,
+      "provides_shield": false,
+      "provides_buff": false,
+      "provides_debuff": true,
+      "shield_id": null,
+      "buff_id": null,
+      "debuff_id": 102,
+      "provides_dot": true,
+      "dot_id": 202
+    },
+    {
+      "id": 4,
+      "spell_name": "Barrier",
+      "mana_cost": 100,
+      "damage_type": "Holy",
+      "damage_value": 0,
+      "heal_value": 0,
+      "provides_shield": true,
+      "provides_buff": false,
+      "provides_debuff": true,
+      "shield_id": 101,
+      "buff_id": null,
+      "debuff_id": null,
+      "provides_dot": false,
+      "dot_id": null
+    }
+  ]
+}

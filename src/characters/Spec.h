@@ -42,9 +42,6 @@ private:
     SpecStatWeights specStatWeights;
     //std::map<DamageType, float> playerDamageTypeProfile; // this is good for defensive numbers
     std::map<FightAffinityProfile, float> fightAffinityProfile;
-    HealerState healerState;
-
-    void buildHealerState();
 
 
 public:

@@ -1,0 +1,128 @@
+<Window x:Class="RaidSimTools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Raid Sim Tools" Height="700" Width="1100"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel>
+
+        <!-- Top toolbar -->
+        <ToolBar DockPanel.Dock="Top">
+            <Button x:Name="BtnSave" Content="Save" Width="80" Click="BtnSave_Click"/>
+            <Separator/>
+            <TextBlock Text="Data path:" VerticalAlignment="Center" Margin="4,0"/>
+            <TextBox x:Name="TxtDataPath" Width="400" VerticalAlignment="Center"
+                     IsReadOnly="True" Background="#F5F5F5"/>
+            <Button Content="Browse..." Width="70" Margin="4,0,0,0" Click="BtnBrowse_Click"/>
+        </ToolBar>
+
+        <!-- Tabs -->
+        <TabControl x:Name="Tabs" SelectionChanged="Tabs_SelectionChanged">
+
+            <TabItem Header="Spells">
+                <!--
+                    SelectionUnit="Cell"  : clicking a cell selects that cell (not the whole row)
+                    EditingMode triggers  : single click goes straight into edit — no double-click needed
+                -->
+                <DataGrid x:Name="SpellsGrid"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="True"
+                          CanUserDeleteRows="True"
+                          SelectionUnit="Cell"
+                          Margin="4">
+                    <DataGrid.Columns>
+                        <!--
+                            Mode=TwoWay          : changes you type flow back into the Spell object
+                            UpdateSourceTrigger=LostFocus : saves the value when you click away
+                        -->
+                        <DataGridTextColumn Header="ID"           Width="50">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="Id" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Name"         Width="140">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="SpellName" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Mana Cost"    Width="80">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="ManaCost" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Damage Type"  Width="100">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="DamageType" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Damage Value" Width="100">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="DamageValue" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Heal Value"   Width="90">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="HealValue" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <!-- CheckBox columns: UpdateSourceTrigger=PropertyChanged so one click toggles immediately -->
+                        <DataGridCheckBoxColumn Header="Shield"  Width="55">
+                            <DataGridCheckBoxColumn.Binding>
+                                <Binding Path="ProvidesShield" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </DataGridCheckBoxColumn.Binding>
+                        </DataGridCheckBoxColumn>
+                        <DataGridCheckBoxColumn Header="Buff"    Width="45">
+                            <DataGridCheckBoxColumn.Binding>
+                                <Binding Path="ProvidesBuff" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </DataGridCheckBoxColumn.Binding>
+                        </DataGridCheckBoxColumn>
+                        <DataGridCheckBoxColumn Header="Debuff"  Width="55">
+                            <DataGridCheckBoxColumn.Binding>
+                                <Binding Path="ProvidesDebuff" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </DataGridCheckBoxColumn.Binding>
+                        </DataGridCheckBoxColumn>
+                        <DataGridCheckBoxColumn Header="DoT"     Width="45">
+                            <DataGridCheckBoxColumn.Binding>
+                                <Binding Path="ProvidesDot" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                            </DataGridCheckBoxColumn.Binding>
+                        </DataGridCheckBoxColumn>
+                        <DataGridTextColumn Header="Shield ID"   Width="70">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="ShieldId" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Buff ID"     Width="60">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="BuffId" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Debuff ID"   Width="70">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="DebuffId" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="DoT ID"      Width="60">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="DotId" Mode="TwoWay" UpdateSourceTrigger="LostFocus"/>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="Specs">
+                <!-- TODO: add a DataGrid bound to SpecsView -->
+            </TabItem>
+
+            <TabItem Header="Players">
+                <!-- TODO: add a DataGrid bound to PlayersView -->
+            </TabItem>
+
+            <TabItem Header="Bosses">
+                <!-- TODO: add a DataGrid bound to BossesView -->
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+</Window>

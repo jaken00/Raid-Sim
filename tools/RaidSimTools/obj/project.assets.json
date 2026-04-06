@@ -8,19 +8,19 @@
     "net8.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\jacob\\.nuget\\packages\\": {}
+    "C:\\Users\\e88993\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\programming\\dev\\Raid-Sim\\tools\\RaidSimTools\\RaidSimTools.csproj",
+      "projectUniqueName": "C:\\dev\\Raid-Sim\\tools\\RaidSimTools\\RaidSimTools.csproj",
       "projectName": "RaidSimTools",
-      "projectPath": "C:\\programming\\dev\\Raid-Sim\\tools\\RaidSimTools\\RaidSimTools.csproj",
-      "packagesPath": "C:\\Users\\jacob\\.nuget\\packages\\",
-      "outputPath": "C:\\programming\\dev\\Raid-Sim\\tools\\RaidSimTools\\obj\\",
+      "projectPath": "C:\\dev\\Raid-Sim\\tools\\RaidSimTools\\RaidSimTools.csproj",
+      "packagesPath": "C:\\Users\\e88993\\.nuget\\packages\\",
+      "outputPath": "C:\\dev\\Raid-Sim\\tools\\RaidSimTools\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jacob\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\e88993\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0-windows"

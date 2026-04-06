@@ -214,8 +214,11 @@ PhaseResult Fight::attemptPhase(){
         takeDamage(damage_per_player, *p);
     }
     std::vector<Player*> death_list = check_deaths();
-    if(death_list.size() >= 1){ // IS NOT EMPTY
+    if(!death_list.empty()){ // IS NOT EMPTY
         //std::cout << "RECALCULATE DPS NUMBERS DUE TO DEATH" << std::endl;   //How do we calcualcate this? pick a random time during the pull? 
+        for(auto player : death_list){
+            players.erase()
+        }
     } else {
         //std::cout << "NO ONE DIED" << std::endl;
     }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RaidSimTools")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0cda4277789c99830f186343d0a2927689c67616")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b24b503c2143fc35d22ea68ab7726796a1bfaaae")]
 [assembly: System.Reflection.AssemblyProductAttribute("RaidSimTools")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RaidSimTools")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

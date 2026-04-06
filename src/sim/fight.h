@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include <bits/stdc++.h> 
 
 #include "../Raid/Boss.h"
 #include "../characters/player.h"

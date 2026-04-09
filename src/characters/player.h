@@ -39,7 +39,7 @@ public:
     int GetTotalConstitution() const;
     void takeDamage(float damageValue);
     float getCurrentHealth();
-
+    HealerState getHealerState();
 
 
     const std::vector<std::string>& GetRaidHistory() const;  // This should prob be raid entries
@@ -178,4 +178,8 @@ inline void Player::AddRaidHistoryEntry(const std::string& entry) {
 
 inline float Player::getCurrentHealth(){
     return currentHealth;
+}
+
+inline float Player::getHealerState(){
+    return healerState;
 }

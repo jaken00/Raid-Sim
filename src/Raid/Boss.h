@@ -25,6 +25,7 @@ struct Phase {
     std::vector<FightAffinityProfile> fightTypes;
     float hp_start_pct;
     float hp_end_pct;
+    std::vector<Spell> phase_spells;
 };
 
 class Boss {

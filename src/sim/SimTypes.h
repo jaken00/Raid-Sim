@@ -16,12 +16,10 @@ enum struct FightAffinityProfile {
 };
 
 struct HealerState {
-    Player* player;
-    float current_mana;
+    std::vector<Spell> healing_spells;
     float max_mana;
-    float mana_per_second_cost;
-    float hps_at_full_mana;
-    float hps_at_oom;
+    float current_mana;
+    float mana_regen_per_resolve_phase; //How much mana we recover after each damage phase call    
 };
 
 struct DefensiveState {
@@ -58,3 +56,15 @@ struct RaidResult {
       
 };
 
+struct Spell {
+    bool isAoe;
+    int number_of_targets;
+    float damage_value;
+    std::string spell_name;
+    float mana_cost;
+    std::vector<Player*> target_list;
+    float heal_value;
+    float shield_amount;
+    bool provides_buff;  
+    int spell_id;
+};

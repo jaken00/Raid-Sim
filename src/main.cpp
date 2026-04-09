@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     SDL_Event event;
 
     GameState gameState;    
-
+    
 
     gameState.runLoader(db);
     EncounterResult result = gameState.attemptRaid();

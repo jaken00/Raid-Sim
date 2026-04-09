@@ -66,6 +66,9 @@ float Fight::get_fight_affinity(const Player& p, Phase phase){
 
 /* ##### HEALING FUNCTIONS #####*/
 
+
+
+
 float Fight::effective_mana_cost_per_second(HealerState& h){
     float proc_chance = h.player->GetTotalExpertise() / 500.0f; 
     float proc_chance_capped = std::min(proc_chance, 0.35f);
@@ -197,11 +200,6 @@ PhaseResult Fight::attemptPhase(){
         std::cout << "###########################################################" << std::endl;
         */
         
-
-
-
-
-        
         total_dps += player_dps;
 
     }
@@ -215,14 +213,14 @@ PhaseResult Fight::attemptPhase(){
     }
     std::vector<Player*> death_list = check_deaths();
     if(!death_list.empty()){ // IS NOT EMPTY
-        //std::cout << "RECALCULATE DPS NUMBERS DUE TO DEATH" << std::endl;   //How do we calcualcate this? pick a random time during the pull? 
+        std::cout << "RECALCULATE DPS NUMBERS DUE TO DEATH" << std::endl;   //How do we calcualcate this? pick a random time during the pull? 
         for(auto player : death_list){
-            players.erase()
+            auto location = std::find(players.begin(), players.end(), player);
+            players.erase(location); 
+            attemptPhase();  
         }
-    } else {
-        //std::cout << "NO ONE DIED" << std::endl;
+        // HERE WILL RECALCUALTE DPS NUMBERS
     }
-
 
     phase_end_result.actual_duration = phase_duration;
     phase_end_result.boss_hp_at_end = 0.0;

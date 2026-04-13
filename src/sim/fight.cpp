@@ -65,33 +65,20 @@ float Fight::get_fight_affinity(const Player& p, Phase phase){
 }
 
 /* ##### HEALING FUNCTIONS #####*/
+void Fight::resolve_incoming_damage(){
+	std::vector<Player*> healers;
 
-
-
-
-float Fight::effective_mana_cost_per_second(HealerState& h){
-    float proc_chance = h.player->GetTotalExpertise() / 500.0f; 
-    float proc_chance_capped = std::min(proc_chance, 0.35f);
-    float mana_saved_factor = 1.0f - (proc_chance_capped * 0.6); // proc saves 60% mana
-
-    return h.mana_per_second_cost * mana_saved_factor;
+	for(auto player : players){
+		Spec player_spec = player->GetSpec();
+		if(player_spec.getRole() == Role::Healer){
+			healers.push_back(player);
+		}
+	}
 }
 
-float Fight::effective_hps(HealerState &h, float phase_duration){
-    float actual_cost = effective_mana_cost_per_second(h);
-    float mana_needed = h.mana_per_second_cost * phase_duration;
 
-    if(mana_needed <= h.current_mana) {
-        h.current_mana = h.current_mana - mana_needed;
-        return h.hps_at_full_mana;
-    }
 
-    float full_time = h.current_mana / actual_cost;
-    float oom_time = phase_duration - full_time;
 
-    return (h.hps_at_full_mana * full_time + h.hps_at_oom * oom_time) / phase_duration;
-
-}
 
 static float getVarianceFloor(float player_performance){
     if(player_performance <= 50){
@@ -211,6 +198,8 @@ PhaseResult Fight::attemptPhase(){
     for(auto p : players){
         takeDamage(damage_per_player, *p);
     }
+	
+
     std::vector<Player*> death_list = check_deaths();
     if(!death_list.empty()){ // IS NOT EMPTY
         std::cout << "RECALCULATE DPS NUMBERS DUE TO DEATH" << std::endl;   //How do we calcualcate this? pick a random time during the pull? 

@@ -38,9 +38,8 @@ private:
 
     // ############### HPS CALCULATIONS ############### //
 
-    float effective_mana_cost_per_second(HealerState& h);
-    float effective_hps(HealerState& h, float phase_duration);
-    void resolve_incoming_damage(Player* player, Spell spell); //This is needed to get the entire Spell as it carries all information
+
+    void resolve_incoming_damage(); //This is needed to get the entire Spell as it carries all information
     
 
     // ############### DEFENSE CALCULATIONS ############### //

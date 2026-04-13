@@ -9,4 +9,5 @@ private:
     static void seedSpecs(Database& db);
     static void seedPlayers(Database& db);
     static void seedBosses(Database& db);
+    static void seedSpells(Database& db);
 };

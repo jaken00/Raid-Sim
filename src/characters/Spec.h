@@ -51,6 +51,8 @@ public:
          bool provides_external_cd, RaidBuff raid_buff, float execute_bonus, float aoe_modifier,
          SpecStatWeights statWeights, std::map<FightAffinityProfile, float> affinityProfile);
     ~Spec();
+    std::string getName() const { return name; }
+    Role getRole() const { return role; }
     float getDPSWeight();
     float getHPSweight();
     float getDefenseWeight();

@@ -47,8 +47,10 @@ int Player::GetTotalExpertise() const{
 int Player::GetTotalConstitution() const {
     int total = 0;
     for (const auto& item : items) total += item.itemStats.constitution;
-    return total;
+	return total;
+
 }
+
 
 
 void Player::setCurrentHealth(){
@@ -57,5 +59,13 @@ void Player::setCurrentHealth(){
 
 void Player::takeDamage(float damageValue){
     currentHealth = currentHealth - damageValue;
+}
+
+void Player::buildHealerState(const std::vector<Spell>& spells) {
+    healerState.healing_spells = spells;
+    healerState.max_mana = 10000.0f;
+    healerState.current_mana = 10000.0f;
+    healerState.mana_regen_per_resolve_phase = 500.0f;
+	healerState.healing_priority = spells;
 }
 

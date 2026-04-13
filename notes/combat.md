@@ -127,7 +127,7 @@ struct SpecProfile {
 | Dirge | SupportDPS | Reduces boss self-healing — counters specific boss types |
 | Elementalist | PureDPS | +20% AoE damage, weak single target |
 | Arcanist | PureDPS | Strong single target, Intellect buff |
-| Siphon | SupportHealer | Provides shields, has an external cooldown |
+| Siphon | Healer | Provides shields, has an external cooldown |
 | Bulwark | Tank | Highest defensive weight, physical damage reduction aura |
 | Vanguard | OffTank | Lower defense than Bulwark, brings interrupt + taunt cooldown |
 

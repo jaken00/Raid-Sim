@@ -135,12 +135,31 @@ bool Database::init() {
         );
     )";
 
+    const std::string create_spells = R"(
+        CREATE TABLE IF NOT EXISTS spells (
+            id                INTEGER PRIMARY KEY AUTOINCREMENT,
+            spell_id          INTEGER NOT NULL,
+            spell_name        TEXT NOT NULL,
+            spec_name         TEXT NOT NULL,
+            mana_cost         REAL NOT NULL DEFAULT 0.0,
+            heal_value        REAL NOT NULL DEFAULT 0.0,
+            damage_value      REAL NOT NULL DEFAULT 0.0,
+            is_aoe            BOOLEAN DEFAULT 0,
+            number_of_targets INTEGER DEFAULT 1,
+            shield_amount     REAL NOT NULL DEFAULT 0.0,
+            provides_buff     BOOLEAN DEFAULT 0,
+            is_hot            BOOLEAN DEFAULT 0,
+            cooldown          REAL NOT NULL DEFAULT 0.0
+        );
+    )";
+
     if (!exec(create_players))       return false;
     if (!exec(create_player_items))  return false;
     if (!exec(create_classes))       return false;
     if (!exec(create_specialization)) return false;
     if (!exec(create_bosses))        return false;
     if (!exec(create_boss_phases))   return false;
+    if (!exec(create_spells))        return false;
 
     std::cout << "Database initialized at: " << m_path << "\n";
     return true;
@@ -648,6 +667,83 @@ bool Database::getBossPhases(int boss_id, std::vector<PhaseRow>& out) {
         row.mechanic_name    = getText(5);
         row.damage_value     = static_cast<float>(sqlite3_column_double(stmt, 6));
         row.need_interrupt   = sqlite3_column_int(stmt, 7) != 0;
+
+        out.push_back(row);
+    }
+
+    sqlite3_finalize(stmt);
+    return true;
+}
+
+bool Database::insertSpell(int spell_id, const std::string& spell_name, const std::string& spec_name,
+                           float mana_cost, float heal_value, float damage_value,
+                           bool is_aoe, int number_of_targets, float shield_amount,
+                           bool provides_buff, bool is_hot, float cooldown) {
+    const char* sql =
+        "INSERT INTO spells "
+        "(spell_id, spell_name, spec_name, mana_cost, heal_value, damage_value, "
+        "is_aoe, number_of_targets, shield_amount, provides_buff, is_hot, cooldown) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed (insertSpell): " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+
+    sqlite3_bind_int   (stmt,  1, spell_id);
+    sqlite3_bind_text  (stmt,  2, spell_name.c_str(),  -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt,  3, spec_name.c_str(),   -1, SQLITE_TRANSIENT);
+    sqlite3_bind_double(stmt,  4, static_cast<double>(mana_cost));
+    sqlite3_bind_double(stmt,  5, static_cast<double>(heal_value));
+    sqlite3_bind_double(stmt,  6, static_cast<double>(damage_value));
+    sqlite3_bind_int   (stmt,  7, static_cast<int>(is_aoe));
+    sqlite3_bind_int   (stmt,  8, number_of_targets);
+    sqlite3_bind_double(stmt,  9, static_cast<double>(shield_amount));
+    sqlite3_bind_int   (stmt, 10, static_cast<int>(provides_buff));
+    sqlite3_bind_int   (stmt, 11, static_cast<int>(is_hot));
+    sqlite3_bind_double(stmt, 12, static_cast<double>(cooldown));
+
+    bool ok = sqlite3_step(stmt) == SQLITE_DONE;
+    if (!ok)
+        std::cerr << "Insert spell failed: " << sqlite3_errmsg(m_db) << "\n";
+    sqlite3_finalize(stmt);
+    return ok;
+}
+
+bool Database::getSpellsBySpec(const std::string& spec_name, std::vector<SpellRow>& out) {
+    const char* sql =
+        "SELECT spell_id, spell_name, spec_name, mana_cost, heal_value, damage_value, "
+        "is_aoe, number_of_targets, shield_amount, provides_buff, is_hot, cooldown "
+        "FROM spells WHERE spec_name = ? ORDER BY spell_id;";
+
+    sqlite3_stmt* stmt = nullptr;
+    if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Prepare failed (getSpellsBySpec): " << sqlite3_errmsg(m_db) << "\n";
+        return false;
+    }
+
+    sqlite3_bind_text(stmt, 1, spec_name.c_str(), -1, SQLITE_TRANSIENT);
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        SpellRow row;
+        auto getText = [&](int col) -> std::string {
+            const unsigned char* txt = sqlite3_column_text(stmt, col);
+            return txt ? reinterpret_cast<const char*>(txt) : "";
+        };
+
+        row.spell_id          = sqlite3_column_int(stmt, 0);
+        row.spell_name        = getText(1);
+        row.spec_name         = getText(2);
+        row.mana_cost         = static_cast<float>(sqlite3_column_double(stmt, 3));
+        row.heal_value        = static_cast<float>(sqlite3_column_double(stmt, 4));
+        row.damage_value      = static_cast<float>(sqlite3_column_double(stmt, 5));
+        row.is_aoe            = sqlite3_column_int(stmt, 6) != 0;
+        row.number_of_targets = sqlite3_column_int(stmt, 7);
+        row.shield_amount     = static_cast<float>(sqlite3_column_double(stmt, 8));
+        row.provides_buff     = sqlite3_column_int(stmt, 9) != 0;
+        row.is_hot            = sqlite3_column_int(stmt, 10) != 0;
+        row.cooldown          = static_cast<float>(sqlite3_column_double(stmt, 11));
 
         out.push_back(row);
     }

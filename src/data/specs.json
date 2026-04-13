@@ -101,7 +101,7 @@
     },
     {
       "class": "Conduit",
-      "role": "SupportHealer",
+      "role": "Healer",
       "name": "Siphon",
       "resource": "Mana",
       "attack_range": "Caster",

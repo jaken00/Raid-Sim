@@ -17,7 +17,6 @@ EncounterResult GameState::attemptRaid(){
 }   
 
 
-
 void GameState::runLoader(Database& db){
     Loader loader = Loader();
     players = loader.loadPlayers(db);

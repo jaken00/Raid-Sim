@@ -163,9 +163,36 @@ void Seeder::seedBosses(Database& db) {
     }
 }
 
+void Seeder::seedSpells(Database& db) {
+    json spells = loadJson("spells.json");
+    if (spells.is_null()) return;
+
+    db.clearTable("spells");
+
+    for (auto& s : spells["spells"]) {
+        db.insertSpell(
+            s["id"].get<int>(),
+            s["spell_name"],
+            s["spec_name"],
+            s["mana_cost"].get<float>(),
+            s["heal_value"].get<float>(),
+            s["damage_value"].get<float>(),
+            s["is_aoe"].get<bool>(),
+            s["number_of_targets"].get<int>(),
+            s["shield_amount"].get<float>(),
+            s["provides_buff"].get<bool>(),
+            s["is_hot"].get<bool>(),
+            s["cooldown"].get<float>()
+        );
+    }
+}
+
 void Seeder::seed(Database& db) {
     std::cout << "Seeding specs from specs.json...\n";
     seedSpecs(db);
+
+    std::cout << "Seeding spells from spells.json...\n";
+    seedSpells(db);
 
     std::cout << "Seeding bosses from bosses.json...\n";
     seedBosses(db);

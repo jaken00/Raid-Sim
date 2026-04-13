@@ -67,6 +67,21 @@ struct PhaseRow {
     bool need_interrupt;
 };
 
+struct SpellRow {
+    int spell_id;
+    std::string spell_name;
+    std::string spec_name;
+    float mana_cost;
+    float heal_value;
+    float damage_value;
+    bool is_aoe;
+    int number_of_targets;
+    float shield_amount;
+    bool provides_buff;
+    bool is_hot;
+    float cooldown;
+};
+
 struct BossRow {
     std::string name;
     std::string raid;
@@ -128,6 +143,13 @@ public:
                          bool is_execute_phase, const std::string& fight_types_csv,
                          const std::string& mechanic_name, float mechanic_damage_value,
                          bool mechanic_needs_interrupt);
+
+    // Spells
+    bool insertSpell(int spell_id, const std::string& spell_name, const std::string& spec_name,
+                     float mana_cost, float heal_value, float damage_value,
+                     bool is_aoe, int number_of_targets, float shield_amount,
+                     bool provides_buff, bool is_hot, float cooldown);
+    bool getSpellsBySpec(const std::string& spec_name, std::vector<SpellRow>& out);
 
     // Queries
     bool getAllSpecs(std::vector<SpecRow>& out);

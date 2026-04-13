@@ -53,7 +53,7 @@ public:
 
     void AddRaidHistoryEntry(const std::string& entry);
     void setCurrentHealth();
-    void buildHealerState();
+    void buildHealerState(const std::vector<Spell>& spells);
     
 
 private:
@@ -180,6 +180,6 @@ inline float Player::getCurrentHealth(){
     return currentHealth;
 }
 
-inline float Player::getHealerState(){
+inline HealerState Player::getHealerState(){
     return healerState;
 }

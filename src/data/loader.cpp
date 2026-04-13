@@ -17,10 +17,10 @@ static DamageType parseDamageType(std::string s){
 }
 
 static Role parseRole(std::string s){
-    if(s == "Tank")    return Role::Tank;
-    if(s == "OffTank") return Role::OffTank;
-    if(s == "Healer")  return Role::Healer;
-    if(s == "Buffer")  return Role::Buffer;
+    if(s == "Tank")          return Role::Tank;
+    if(s == "OffTank")       return Role::OffTank;
+    if(s == "Healer")        return Role::Healer;
+if(s == "Buffer")        return Role::Buffer;
     return Role::DPS;
 }
 
@@ -119,8 +119,31 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
         
     }
 
-    for(Player player : players){
+    for (Player& player : players) {
         player.setCurrentHealth();
+
+        std::vector<SpellRow> spell_rows;
+        db.getSpellsBySpec(player.GetSpec().getName(), spell_rows);
+        if (!spell_rows.empty()) {
+            std::vector<Spell> spells;
+            for (const SpellRow& sr : spell_rows) {
+                Spell s;
+                s.spell_id          = sr.spell_id;
+                s.spell_name        = sr.spell_name;
+                s.spec_name         = sr.spec_name;
+                s.mana_cost         = sr.mana_cost;
+                s.heal_value        = sr.heal_value;
+                s.damage_value      = sr.damage_value;
+                s.isAoe             = sr.is_aoe;
+                s.number_of_targets = sr.number_of_targets;
+                s.shield_amount     = sr.shield_amount;
+                s.provides_buff     = sr.provides_buff;
+                s.is_hot            = sr.is_hot;
+                s.cooldown          = sr.cooldown;
+                spells.push_back(s);
+            }
+            player.buildHealerState(spells);
+        }
     }
 
     return players;

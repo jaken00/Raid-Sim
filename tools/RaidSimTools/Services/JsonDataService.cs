@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text.Json;
 using RaidSimTools.Models;
@@ -12,7 +13,9 @@ public class JsonDataService
         PropertyNameCaseInsensitive = true
     };
 
-    private const string DataDir = "C:/programming/dev/Raid-Sim/src/data";
+    private static readonly string DataDir =
+        Environment.GetEnvironmentVariable("RAIDSIM_DATA_DIR")
+        ?? Path.Combine(Environment.CurrentDirectory, "src", "data");
 
     // ── Spells ──────────────────────────────────────────────────────────────
 

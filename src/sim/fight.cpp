@@ -6,7 +6,7 @@ Fight::~Fight() {}
 
 /* ##### DPS FUNCTIONS #####*/
 
-float Fight::ilvl_factor(float player_ilvl, float boss_tuning_ilvl){
+float ilvl_factor(float player_ilvl, float boss_tuning_ilvl){
     float tuning_factor = 2.8f;
 
     float delta = (player_ilvl - boss_tuning_ilvl) / boss_tuning_ilvl;
@@ -75,10 +75,6 @@ void Fight::resolve_incoming_damage(){
 		}
 	}
 }
-
-
-
-
 
 static float getVarianceFloor(float player_performance){
     if(player_performance <= 50){

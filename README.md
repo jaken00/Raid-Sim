@@ -52,3 +52,80 @@ If you get an error about `SDL2.dll` not found, copy it next to the executable:
 ```bash
 cp /ucrt64/bin/SDL2.dll .
 ```
+
+
+
+
+
+● Clean. Here's a summary of everything that changed and what you need to do to build.
+
+  ---
+  What was written/changed:
+
+  ┌────────────────────────────────────────────────┬─────────────────────────────────────────────────────────────────┐
+  │                      File                      │                             Action                              │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ CMakeLists.txt                                 │ Rewritten — minimal orchestrator, delegates to src/ and test/   │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ src/CMakeLists.txt                             │ New — raidsim_core static lib + raidsim exe                     │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ test/CMakeLists.txt                            │ New — doctest target linked against raidsim_core                │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ test/test_fight.cpp                            │ New — 4 cases on ilvl_factor                                    │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ vcpkg.json                                     │ New — sdl2, sqlite3, nlohmann-json, imgui[sdl2+opengl3],        │
+  │                                                │ doctest                                                         │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ CMakePresets.json                              │ New — debug/release presets via $VCPKG_ROOT toolchain           │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ .gitignore                                     │ Expanded — covers CMake artifacts, .NET bin/obj, clangd cache,  │
+  │                                                │ vcpkg_installed                                                 │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ src/sim/fight.h                                │ ilvl_factor removed from private class, re-declared as free     │
+  │                                                │ function                                                        │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ src/sim/fight.cpp                              │ Fight::ilvl_factor → free function ilvl_factor                  │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────┤
+  │ tools/RaidSimTools/Services/JsonDataService.cs │ Hardcoded path replaced with RAIDSIM_DATA_DIR env var fallback  │
+  └────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────┘
+
+  ---
+  Before you configure, run these once:
+
+  # 1. Untrack committed build artifacts (safe — only removes from git index)
+  git rm -r --cached tools/RaidSimTools/bin/ tools/RaidSimTools/obj/ a.out
+  git add .gitignore
+  git commit -m "clean: remove committed artifacts, expand .gitignore"
+
+  # 2. Install vcpkg if you haven't (one-time)
+  git clone https://github.com/microsoft/vcpkg.git C:/vcpkg
+  C:/vcpkg/bootstrap-vcpkg.bat
+
+  # 3. Set env var (add to your system env or MSYS2 profile permanently)
+  export VCPKG_ROOT=/c/vcpkg
+
+  Then build:
+
+  cmake --preset debug
+  cmake --build --preset debug
+  ctest --preset debug
+
+  One heads-up: the first cmake --preset debug triggers vcpkg installing all deps from source (SDL2, SQLite3, imgui,
+  etc.). On Windows this takes 15–30 minutes. It's a one-time cost — results go to vcpkg_installed/ which is gitignored
+  and cached on subsequent runs.
+
+  Run those three build commands and paste back whatever error you hit first. The most likely friction points are vcpkg
+  not finding a dep, or a missing include in one of the deeper headers.
+
+✻ Cooked for 6m 49s
+
+
+
+
+
+
+
+
+
+
+

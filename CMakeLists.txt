@@ -1,64 +1,20 @@
-cmake_minimum_required(VERSION 3.20)
-project(RaidSim)
+cmake_minimum_required(VERSION 3.25)
+
+project(RaidSim
+    VERSION 0.1.0
+    DESCRIPTION "Football-Manager style raiding guild simulator"
+    LANGUAGES CXX
+)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(SDL2 REQUIRED)
-find_package(SQLite3 REQUIRED)
-find_package(OpenGL REQUIRED)
+add_subdirectory(src)
 
-# Fetch dependencies
-include(FetchContent)
-FetchContent_Declare(
-    imgui
-    GIT_REPOSITORY https://github.com/ocornut/imgui.git
-    GIT_TAG v1.91.0
-)
-FetchContent_Declare(
-    nlohmann_json
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG v3.11.3
-)
-FetchContent_MakeAvailable(imgui nlohmann_json)
-
-set(IMGUI_SOURCES
-    ${imgui_SOURCE_DIR}/imgui.cpp
-    ${imgui_SOURCE_DIR}/imgui_draw.cpp
-    ${imgui_SOURCE_DIR}/imgui_tables.cpp
-    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-)
-
-add_executable(RaidSim
-    src/main.cpp
-    src/db/database.cpp
-    src/data/seeder.cpp
-    src/data/loader.cpp
-    src/ui/main_window.cpp
-    src/sim/fight.cpp
-    src/core/gamestate.cpp
-    src/characters/player.cpp
-    src/characters/Spec.cpp
-    src/Raid/Boss.cpp
-    ${IMGUI_SOURCES}
-)
-
-target_include_directories(RaidSim PRIVATE
-    ${SQLite3_INCLUDE_DIRS}
-    ${imgui_SOURCE_DIR}
-    ${imgui_SOURCE_DIR}/backends
-)
-
-target_compile_definitions(RaidSim PRIVATE
-    DATA_DIR="${CMAKE_SOURCE_DIR}/src/data"
-)
-
-target_link_libraries(RaidSim
-    SDL2::SDL2main
-    SDL2::SDL2
-    ${SQLite3_LIBRARIES}
-    OpenGL::GL
-    nlohmann_json::nlohmann_json
-)
+option(RAIDSIM_BUILD_TESTS "Build test suite" ON)
+if(RAIDSIM_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()

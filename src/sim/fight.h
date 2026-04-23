@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include <bits/stdc++.h> 
 
 #include "../Raid/Boss.h"
 #include "../characters/player.h"
@@ -30,7 +29,6 @@ private:
     
     // ############### DPS CALCULATIONS ############### //
 
-    float ilvl_factor(float player_ilvl, float boss_tuning_ilvl);
     float crit_multiplier(const Player& p);
     float haste_multiplier(const Player& p);
     float resist_profile(const Player& p);
@@ -61,3 +59,6 @@ public:
     EncounterResult attemptFight();
 
 };
+
+// Pure math — exposed for testing
+float ilvl_factor(float player_ilvl, float boss_tuning_ilvl);

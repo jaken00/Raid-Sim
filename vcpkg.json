@@ -1,0 +1,14 @@
+{
+  "name": "raidsim",
+  "version": "0.1.0",
+  "dependencies": [
+    "sdl2",
+    "sqlite3",
+    "nlohmann-json",
+    {
+      "name": "imgui",
+      "features": ["sdl2-binding", "opengl3-binding"]
+    },
+    "doctest"
+  ]
+}

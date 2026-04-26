@@ -118,6 +118,8 @@
                           SelectionUnit="Cell"
                           Margin="4">
                     <DataGrid.Columns>
+                        
+                    </DataGrid.Columns>
             </TabItem>
 
             <TabItem Header="Players">

@@ -9,7 +9,7 @@
     {
       "name": "base",
       "hidden": true,
-      "generator": "Ninja",
+      "generator": "Visual Studio 18 2026",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
       "cacheVariables": {
@@ -19,34 +19,31 @@
     {
       "name": "debug",
       "inherits": "base",
-      "displayName": "Debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      }
+      "displayName": "Debug"
     },
     {
       "name": "release",
       "inherits": "base",
-      "displayName": "Release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
+      "displayName": "Release"
     }
   ],
   "buildPresets": [
     {
       "name": "debug",
-      "configurePreset": "debug"
+      "configurePreset": "debug",
+      "configuration": "Debug"
     },
     {
       "name": "release",
-      "configurePreset": "release"
+      "configurePreset": "release",
+      "configuration": "Release"
     }
   ],
   "testPresets": [
     {
       "name": "debug",
-      "configurePreset": "debug"
+      "configurePreset": "debug",
+      "configuration": "Debug"
     }
   ]
 }

@@ -5,6 +5,22 @@
 
 class Player;
 
+struct Spell {
+    bool isAoe;
+    int number_of_targets;
+    float damage_value;
+    std::string spell_name;
+    float mana_cost;
+    std::vector<Player*> target_list;
+    float heal_value;
+    float shield_amount;
+    bool provides_buff;
+    int spell_id;
+    float cooldown;       // 0 = no cooldown, >0 = seconds
+    bool is_hot;          // heal over time
+    std::string spec_name; // owning spec (e.g. "Mender")
+};
+
 enum struct FightAffinityProfile {
      single_target_modifier,  // pure patchwerk DPS
      aoe_modifier,            // 4+ targets
@@ -52,23 +68,7 @@ struct EncounterResult{
 struct RaidResult {
     float total_duration;
     std::vector<Player*> player_deaths;
-    std::map<Player*, float> total_dps;    
+    std::map<Player*, float> total_dps;
     std::map<Player*, float> total_hps;
-      
-};
 
-struct Spell {
-    bool isAoe;
-    int number_of_targets;
-    float damage_value;
-    std::string spell_name;
-    float mana_cost;
-    std::vector<Player*> target_list;
-    float heal_value;
-    float shield_amount;
-    bool provides_buff;
-    int spell_id;
-    float cooldown;       // 0 = no cooldown, >0 = seconds
-    bool is_hot;          // heal over time
-    std::string spec_name; // owning spec (e.g. "Mender")
 };

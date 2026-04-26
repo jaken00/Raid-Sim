@@ -1,8 +1,22 @@
 find_package(SDL2 CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(imgui CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
+
+# imgui is fetched via FetchContent in the root CMakeLists.txt
+add_library(imgui_sdl2 STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+target_include_directories(imgui_sdl2 PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+target_link_libraries(imgui_sdl2 PUBLIC SDL2::SDL2 OpenGL::GL)
 
 # Simulation core — no UI/SDL2/OpenGL; this is what tests link against
 add_library(raidsim_core STATIC
@@ -41,8 +55,6 @@ add_executable(raidsim
 target_link_libraries(raidsim
   PRIVATE
     raidsim_core
-    SDL2::SDL2
     SDL2::SDL2main
-    OpenGL::GL
-    imgui::imgui
+    imgui_sdl2
 )

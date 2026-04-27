@@ -92,38 +92,44 @@ static float getVarianceFloor(float player_performance){
         return .85f;
     }
 }
-/*
-ilvl_factor	clamped at 1.25	1.25
-performance	100 / 100	1.0
-dps_weight	Striker	1.05
-crit_multiplier	1 + (crit/100) * 1.0	depends on item stats
-haste_multiplier	1 + (haste/100) * 0.9	depends on item stats
-boss_resist	1 - 0	1.0
-fight_affinity	Striker execute_modifier	1.25
-variance	MAX_VARIANCE	1.30
-Ignoring crit/haste (currently 0 since all items are placeholders):
 
+float Fight::calculate_player_dps(std::vector<Player*> active_player_list, float boss_ilvl, Phase bossPhase) {
+	float total_dps = 0.0f; 
+	std::random_device rd; 
+    std::mt19937 gen(rd()); 
+	
+	for(int i = 0 ; i < active_player_list.size(); i++){
+        Spec player_spec = active_player_list[i]->GetSpec(); 
+        float ilvl_calculation = ilvl_factor(active_player_list[i]->GetItemLevel(), boss_ilvl);
+        float base_dps = ilvl_calculation * active_player_list[i]->GetPerformanceRating() * player_spec.getDPSWeight();
+        
+        float crit_multiplier_final = crit_multiplier(*active_player_list[i]);
+        float haste_multiplier_final = haste_multiplier(*active_player_list[i]);
+        float boss_resist = resist_profile(*active_player_list[i]);
+        float fight_affinity = get_fight_affinity(*active_player_list[i], boss.getCurrentPhase());
+        std::uniform_real_distribution<float> dis(getVarianceFloor(active_player_list[i]->GetPerformanceRating()), MAX_VARIANCE);
 
-1.25 × 1.0 × 1.05 × 1.0 × 1.0 × 1.0 × 1.25 × 1.30 = ~2.14× MAX_DPS
-So if you want a godlike performance-100 Striker to hit say 20,000 DPS at 
-the absolute ceiling:
+        float variance = dis(gen);
+        float real_boss_resist = 1.0f - boss_resist;
 
+        float player_dps = (base_dps * crit_multiplier_final * haste_multiplier_final * (1.0f - boss_resist) * fight_affinity) * variance;
 
-MAX_DPS = 20000 / 2.14 ≈ 9,346
-A round MAX_DPS = 10,000 would put that ceiling at ~21,400.
+		FightDebugData fightDebugInfo;
 
-One thing to flag: crit_multiplier and haste_multiplier have no cap, 
-so once you add real item stats they could inflate this unboundedly. 
-You probably want to clamp those too — 
-something like std::clamp(crit_multiplier, 1.0f, 2.0f) once you 
-define your stat ranges
+		fightDebugInfo.player_dps = player_dps;
+		fightDebugInfo.ilvl_calculation = ilvl_calculation;
+		fightDebugInfo.crit_multiplier  = crit_multiplier_final;
+		fightDebugInfo.haste_multiplier = haste_multiplier_final;
+		fightDebugInfo.boss_resist = boss_resist;
+		fightDebugInfo.fight_affinity = fight_affinity;
+		fightDebugInfo.variance = variance;
+        total_dps += player_dps;
 
+    }
 
-*/
+	return total_dps;
 
-
-
-/* ##### ENCOUNTER/RAID FUNCTIONS #####*/
+}
 
 void Fight::takeDamage(float boss_damage, Player& p){ //might be over engineering and can just call it in the loop? (Maybe not sicne we have to recalculate hp values?)
     p.takeDamage(boss_damage);
@@ -145,47 +151,16 @@ PhaseResult Fight::attemptPhase(){
     std::random_device rd; 
     std::mt19937 gen(rd()); 
     PhaseResult phase_end_result;
-    float total_dps = 0.0f;
-    float base_dps = 0.0f;
-    float total_hps = 0.0f;
+
+	std::vector<Player*> alive_players  = players;
 
     Phase currentPhase = boss.getCurrentPhase();
-    // WE ARENT USING ACTUACL PHASE NUMBERS
-    //currentPhase.hp_start_pct = 1.0f;
-    //currentPhase.hp_end_pct = 0.0f;
+	float boss_ilvl = boss.GetBossilvl();
 
     float boss_phase_hp_pool = (currentPhase.hp_start_pct - currentPhase.hp_end_pct) * boss.getMaxHP();
     
-    for(int i = 0 ; i < players.size(); i++){
-        Spec player_spec = players[i]->GetSpec(); 
-        float ilvl_calculation = ilvl_factor(players[i]->GetItemLevel(), boss.GetBossilvl());
-        base_dps = ilvl_calculation * players[i]->GetPerformanceRating() * player_spec.getDPSWeight();
-        
-        float crit_multiplier_final = crit_multiplier(*players[i]);
-        float haste_multiplier_final = haste_multiplier(*players[i]);
-        float boss_resist = resist_profile(*players[i]);
-        float fight_affinity = get_fight_affinity(*players[i], boss.getCurrentPhase());
-        std::uniform_real_distribution<float> dis(getVarianceFloor(players[i]->GetPerformanceRating()), MAX_VARIANCE);
+    float total_dps = calculate_player_dps(alive_players, boss_ilvl, currentPhase);
 
-        float variance = dis(gen);
-        float real_boss_resist = 1.0f - boss_resist;
-
-        float player_dps = (base_dps * crit_multiplier_final * haste_multiplier_final * (1.0f - boss_resist) * fight_affinity) * variance;
-        /*
-        std::cout << "ILVL CALCULATION: " << ilvl_calculation << std::endl;
-        std::cout << "GET PLAYER PERFORMACE: " << players[i]->GetPerformanceRating() << std::endl;
-        std::cout << "CRIT MULTIPLIER: " << crit_multiplier_final << std::endl;
-        std::cout << "HASTE MULTIPLIER: " << haste_multiplier_final << std::endl;
-        std::cout << "BOSS RESIST: " << real_boss_resist << std::endl;
-        std::cout << "FIGHT AFFINITY : " << fight_affinity << std::endl;
-        std::cout << "VARIANCE : " << variance << std::endl;
-        std::cout << "PLAYER DPS: " << player_dps << std::endl;
-        std::cout << "###########################################################" << std::endl;
-        */
-        
-        total_dps += player_dps;
-
-    }
     float phase_duration = boss_phase_hp_pool / total_dps;
     BossMechanic current_mechanic = currentPhase.mechanicAssociated;
     float boss_damage = current_mechanic.damageValue * players.size() * phase_duration;
@@ -194,17 +169,16 @@ PhaseResult Fight::attemptPhase(){
     for(auto p : players){
         takeDamage(damage_per_player, *p);
     }
-	
 
     std::vector<Player*> death_list = check_deaths();
-    if(!death_list.empty()){ // IS NOT EMPTY
+    if(!death_list.empty()){ 
         std::cout << "RECALCULATE DPS NUMBERS DUE TO DEATH" << std::endl;   //How do we calcualcate this? pick a random time during the pull? 
         for(auto player : death_list){
-            auto location = std::find(players.begin(), players.end(), player);
-            players.erase(location); 
-            attemptPhase();  
+            auto location = std::find(alive_players.begin(), alive_players.end(), player);
+            alive_players.erase(location); 
+            calculate_player_dps(alive_players, boss_ilvl, currentPhase); // Call dps calculation without Player alive
         }
-        // HERE WILL RECALCUALTE DPS NUMBERS
+        
     }
 
     phase_end_result.actual_duration = phase_duration;
@@ -213,7 +187,6 @@ PhaseResult Fight::attemptPhase(){
     phase_end_result.deaths = 0;
     phase_end_result.survivied = players.size();
     phase_end_result.completed = true; // FIX THIS HARDCODED COMPLETION
-
 
     //std::cout << "TOTAL DPS: "<< total_dps << std::endl;
     

@@ -4,6 +4,7 @@ out/
 vcpkg_installed/
 
 # CMake generated
+CMakeUserPresets.json
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake

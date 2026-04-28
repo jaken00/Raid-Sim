@@ -26,6 +26,13 @@ struct Phase {
     float hp_start_pct;
     float hp_end_pct;
     std::vector<Spell> phase_spells;
+	BossSpellDictionary attackDictionary;
+};
+
+struct BossSpellDictionary {
+	float melee_delay;
+	float cast_delay;
+	float mechanic_delay;
 };
 
 class Boss {

@@ -131,7 +131,12 @@ float Fight::calculate_player_dps(std::vector<Player*> active_player_list, float
 
 }
 
-void Fight::takeDamage(float boss_damage, Player& p){ //might be over engineering and can just call it in the loop? (Maybe not sicne we have to recalculate hp values?)
+std::vector<Spell> Fight::damageStack(Boss *boss, float phase_duration) {
+
+}
+
+void Fight::takeDamage(float boss_damage, Player& p){ 
+	//might be over engineering and can just call it in the loop? (Maybe not sicne we have to recalculate hp values?)
     p.takeDamage(boss_damage);
 }
 

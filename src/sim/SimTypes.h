@@ -10,15 +10,8 @@ struct Spell {
     int number_of_targets;
     float damage_value;
     std::string spell_name;
-    float mana_cost;
     std::vector<Player*> target_list;
-    float heal_value;
-    float shield_amount;
-    bool provides_buff;
     int spell_id;
-    float cooldown;       // 0 = no cooldown, >0 = seconds
-    bool is_hot;          // heal over time
-    std::string spec_name; // owning spec (e.g. "Mender")
 };
 
 enum struct FightAffinityProfile {
@@ -32,11 +25,9 @@ enum struct FightAffinityProfile {
 };
 
 struct HealerState {
-    std::vector<Spell> healing_spells;
     float max_mana;
     float current_mana;
     float mana_regen_per_resolve_phase; //How much mana we recover after each damage phase call   
-	std::vector<Spell> healing_priority; 
 };
 
 struct DefensiveState {

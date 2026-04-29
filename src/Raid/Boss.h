@@ -1,21 +1,23 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
-
-#include "Raid.h"
 #include "../enum.h"
 #include "../sim/SimTypes.h"
-
+#include "Raid.h"
 
 struct BossMechanic {
     std::string name;
     float damageValue;
     bool needsInterrupt;
-    
+};
 
+struct BossSpellDictionary {
+    float melee_delay;
+    float cast_delay;
+    float mechanic_delay;
 };
 
 struct Phase {
@@ -26,13 +28,7 @@ struct Phase {
     float hp_start_pct;
     float hp_end_pct;
     std::vector<Spell> phase_spells;
-	BossSpellDictionary attackDictionary;
-};
-
-struct BossSpellDictionary {
-	float melee_delay;
-	float cast_delay;
-	float mechanic_delay;
+    BossSpellDictionary attackDictionary;
 };
 
 class Boss {
@@ -47,15 +43,23 @@ private:
     float maxHP;
     std::vector<Phase*> bossPhases;
     DamageType bossDamagetype;
-    std::map<DamageType, float> resistMap; 
+    std::map<DamageType, float> resistMap;
     Phase current_phase;
 
 public:
-    Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP,
-         int phaseCount, int currentPhase, float ilvl_threshhold,
-         const std::vector<Phase*> bossPhases, DamageType bossDamagetype,
-         std::map<DamageType, float> resistMap);
-    Boss() : id(0), phaseCount(0),currentPhaseNumber(0),ilvl_threshhold(0), raid(nullptr), currentHP(0), maxHP(0), bossDamagetype(DamageType::Physical) {} //default construor
+    Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP, int phaseCount,
+         int currentPhase, float ilvl_threshhold, const std::vector<Phase*> bossPhases,
+         DamageType bossDamagetype, std::map<DamageType, float> resistMap);
+
+    Boss()
+        : id(0),
+          phaseCount(0),
+          currentPhaseNumber(0),
+          ilvl_threshhold(0),
+          raid(nullptr),
+          currentHP(0),
+          maxHP(0),
+          bossDamagetype(DamageType::Physical) {}  // default construor
 
     ~Boss();
 
@@ -64,33 +68,32 @@ public:
     Phase getCurrentPhase();
     float GetCurrentHP();
     void AdvancePhase();
-    
+
     std::string GetName() const;
-    float getMaxHP(); 
+    float getMaxHP();
     int GetPhaseCount();
-
-
 };
 
-inline float Boss::GetBossilvl(){
+inline float Boss::GetBossilvl() {
     return ilvl_threshhold;
 }
 
-inline Phase Boss::getCurrentPhase(){
+inline Phase Boss::getCurrentPhase() {
     return current_phase;
 }
 
-inline float Boss::getMaxHP(){
-    return maxHP; 
+inline float Boss::getMaxHP() {
+    return maxHP;
 }
 
 inline std::string Boss::GetName() const {
     return name;
 }
+
 inline float Boss::GetCurrentHP() {
     return currentHP;
 }
 
-inline int Boss::GetPhaseCount(){
+inline int Boss::GetPhaseCount() {
     return phaseCount;
 }

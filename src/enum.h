@@ -6,7 +6,8 @@ enum class Role {
     OffTank,
     Healer,
     Buffer,
-    DPS
+    DPS,
+    ANY
 };
 
 
@@ -18,6 +19,3 @@ enum class DamageType {
     Shadow,
     Radiant,
 };
-
-
-

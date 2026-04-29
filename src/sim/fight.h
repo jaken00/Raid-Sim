@@ -13,14 +13,14 @@
 struct FightState {
     float current_dps;
     float current_hps;
-    DefensiveState current_defensive_state; 
+    DefensiveState current_defensive_state;
 };
 
 struct FightDebugData {
 	float player_performance_rating;
 	float ilvl_calculation;
 	float crit_multiplier;
-	float haste_multiplier; 
+	float haste_multiplier;
 	float boss_resist;
 	float fight_affinity;
 	float variance;
@@ -30,6 +30,7 @@ struct FightDebugData {
 class Fight {
 private:
     std::vector<Player*> players;
+    std::vector<Player*> m_alive_players;
     Boss& boss;
 
     float MAX_VARIANCE = 1.30f;
@@ -38,7 +39,10 @@ private:
     std::vector<HealerState*> getHealerState();
     float getPlayerDefense();
     float getPlayerUtility(); // figure out what this means and what this really does? I think this is imporatnt -> Maybe buffer or utility type? HPS buffer / Def / DPS
-    
+
+    // ############### HELPER FUNCTIONS ############### //
+    std::vector<Player*> get_targetted_player(Role role_selection, int num_of_targets);
+
     // ############### DPS CALCULATIONS ############### //
     float crit_multiplier(const Player& p);
     float haste_multiplier(const Player& p);
@@ -48,12 +52,12 @@ private:
 
     // ############### HPS CALCULATIONS ############### //
     void resolve_incoming_damage(); //This is needed to get the entire Spell as it carries all information
-    
+
     // ############### DEFENSE CALCULATIONS ############### //
-    DefensiveState calculate_defensive(); 
+    DefensiveState calculate_defensive();
     bool combatResurectionNeeded(DefensiveState& defensiveState);
     FightState updateFightState(FightState& fightState);
-    
+
     // ############### DAMAGE TO PLAYERS ############### //
     void takeDamage(float boss_damage, Player& p);
     std::vector<Player*> check_deaths();
@@ -64,16 +68,15 @@ private:
 	// ############### BOSS CALCULATIONS ############### //
 
 	std::vector<Spell> damageStack(Boss *boss, float phase_duration);
-	
+
 
 
 public:
     Fight(const std::vector<Player*> players, Boss& boss);
     ~Fight();
-    
+
     PhaseResult attemptPhase();
     EncounterResult attemptFight();
-
 };
 
 // Pure math — exposed for testing

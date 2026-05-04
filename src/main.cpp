@@ -4,6 +4,7 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl2.h>
 
+#include <algorithm>
 #include <iostream>
 
 #include "data/seeder.h"
@@ -50,14 +51,21 @@ int main(int argc, char* argv[]) {
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init("#version 130");
 
+    GameState gameState;
+    gameState.runLoader(db);
+
+    // Simulation state
+    bool               sim_ready     = false;
+    bool               run_sim       = false;
+    EncounterResult    result{};
+    std::vector<FightStep> sim_history;
+    int                current_step  = 0;
+    float              step_accum    = 0.0f;
+    float              playback_speed = 10.0f;
+    Uint32             last_ticks    = SDL_GetTicks();
+
     bool running = true;
     SDL_Event event;
-
-    GameState gameState;    
-    
-
-    gameState.runLoader(db);
-    EncounterResult result = gameState.attemptRaid();
 
     while (running) {
         while (SDL_PollEvent(&event)) {
@@ -66,11 +74,35 @@ int main(int argc, char* argv[]) {
                 running = false;
         }
 
+        // Delta time
+        Uint32 now   = SDL_GetTicks();
+        float  delta = (now - last_ticks) / 1000.0f;
+        last_ticks   = now;
+
+        // Trigger simulation when button was pressed
+        if (run_sim) {
+            result       = gameState.attemptRaid();
+            sim_history  = gameState.getSimHistory();
+            current_step = 0;
+            step_accum   = 0.0f;
+            sim_ready    = true;
+            run_sim      = false;
+        }
+
+        // Advance playback
+        if (sim_ready && current_step < (int)sim_history.size() - 1) {
+            step_accum += delta * playback_speed;
+            int advance = (int)step_accum;
+            step_accum -= (float)advance;
+            current_step = std::min(current_step + advance, (int)sim_history.size() - 1);
+        }
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        DrawMainWindow(result);
+        DrawMainWindow(result, sim_ready, run_sim);
+        DrawDebugWindow(sim_history, current_step, playback_speed);
 
         ImGui::Render();
         glViewport(0, 0, 1280, 720);

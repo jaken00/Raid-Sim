@@ -8,7 +8,8 @@
       "Bash(find /c/programming/dev/Raid-Sim -maxdepth 2 -name CMakeLists.txt -o -name *.cmake)",
       "Bash(C:/msys64/ucrt64/bin/x86_64-w64-mingw32-g++.exe --version)",
       "Bash(C:/msys64/ucrt64/bin/x86_64-w64-mingw32-g++.exe /tmp/test.cpp -o /tmp/test.exe)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(Get-ChildItem *)"
     ]
   }
 }

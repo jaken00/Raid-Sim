@@ -16,10 +16,13 @@ private:
     Boss boss;
     Raid raid;
     std::vector<RaidResult> raid_results;
+    std::vector<FightStep> m_sim_history;
 
 public:
     GameState();
     EncounterResult attemptRaid();
     void runLoader(Database& db);
-};
 
+    const std::vector<FightStep>& getSimHistory() const { return m_sim_history; }
+    float getBossMaxHP() const { return boss.getMaxHP(); }
+};

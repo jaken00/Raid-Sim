@@ -69,7 +69,7 @@ public:
     void AdvancePhase();
 
     std::string GetName() const;
-    float getMaxHP();
+    float getMaxHP() const;
     int GetPhaseCount();
     float getMeleeAttackValue() const { return melee_attack_value; }
     float getSpellAttackValue()  const { return spell_attack_value; }
@@ -83,7 +83,7 @@ inline Phase Boss::getCurrentPhase() {
     return current_phase;
 }
 
-inline float Boss::getMaxHP() {
+inline float Boss::getMaxHP() const {
     return maxHP;
 }
 

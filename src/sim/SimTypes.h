@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <utility>
 
 class Player;
 
@@ -19,6 +20,7 @@ struct Spell {
     float cooldown;
     std::vector<Player*> target_list;
     int spell_id;
+    bool operator<(const Spell& other) const { return spell_id < other.spell_id; }
 };
 
 enum struct FightAffinityProfile {
@@ -69,5 +71,50 @@ struct RaidResult {
     std::vector<Player*> player_deaths;
     std::map<Player*, float> total_dps;
     std::map<Player*, float> total_hps;
+};
 
+struct FightState {
+    float current_dps;
+    float current_hps;
+    DefensiveState current_defensive_state;
+};
+
+struct BossDamageStackData {
+    std::map<std::string, float> damage_table;
+};
+
+struct FightDebugData {
+    float player_performance_rating;
+    float ilvl_calculation;
+    float crit_multiplier;
+    float haste_multiplier;
+    float boss_resist;
+    float fight_affinity;
+    float variance;
+    float player_dps;
+};
+
+struct HealResolutionData {
+    Player* healer = nullptr;
+    Player* target = nullptr;
+    std::map<Spell, float> heal_table;
+};
+
+struct FightStep {
+    std::string spell_name;
+    float damage_value = 0.0f;
+    bool is_aoe = false;
+
+    float boss_hp_remaining = 0.0f;
+    float boss_hp_pct       = 0.0f;
+    int   spells_resolved   = 0;
+    int   total_spells      = 0;
+
+    std::vector<std::string> deaths_this_step;
+
+    FightState          fight_state{};
+    BossDamageStackData damage_data;
+    HealResolutionData  heal_data;
+
+    std::vector<std::pair<std::string, FightDebugData>> player_debug;
 };

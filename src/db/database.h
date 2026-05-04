@@ -64,7 +64,12 @@ struct PhaseRow {
     std::string fight_types; //NEED TO ADD CONVERSION FUCNTION
     std::string mechanic_name;
     float damage_value;
-    bool need_interrupt;
+    int mechanic_spell_id;
+    bool mechanic_is_aoe;
+    int mechanic_num_targets;
+    float melee_delay;
+    float cast_delay;
+    float mechanic_delay;
 };
 
 struct SpellRow {
@@ -97,6 +102,8 @@ struct BossRow {
     float resist_frost;
     float resist_shadow;
     float resist_radiant;
+    float melee_attack_value;
+    float spell_attack_value;
     std::vector<PhaseRow> phases;
 };
 
@@ -138,11 +145,13 @@ public:
                     bool rewards_physical_buffs, bool punishes_melee_heavy,
                     const std::string& damage_type,
                     double resist_physical, double resist_fire, double resist_storm,
-                    double resist_frost, double resist_shadow, double resist_radiant);
+                    double resist_frost, double resist_shadow, double resist_radiant,
+                    float melee_attack_value, float spell_attack_value);
     bool insertBossPhase(int boss_id, int phase_number, float hp_start_pct, float hp_end_pct,
                          bool is_execute_phase, const std::string& fight_types_csv,
                          const std::string& mechanic_name, float mechanic_damage_value,
-                         bool mechanic_needs_interrupt);
+                         int mechanic_spell_id, bool mechanic_is_aoe, int mechanic_num_targets,
+                         float melee_delay, float cast_delay, float mechanic_delay);
 
     // Spells
     bool insertSpell(int spell_id, const std::string& spell_name, const std::string& spec_name,

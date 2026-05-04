@@ -38,8 +38,9 @@ public:
     int GetTotalExpertise() const;
     int GetTotalConstitution() const;
     void takeDamage(float damageValue);
+    void heal(float healValue);
     float getCurrentHealth();
-    HealerState getHealerState();
+    HealerState* getHealerState();
 
 
     const std::vector<std::string>& GetRaidHistory() const;  // This should prob be raid entries
@@ -54,7 +55,8 @@ public:
     void AddRaidHistoryEntry(const std::string& entry);
     void setCurrentHealth();
     void buildHealerState(const std::vector<Spell>& spells);
-    
+
+
 
 private:
     int id;
@@ -73,10 +75,10 @@ private:
 
     HealerState healerState;
 
-    
 
 
-    
+
+
 };
 
 inline Player::Player(int id, const std::string& name,
@@ -180,6 +182,6 @@ inline float Player::getCurrentHealth(){
     return currentHealth;
 }
 
-inline HealerState Player::getHealerState(){
-    return healerState;
+inline HealerState* Player::getHealerState(){
+    return &healerState;
 }

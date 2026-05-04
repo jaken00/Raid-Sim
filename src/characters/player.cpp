@@ -4,43 +4,43 @@
 
 
     int total_crit = 0;
-    
+
     for(int i = 0; i < this->items.size(); i++){
         Stats itemStats = items[i].itemStats;
 
         total_crit += itemStats.criticalStrike;
 
     }
-    
+
     return total_crit;
-    
+
 }
 
 int Player::GetTotalHaste() const{
-    
+
     int total_haste = 0;
-    
+
     for(int i = 0; i < this->items.size(); i++){
         Stats itemStats = items[i].itemStats;
 
         total_haste += itemStats.haste;
 
     }
-    
+
     return total_haste;
 }
 
 int Player::GetTotalExpertise() const{
-    
+
     int total_expertise = 0;
-    
+
     for(int i = 0; i < this->items.size(); i++){
         Stats itemStats = items[i].itemStats;
 
         total_expertise += itemStats.expertise;
 
     }
-    
+
     return total_expertise;
 }
 
@@ -51,7 +51,9 @@ int Player::GetTotalConstitution() const {
 
 }
 
-
+void Player::heal(float healValue){
+    currentHealth += healValue;
+}
 
 void Player::setCurrentHealth(){
     currentHealth = maxHp;
@@ -62,10 +64,9 @@ void Player::takeDamage(float damageValue){
 }
 
 void Player::buildHealerState(const std::vector<Spell>& spells) {
+    HealerState healerState;
     healerState.healing_spells = spells;
     healerState.max_mana = 10000.0f;
     healerState.current_mana = 10000.0f;
     healerState.mana_regen_per_resolve_phase = 500.0f;
-	healerState.healing_priority = spells;
 }
-

@@ -3,7 +3,8 @@
 Boss::Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP,
            int phaseCount, int currentPhase, float ilvl_threshhold,
            const std::vector<Phase*> bossPhases, DamageType bossDamagetype,
-           std::map<DamageType, float> resistMap)
+           std::map<DamageType, float> resistMap,
+           float melee_attack_value, float spell_attack_value)
     : name(name),
       id(id),
       phaseCount(phaseCount),
@@ -15,7 +16,9 @@ Boss::Boss(const std::string& name, int id, Raid* raid, float currentHP, float m
       bossPhases(bossPhases),
       bossDamagetype(bossDamagetype),
       resistMap(resistMap),
-      current_phase(bossPhases.empty() ? Phase{} : *bossPhases[0])
+      current_phase(bossPhases.empty() ? Phase{} : *bossPhases[0]),
+      melee_attack_value(melee_attack_value),
+      spell_attack_value(spell_attack_value)
 {}
 
 Boss::~Boss() {}

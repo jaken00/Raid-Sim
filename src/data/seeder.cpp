@@ -136,7 +136,9 @@ void Seeder::seedBosses(Database& db) {
             rp["Storm"].get<double>(),
             rp["Frost"].get<double>(),
             rp["Shadow"].get<double>(),
-            rp["Radiant"].get<double>()
+            rp["Radiant"].get<double>(),
+            b["melee_attack_value"].get<float>(),
+            b["spell_attack_value"].get<float>()
         );
 
         if (bossId < 0) {
@@ -146,7 +148,8 @@ void Seeder::seedBosses(Database& db) {
 
         for (auto& phase : b["phases"]) {
             std::string fightTypesCsv = joinFightTypes(phase["fight_types"]);
-            const auto& mech = phase["mechanic"];
+            const auto& ms = phase["mechanic_spell"];
+            const auto& ad = phase["attack_dictionary"];
 
             db.insertBossPhase(
                 bossId,
@@ -155,9 +158,14 @@ void Seeder::seedBosses(Database& db) {
                 phase["hp_end_pct"].get<float>(),
                 phase["is_execute_phase"].get<bool>(),
                 fightTypesCsv,
-                mech["name"],
-                mech["damage_value"].get<float>(),
-                mech["needs_interrupt"].get<bool>()
+                ms["spell_name"],
+                ms["damage_value"].get<float>(),
+                ms["spell_id"].get<int>(),
+                ms["is_aoe"].get<bool>(),
+                ms["number_of_targets"].get<int>(),
+                ad["melee_delay"].get<float>(),
+                ad["cast_delay"].get<float>(),
+                ad["mechanic_delay"].get<float>()
             );
         }
     }

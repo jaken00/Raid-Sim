@@ -115,22 +115,29 @@ bool Database::init() {
             resist_storm                REAL DEFAULT 0.0,
             resist_frost                REAL DEFAULT 0.0,
             resist_shadow               REAL DEFAULT 0.0,
-            resist_radiant              REAL DEFAULT 0.0
+            resist_radiant              REAL DEFAULT 0.0,
+            melee_attack_value          REAL DEFAULT 0.0,
+            spell_attack_value          REAL DEFAULT 0.0
         );
     )";
 
     const std::string create_boss_phases = R"(
         CREATE TABLE IF NOT EXISTS boss_phases (
-            id                          INTEGER PRIMARY KEY AUTOINCREMENT,
-            boss_id                     INTEGER NOT NULL,
-            phase_number                INTEGER NOT NULL,
-            hp_start_pct                REAL NOT NULL,
-            hp_end_pct                  REAL NOT NULL,
-            is_execute_phase            BOOLEAN DEFAULT 0,
-            fight_types                 TEXT NOT NULL DEFAULT '',
-            mechanic_name               TEXT NOT NULL DEFAULT '',
-            mechanic_damage_value       REAL DEFAULT 0.0,
-            mechanic_needs_interrupt    BOOLEAN DEFAULT 0,
+            id                      INTEGER PRIMARY KEY AUTOINCREMENT,
+            boss_id                 INTEGER NOT NULL,
+            phase_number            INTEGER NOT NULL,
+            hp_start_pct            REAL NOT NULL,
+            hp_end_pct              REAL NOT NULL,
+            is_execute_phase        BOOLEAN DEFAULT 0,
+            fight_types             TEXT NOT NULL DEFAULT '',
+            mechanic_name           TEXT NOT NULL DEFAULT '',
+            mechanic_damage_value   REAL DEFAULT 0.0,
+            mechanic_spell_id       INTEGER DEFAULT -1,
+            mechanic_is_aoe         BOOLEAN DEFAULT 0,
+            mechanic_num_targets    INTEGER DEFAULT 1,
+            melee_delay             REAL DEFAULT 1.5,
+            cast_delay              REAL DEFAULT 4.0,
+            mechanic_delay          REAL DEFAULT 8.0,
             FOREIGN KEY (boss_id) REFERENCES bosses(id)
         );
     )";
@@ -333,14 +340,16 @@ int Database::insertBoss(const std::string& name, const std::string& raid, float
                          int dispel_coverage_needed, bool rewards_physical_buffs,
                          bool punishes_melee_heavy, const std::string& damage_type,
                          double resist_physical, double resist_fire, double resist_storm,
-                         double resist_frost, double resist_shadow, double resist_radiant) {
+                         double resist_frost, double resist_shadow, double resist_radiant,
+                         float melee_attack_value, float spell_attack_value) {
     const char* sql =
         "INSERT INTO bosses ("
         "name, raid, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
         "interrupt_coverage_needed, tank_minimum, dispel_coverage_needed, "
         "rewards_physical_buffs, punishes_melee_heavy, damage_type, "
-        "resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant"
-        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        "resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant, "
+        "melee_attack_value, spell_attack_value"
+        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     sqlite3_stmt* stmt;
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -367,6 +376,8 @@ int Database::insertBoss(const std::string& name, const std::string& raid, float
     sqlite3_bind_double(stmt, 17, resist_frost);
     sqlite3_bind_double(stmt, 18, resist_shadow);
     sqlite3_bind_double(stmt, 19, resist_radiant);
+    sqlite3_bind_double(stmt, 20, static_cast<double>(melee_attack_value));
+    sqlite3_bind_double(stmt, 21, static_cast<double>(spell_attack_value));
 
     int newId = -1;
     if (sqlite3_step(stmt) == SQLITE_DONE) {
@@ -382,12 +393,15 @@ bool Database::insertBossPhase(int boss_id, int phase_number, float hp_start_pct
                                float hp_end_pct, bool is_execute_phase,
                                const std::string& fight_types_csv,
                                const std::string& mechanic_name, float mechanic_damage_value,
-                               bool mechanic_needs_interrupt) {
+                               int mechanic_spell_id, bool mechanic_is_aoe, int mechanic_num_targets,
+                               float melee_delay, float cast_delay, float mechanic_delay) {
     const char* sql =
         "INSERT INTO boss_phases ("
         "boss_id, phase_number, hp_start_pct, hp_end_pct, is_execute_phase, "
-        "fight_types, mechanic_name, mechanic_damage_value, mechanic_needs_interrupt"
-        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        "fight_types, mechanic_name, mechanic_damage_value, "
+        "mechanic_spell_id, mechanic_is_aoe, mechanic_num_targets, "
+        "melee_delay, cast_delay, mechanic_delay"
+        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     sqlite3_stmt* stmt;
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -395,15 +409,20 @@ bool Database::insertBossPhase(int boss_id, int phase_number, float hp_start_pct
         return false;
     }
 
-    sqlite3_bind_int   (stmt, 1, boss_id);
-    sqlite3_bind_int   (stmt, 2, phase_number);
-    sqlite3_bind_double(stmt, 3, static_cast<double>(hp_start_pct));
-    sqlite3_bind_double(stmt, 4, static_cast<double>(hp_end_pct));
-    sqlite3_bind_int   (stmt, 5, static_cast<int>(is_execute_phase));
-    sqlite3_bind_text  (stmt, 6, fight_types_csv.c_str(),  -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text  (stmt, 7, mechanic_name.c_str(),    -1, SQLITE_TRANSIENT);
-    sqlite3_bind_double(stmt, 8, static_cast<double>(mechanic_damage_value));
-    sqlite3_bind_int   (stmt, 9, static_cast<int>(mechanic_needs_interrupt));
+    sqlite3_bind_int   (stmt,  1, boss_id);
+    sqlite3_bind_int   (stmt,  2, phase_number);
+    sqlite3_bind_double(stmt,  3, static_cast<double>(hp_start_pct));
+    sqlite3_bind_double(stmt,  4, static_cast<double>(hp_end_pct));
+    sqlite3_bind_int   (stmt,  5, static_cast<int>(is_execute_phase));
+    sqlite3_bind_text  (stmt,  6, fight_types_csv.c_str(),  -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt,  7, mechanic_name.c_str(),    -1, SQLITE_TRANSIENT);
+    sqlite3_bind_double(stmt,  8, static_cast<double>(mechanic_damage_value));
+    sqlite3_bind_int   (stmt,  9, mechanic_spell_id);
+    sqlite3_bind_int   (stmt, 10, static_cast<int>(mechanic_is_aoe));
+    sqlite3_bind_int   (stmt, 11, mechanic_num_targets);
+    sqlite3_bind_double(stmt, 12, static_cast<double>(melee_delay));
+    sqlite3_bind_double(stmt, 13, static_cast<double>(cast_delay));
+    sqlite3_bind_double(stmt, 14, static_cast<double>(mechanic_delay));
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
     if (!ok)
@@ -571,7 +590,8 @@ bool Database::getFirstPlayer(PlayerRow& out) {
 bool Database::getFirstBoss(BossRow& out) {
     const char* sql =
         "SELECT id, name, raid, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
-        "damage_type, resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant "
+        "damage_type, resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant, "
+        "melee_attack_value, spell_attack_value "
         "FROM bosses ORDER BY id LIMIT 1;";
     sqlite3_stmt* stmt = nullptr;
 
@@ -596,12 +616,14 @@ bool Database::getFirstBoss(BossRow& out) {
         out.hps_threshold   = sqlite3_column_int(stmt, 6);
         out.dps_threshold   = sqlite3_column_int(stmt, 7);
         out.damage_type     = getText(8);
-        out.resist_physical = static_cast<float>(sqlite3_column_double(stmt, 9));
-        out.resist_fire     = static_cast<float>(sqlite3_column_double(stmt, 10));
-        out.resist_storm    = static_cast<float>(sqlite3_column_double(stmt, 11));
-        out.resist_frost    = static_cast<float>(sqlite3_column_double(stmt, 12));
-        out.resist_shadow   = static_cast<float>(sqlite3_column_double(stmt, 13));
-        out.resist_radiant  = static_cast<float>(sqlite3_column_double(stmt, 14));
+        out.resist_physical      = static_cast<float>(sqlite3_column_double(stmt, 9));
+        out.resist_fire          = static_cast<float>(sqlite3_column_double(stmt, 10));
+        out.resist_storm         = static_cast<float>(sqlite3_column_double(stmt, 11));
+        out.resist_frost         = static_cast<float>(sqlite3_column_double(stmt, 12));
+        out.resist_shadow        = static_cast<float>(sqlite3_column_double(stmt, 13));
+        out.resist_radiant       = static_cast<float>(sqlite3_column_double(stmt, 14));
+        out.melee_attack_value   = static_cast<float>(sqlite3_column_double(stmt, 15));
+        out.spell_attack_value   = static_cast<float>(sqlite3_column_double(stmt, 16));
 
         sqlite3_finalize(stmt);
         stmt = nullptr;
@@ -639,7 +661,9 @@ int Database::getBossID(const std::string& boss_name) {
 bool Database::getBossPhases(int boss_id, std::vector<PhaseRow>& out) {
     const char* sql =
         "SELECT phase_number, hp_start_pct, hp_end_pct, is_execute_phase, "
-        "fight_types, mechanic_name, mechanic_damage_value, mechanic_needs_interrupt "
+        "fight_types, mechanic_name, mechanic_damage_value, "
+        "mechanic_spell_id, mechanic_is_aoe, mechanic_num_targets, "
+        "melee_delay, cast_delay, mechanic_delay "
         "FROM boss_phases "
         "WHERE boss_id = ? ORDER BY phase_number;";
 
@@ -659,14 +683,19 @@ bool Database::getBossPhases(int boss_id, std::vector<PhaseRow>& out) {
             return txt ? reinterpret_cast<const char*>(txt) : "";
         };
 
-        row.phase_number     = sqlite3_column_int(stmt, 0);
-        row.hp_start_pct     = static_cast<float>(sqlite3_column_double(stmt, 1));
-        row.hp_end_pct       = static_cast<float>(sqlite3_column_double(stmt, 2));
-        row.is_execute_phase = sqlite3_column_int(stmt, 3) != 0;
-        row.fight_types      = getText(4);
-        row.mechanic_name    = getText(5);
-        row.damage_value     = static_cast<float>(sqlite3_column_double(stmt, 6));
-        row.need_interrupt   = sqlite3_column_int(stmt, 7) != 0;
+        row.phase_number        = sqlite3_column_int(stmt, 0);
+        row.hp_start_pct        = static_cast<float>(sqlite3_column_double(stmt, 1));
+        row.hp_end_pct          = static_cast<float>(sqlite3_column_double(stmt, 2));
+        row.is_execute_phase    = sqlite3_column_int(stmt, 3) != 0;
+        row.fight_types         = getText(4);
+        row.mechanic_name       = getText(5);
+        row.damage_value        = static_cast<float>(sqlite3_column_double(stmt, 6));
+        row.mechanic_spell_id   = sqlite3_column_int(stmt, 7);
+        row.mechanic_is_aoe     = sqlite3_column_int(stmt, 8) != 0;
+        row.mechanic_num_targets = sqlite3_column_int(stmt, 9);
+        row.melee_delay         = static_cast<float>(sqlite3_column_double(stmt, 10));
+        row.cast_delay          = static_cast<float>(sqlite3_column_double(stmt, 11));
+        row.mechanic_delay      = static_cast<float>(sqlite3_column_double(stmt, 12));
 
         out.push_back(row);
     }

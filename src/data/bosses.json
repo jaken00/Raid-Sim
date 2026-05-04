@@ -14,6 +14,8 @@
       "rewards_physical_buffs": false,
       "punishes_melee_heavy": false,
       "damage_type": "Fire",
+      "melee_attack_value": 800.0,
+      "spell_attack_value": 600.0,
       "resistance_profile": {
         "Physical": 0.0,
         "Fire": 0.5,
@@ -29,10 +31,17 @@
           "hp_end_pct": 0.6,
           "is_execute_phase": false,
           "fight_types": ["single_target_modifier"],
-          "mechanic": {
-            "name": "Flame Breath",
+          "mechanic_spell": {
+            "spell_id": -1,
+            "spell_name": "Flame Breath",
             "damage_value": 450.0,
-            "needs_interrupt": false
+            "is_aoe": false,
+            "number_of_targets": 1
+          },
+          "attack_dictionary": {
+            "melee_delay": 1.5,
+            "cast_delay": 4.0,
+            "mechanic_delay": 12.0
           }
         },
         {
@@ -41,10 +50,17 @@
           "hp_end_pct": 0.35,
           "is_execute_phase": false,
           "fight_types": ["single_target_modifier", "aoe_modifier"],
-          "mechanic": {
-            "name": "Inferno Nova",
+          "mechanic_spell": {
+            "spell_id": -2,
+            "spell_name": "Inferno Nova",
             "damage_value": 650.0,
-            "needs_interrupt": true
+            "is_aoe": true,
+            "number_of_targets": 5
+          },
+          "attack_dictionary": {
+            "melee_delay": 1.5,
+            "cast_delay": 3.5,
+            "mechanic_delay": 10.0
           }
         },
         {
@@ -53,10 +69,17 @@
           "hp_end_pct": 0.0,
           "is_execute_phase": true,
           "fight_types": ["single_target_modifier", "execute_modifier"],
-          "mechanic": {
-            "name": "Molten Rage",
+          "mechanic_spell": {
+            "spell_id": -3,
+            "spell_name": "Molten Rage",
             "damage_value": 900.0,
-            "needs_interrupt": true
+            "is_aoe": false,
+            "number_of_targets": 1
+          },
+          "attack_dictionary": {
+            "melee_delay": 1.2,
+            "cast_delay": 3.0,
+            "mechanic_delay": 8.0
           }
         }
       ]

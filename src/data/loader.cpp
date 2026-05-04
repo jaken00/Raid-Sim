@@ -184,12 +184,17 @@ static Phase phaseBuilder(const PhaseRow& pr){
     phase.hp_end_pct = pr.hp_end_pct;
     phase.is_execute_phase = pr.is_execute_phase;
     
-    BossMechanic bossMech;
-    bossMech.damageValue = pr.damage_value;
-    bossMech.name = pr.mechanic_name;
-    bossMech.needsInterrupt = pr.need_interrupt;
+    Spell mechanic_spell;
+    mechanic_spell.spell_id          = pr.mechanic_spell_id;
+    mechanic_spell.spell_name        = pr.mechanic_name;
+    mechanic_spell.damage_value      = pr.damage_value;
+    mechanic_spell.isAoe             = pr.mechanic_is_aoe;
+    mechanic_spell.number_of_targets = pr.mechanic_num_targets;
+    phase.mechanic_spell = mechanic_spell;
 
-    phase.mechanicAssociated = bossMech;
+    phase.attackDictionary.melee_delay    = pr.melee_delay;
+    phase.attackDictionary.cast_delay     = pr.cast_delay;
+    phase.attackDictionary.mechanic_delay = pr.mechanic_delay;
 
 
     std::string data = pr.fight_types;
@@ -232,6 +237,8 @@ Boss Loader::loadBosses(Database& db) {
         row.name, 0, nullptr, row.max_hp, row.max_hp,
         row.phase_count, 1, (float)row.tuning_ilvl, phases,
         parseDamageType(row.damage_type),
-        resistMap
+        resistMap,
+        row.melee_attack_value,
+        row.spell_attack_value
     );
 }

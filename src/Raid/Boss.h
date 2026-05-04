@@ -8,12 +8,6 @@
 #include "../sim/SimTypes.h"
 #include "Raid.h"
 
-struct BossMechanic {
-    std::string name;
-    float damageValue;
-    bool needsInterrupt;
-};
-
 struct BossSpellDictionary {
     float melee_delay;
     float cast_delay;
@@ -21,7 +15,7 @@ struct BossSpellDictionary {
 };
 
 struct Phase {
-    BossMechanic mechanicAssociated;
+    Spell mechanic_spell;
     int phaseNumber;
     bool is_execute_phase;
     std::vector<FightAffinityProfile> fightTypes;
@@ -45,11 +39,14 @@ private:
     DamageType bossDamagetype;
     std::map<DamageType, float> resistMap;
     Phase current_phase;
+    float melee_attack_value;
+    float spell_attack_value;
 
 public:
     Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP, int phaseCount,
          int currentPhase, float ilvl_threshhold, const std::vector<Phase*> bossPhases,
-         DamageType bossDamagetype, std::map<DamageType, float> resistMap);
+         DamageType bossDamagetype, std::map<DamageType, float> resistMap,
+         float melee_attack_value, float spell_attack_value);
 
     Boss()
         : id(0),
@@ -59,7 +56,9 @@ public:
           raid(nullptr),
           currentHP(0),
           maxHP(0),
-          bossDamagetype(DamageType::Physical) {}  // default construor
+          bossDamagetype(DamageType::Physical),
+          melee_attack_value(0.0f),
+          spell_attack_value(0.0f) {}  // default construor
 
     ~Boss();
 
@@ -72,6 +71,8 @@ public:
     std::string GetName() const;
     float getMaxHP();
     int GetPhaseCount();
+    float getMeleeAttackValue() const { return melee_attack_value; }
+    float getSpellAttackValue()  const { return spell_attack_value; }
 };
 
 inline float Boss::GetBossilvl() {

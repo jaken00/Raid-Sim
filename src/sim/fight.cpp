@@ -92,16 +92,101 @@ float Fight::get_fight_affinity(const Player& p, Phase phase) {
     return fight_affinity_float;
 }
 
-/* ##### HEALING FUNCTIONS #####*/
-void Fight::resolve_incoming_damage() {
-    std::vector<Player*> healers;
+void Fight::single_target_heal_player(Player* p){
+    if(p->getCurrentHealth() <= 0) {
+        return;
+    }
 
-    for (auto player : players) {
-        Spec player_spec = player->GetSpec();
-        if (player_spec.getRole() == Role::Healer) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+
+    std::vector<Player*> healers;
+    for(auto player :m_alive_players ){
+        Spec p_spec = player->GetSpec();
+        if(p_spec.getRole() == Role::Healer){
             healers.push_back(player);
         }
     }
+
+    for(auto p_healer : healers){
+        std::vector<Spell> available_spells;
+        HealerState* p_healerState = p_healer->getHealerState();
+        available_spells = p_healerState->healing_spells;
+        int i = 0;
+        for(auto spell : available_spells) {
+
+            if(spell.isAoe == false){
+                available_spells.erase(
+                    std::remove_if(
+                        available_spells.begin(),
+                        available_spells.end(),
+                        [](const Spell& spell) {
+                            return !spell.isAoe;
+                        }
+                    ),
+                    available_spells.end()
+                );
+            }
+        }
+        if (!available_spells.empty()) {
+            std::uniform_int_distribution<> dist(0, available_spells.size() - 1);
+            Spell& chosen = available_spells[dist(gen)];
+            p->heal(chosen.heal_value);
+            p_healerState->current_mana -= chosen.mana_cost;
+        }
+    }
+}
+
+void Fight::aoe_heal_player(std::vector<Player*> player_list){
+    std::vector<Player*> healers;
+    for(auto player :m_alive_players ){
+        Spec p_spec = player->GetSpec();
+        if(p_spec.getRole() == Role::Healer){
+            healers.push_back(player);
+        }
+    }
+    for(auto p_healer : healers){
+        Spell aoe_spell;
+        HealerState* p_healerState = p_healer->getHealerState();
+        for(auto spell : p_healerState->healing_spells){
+            if(spell.isAoe == true){
+                aoe_spell = spell;
+            }
+        }
+        for(auto p : player_list){
+            p->heal(aoe_spell.heal_value);
+        }
+        p_healerState->current_mana -= aoe_spell.mana_cost;
+    }
+}
+
+
+
+/* ##### HEALING FUNCTIONS #####*/
+//KNOWN BUG: IF TARGET LIST HAS DEAD PLAYER WILL TARGET DEAD PLAYER
+void Fight::resolveDamage(std::vector<Spell> boss_damage_stack){
+    std::vector<Player*> healers;
+    std::vector<Player*> unhealthy_players;
+
+    for(auto boss_ability : boss_damage_stack) {
+        for(auto p : boss_ability.target_list) {
+            p->takeDamage(boss_ability.damage_value);
+            boss_damage_stack.pop_back();
+            if(p->getCurrentHealth() <= 0){
+                m_alive_players.erase(std::remove(m_alive_players.begin(), m_alive_players.end(), p), m_alive_players.end());
+            }
+            if(boss_ability.isAoe == true){
+                aoe_heal_player(boss_ability.target_list);
+            }
+            else {
+                single_target_heal_player(boss_ability.target_list[0]); //this is so janky
+            }
+        }
+    }
+
+
+
 }
 
 static float getVarianceFloor(float player_performance) {
@@ -159,8 +244,10 @@ float Fight::calculate_player_dps(std::vector<Player*> active_player_list, float
     return total_dps;
 }
 
-std::vector<Spell> Fight::damageStack(Boss* boss, float phase_duration) {
-    Phase boss_phase = boss->getCurrentPhase();
+//Maybe want to make this into a Map and decouple Spell from targets. Right now Spells Owns the Target might want to remove that and do dynamic target checking in future (if someone dies later in phase)
+//
+std::vector<Spell> Fight::damageStack(Boss &boss, float phase_duration) {
+    Phase boss_phase = boss.getCurrentPhase();
     BossSpellDictionary spellDictionary = boss_phase.attackDictionary;
 
     float melee_delay       = spellDictionary.melee_delay;
@@ -176,9 +263,9 @@ std::vector<Spell> Fight::damageStack(Boss* boss, float phase_duration) {
     for(int i = 0; i < num_of_melee_casts; i++) {
         Spell melee_spell;
 
-        melee_spell.spell_name = boss->GetName() + "_MELEE";
+        melee_spell.spell_name = boss.GetName() + "_MELEE";
         melee_spell.spell_id = -1;
-        melee_spell.damage_value = 500.0f; //need to do a caclcualtion based off of boss stats rather than hard coding this
+        melee_spell.damage_value = boss.getMeleeAttackValue();
         melee_spell.isAoe = false;
         melee_spell.number_of_targets = 1;
         melee_spell.target_list = Fight::get_targetted_player(Role::Tank, melee_spell.number_of_targets);
@@ -187,24 +274,26 @@ std::vector<Spell> Fight::damageStack(Boss* boss, float phase_duration) {
     for(int j = 0; j < num_of_spell_casts; j++) {
         Spell ranged_spell;
 
-        ranged_spell.spell_name = boss->GetName() + "_SPELL";
+        ranged_spell.spell_name = boss.GetName() + "_SPELL";
         ranged_spell.spell_id = -1;
-        ranged_spell.damage_value = 500.0f; //need to do a caclcualtion based off of boss stats rather than hard coding this
+        ranged_spell.damage_value = boss.getSpellAttackValue();
         ranged_spell.isAoe = false;
         ranged_spell.number_of_targets = 3;
         ranged_spell.target_list = Fight::get_targetted_player(Role::DPS, ranged_spell.number_of_targets);
         boss_damage_stack.push_back(ranged_spell);
     }
+    for (int k = 0; k < num_of_mechanic_casts; k++) {
+        Spell mechanic_spell = boss_phase.mechanic_spell;
+        mechanic_spell.target_list = Fight::get_targetted_player(
+            mechanic_spell.isAoe ? Role::DPS : Role::Tank,
+            mechanic_spell.number_of_targets
+        );
+        boss_damage_stack.push_back(mechanic_spell);
+    }
 
-
-
+    return boss_damage_stack;
 }
 
-void Fight::takeDamage(float boss_damage, Player& p) {
-    // might be over engineering and can just call it in the loop? (Maybe not sicne we have to
-    // recalculate hp values?)
-    p.takeDamage(boss_damage);
-}
 
 std::vector<Player*> Fight::check_deaths() {
     std::vector<Player*> death_list;
@@ -234,13 +323,10 @@ PhaseResult Fight::attemptPhase() {
     float total_dps = calculate_player_dps(m_alive_players, boss_ilvl, currentPhase);
 
     float phase_duration = boss_phase_hp_pool / total_dps;
-    BossMechanic current_mechanic = currentPhase.mechanicAssociated;
-    float boss_damage = current_mechanic.damageValue * players.size() * phase_duration;
-    float damage_per_player = boss_damage / players.size();
+    Spell current_mechanic = currentPhase.mechanic_spell;
+    std::vector<Spell> boss_damage_stack = damageStack(boss, phase_duration);
+    resolveDamage(boss_damage_stack);
 
-    for (auto p : players) {
-        takeDamage(damage_per_player, *p);
-    }
 
     std::vector<Player*> death_list = check_deaths();
     if (!death_list.empty()) {
@@ -264,7 +350,6 @@ PhaseResult Fight::attemptPhase() {
     // std::cout << "TOTAL DPS: "<< total_dps << std::endl;
 
     std::cout << "PHASE DURATION: " << phase_duration << std::endl;
-    std::cout << "BOSS DAMAGE: " << boss_damage << std::endl;
 
     return phase_end_result;
 }

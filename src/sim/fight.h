@@ -16,6 +16,17 @@ struct FightState {
     DefensiveState current_defensive_state;
 };
 
+struct BossDamageStackData {
+    std::map<std::string, float> damage_table;
+};
+
+struct HealResolutionData {
+    Player* healer;
+    Player* target;
+    std::map<Spell, float> heal_table;
+
+};
+
 struct FightDebugData {
 	float player_performance_rating;
 	float ilvl_calculation;
@@ -51,7 +62,9 @@ private:
 	float calculate_player_dps(std::vector<Player*> active_player_list, float boss_ilvl, Phase bossPhase); //Main Calculation Function
 
     // ############### HPS CALCULATIONS ############### //
-    void resolve_incoming_damage(); //This is needed to get the entire Spell as it carries all information
+    void single_target_heal_player(Player* p);
+    void aoe_heal_player(std::vector<Player*> player_list);
+
 
     // ############### DEFENSE CALCULATIONS ############### //
     DefensiveState calculate_defensive();
@@ -61,13 +74,14 @@ private:
     // ############### DAMAGE TO PLAYERS ############### //
     void takeDamage(float boss_damage, Player& p);
     std::vector<Player*> check_deaths();
+    void resolveDamage(std::vector<Spell> boss_damage_stack);
 
 	// ############### DEBUG DATA ############### //
 	void print_fight_data();
 
 	// ############### BOSS CALCULATIONS ############### //
 
-	std::vector<Spell> damageStack(Boss *boss, float phase_duration);
+	std::vector<Spell> damageStack(Boss &boss, float phase_duration);
 
 
 

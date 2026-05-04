@@ -100,6 +100,40 @@ void DrawDebugWindow(const std::vector<FightStep>& history, int current_step, fl
 
     ImGui::Separator();
 
+    // Unit frames — per-player health bars
+    ImGui::Text("Unit Frames");
+    ImGui::Spacing();
+    if (!step.player_health.empty()) {
+        float bar_width = ImGui::GetContentRegionAvail().x;
+        for (const auto& snap : step.player_health) {
+            float pct = (snap.max_hp > 0.0f)
+                ? std::clamp(snap.current_hp / snap.max_hp, 0.0f, 1.0f)
+                : 0.0f;
+
+            ImVec4 bar_color;
+            if (pct > 0.75f)
+                bar_color = ImVec4(0.15f, 0.75f, 0.15f, 1.0f); // green
+            else if (pct > 0.35f)
+                bar_color = ImVec4(0.85f, 0.75f, 0.10f, 1.0f); // yellow
+            else
+                bar_color = ImVec4(0.85f, 0.15f, 0.15f, 1.0f); // red
+
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, bar_color);
+            char label[64];
+            snprintf(label, sizeof(label), "%.0f / %.0f", snap.current_hp, snap.max_hp);
+            ImGui::ProgressBar(pct, ImVec2(bar_width, 18.0f), label);
+            ImGui::PopStyleColor();
+
+            ImGui::SameLine(0.0f, 6.0f);
+            ImGui::Text("%s", snap.name.c_str());
+            ImGui::Spacing();
+        }
+    } else {
+        ImGui::TextDisabled("No player health data.");
+    }
+
+    ImGui::Separator();
+
     // Playback speed slider
     ImGui::SliderFloat("Steps/sec", &playback_speed, 1.0f, 120.0f);
 

@@ -52,7 +52,8 @@ int Player::GetTotalConstitution() const {
 }
 
 void Player::heal(float healValue){
-    currentHealth += healValue;
+
+    currentHealth = std::min((currentHealth + healValue), maxHp);
 }
 
 void Player::setCurrentHealth(){
@@ -64,7 +65,6 @@ void Player::takeDamage(float damageValue){
 }
 
 void Player::buildHealerState(const std::vector<Spell>& spells) {
-    HealerState healerState;
     healerState.healing_spells = spells;
     healerState.max_mana = 10000.0f;
     healerState.current_mana = 10000.0f;

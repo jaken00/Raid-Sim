@@ -100,6 +100,12 @@ struct HealResolutionData {
     std::map<Spell, float> heal_table;
 };
 
+struct PlayerHealthSnapshot {
+    std::string name;
+    float current_hp = 0.0f;
+    float max_hp     = 0.0f;
+};
+
 struct FightStep {
     std::string spell_name;
     float damage_value = 0.0f;
@@ -117,4 +123,5 @@ struct FightStep {
     HealResolutionData  heal_data;
 
     std::vector<std::pair<std::string, FightDebugData>> player_debug;
+    std::vector<PlayerHealthSnapshot>                   player_health;
 };

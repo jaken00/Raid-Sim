@@ -14,8 +14,8 @@
       "rewards_physical_buffs": false,
       "punishes_melee_heavy": false,
       "damage_type": "Fire",
-      "melee_attack_value": 800.0,
-      "spell_attack_value": 600.0,
+      "melee_attack_value": 400.0,
+      "spell_attack_value": 300.0,
       "resistance_profile": {
         "Physical": 0.0,
         "Fire": 0.5,

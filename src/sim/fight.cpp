@@ -111,7 +111,9 @@ void Fight::single_target_heal_player(Player* p){
         if (!available_spells.empty()) {
             std::uniform_int_distribution<> dist(0, available_spells.size() - 1);
             Spell& chosen = available_spells[dist(gen)];
+            
             p->heal(chosen.heal_value);
+            std::cout << "HEAL VALUE: " << chosen.heal_value << std::endl;
             p_healerState->current_mana -= chosen.mana_cost;
         }
     }
@@ -220,7 +222,7 @@ std::vector<Spell> Fight::damageStack(Boss &boss, float phase_duration) {
         melee_spell.damage_value       = boss.getMeleeAttackValue();
         melee_spell.isAoe              = false;
         melee_spell.number_of_targets  = 1;
-        melee_spell.target_list        = Fight::get_targetted_player(Role::Tank, melee_spell.number_of_targets);
+        melee_spell.target_list        = get_targetted_player(Role::Tank, melee_spell.number_of_targets);
         boss_damage_stack.push_back(melee_spell);
     }
     for(int j = 0; j < num_of_spell_casts; j++) {
@@ -230,12 +232,12 @@ std::vector<Spell> Fight::damageStack(Boss &boss, float phase_duration) {
         ranged_spell.damage_value      = boss.getSpellAttackValue();
         ranged_spell.isAoe             = false;
         ranged_spell.number_of_targets = 3;
-        ranged_spell.target_list       = Fight::get_targetted_player(Role::DPS, ranged_spell.number_of_targets);
+        ranged_spell.target_list       = get_targetted_player(Role::DPS, ranged_spell.number_of_targets);
         boss_damage_stack.push_back(ranged_spell);
     }
     for (int k = 0; k < num_of_mechanic_casts; k++) {
         Spell mechanic_spell = boss_phase.mechanic_spell;
-        mechanic_spell.target_list = Fight::get_targetted_player(
+        mechanic_spell.target_list = get_targetted_player(
             mechanic_spell.isAoe ? Role::DPS : Role::Tank,
             mechanic_spell.number_of_targets
         );
@@ -274,13 +276,12 @@ int Fight::resolveDamage(std::stack<Spell>& stack, int total_spells,
         for (auto* p : spell.target_list) {
             if (p->getCurrentHealth() <= 0) continue;
             p->takeDamage(spell.damage_value);
-        }
 
-        // Heal after each attack
-        if (spell.isAoe) {
-            aoe_heal_player(spell.target_list);
-        } else if (!spell.target_list.empty()) {
-            single_target_heal_player(spell.target_list[0]);
+            if (spell.isAoe) {
+                aoe_heal_player(spell.target_list);
+            } else if (!spell.target_list.empty()) {
+                single_target_heal_player(spell.target_list[0]);
+            }
         }
 
         // Build snapshot
@@ -303,6 +304,15 @@ int Fight::resolveDamage(std::stack<Spell>& stack, int total_spells,
             total_dps_step += dbg.player_dps;
         step.fight_state.current_dps = total_dps_step;
         step.fight_state.current_hps = 0.0f;
+
+        // Record per-player HP snapshot
+        for (auto* p : players) {
+            PlayerHealthSnapshot snap;
+            snap.name       = p->GetName();
+            snap.current_hp = std::max(0.0f, p->getCurrentHealth());
+            snap.max_hp     = p->GetMaxHp();
+            step.player_health.push_back(snap);
+        }
 
         // Record deaths at this step
         for (auto* p : m_alive_players) {

@@ -1,14 +1,22 @@
 #pragma once
 #include <string>
 #include <vector>
-
-class Player;
-class Boss;
+#include "RaidTypes.h"
 
 
+class Raid {
+private:
+	PhaseBuilder* buildPhase();
+    FightBuilder* buildFight();
 
-struct Raid {
-    std::string name;
-    std::vector<Boss*> boss_list;
-    std::vector<Player*> player_list;
+public:
+    Raid();
+    ~Raid();
+	Raid() {};
+	
+	RaidBuilder* buildRaid();
+	
+	
+
 };
+

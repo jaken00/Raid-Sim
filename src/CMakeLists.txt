@@ -11,7 +11,7 @@ add_library(imgui_sdl2 STATIC
     ${imgui_SOURCE_DIR}/imgui_widgets.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-)
+ "Raid/RaidTypes.h")
 target_include_directories(imgui_sdl2 PUBLIC
     ${imgui_SOURCE_DIR}
     ${imgui_SOURCE_DIR}/backends
@@ -28,7 +28,7 @@ add_library(raidsim_core STATIC
     db/database.cpp
     Raid/Boss.cpp
     sim/fight.cpp
-)
+ "Raid/RaidTypes.h")
 
 target_include_directories(raidsim_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -50,7 +50,7 @@ target_link_libraries(raidsim_core
 add_executable(raidsim
     main.cpp
     ui/main_window.cpp
-)
+ "Raid/RaidTypes.h")
 
 target_link_libraries(raidsim
   PRIVATE

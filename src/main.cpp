@@ -57,6 +57,7 @@ int main(int argc, char* argv[]) {
     // Simulation state
     bool               sim_ready     = false;
     bool               run_sim       = false;
+    bool               restart_sim   = false;
     EncounterResult    result{};
     std::vector<FightStep> sim_history;
     int                current_step  = 0;
@@ -79,14 +80,15 @@ int main(int argc, char* argv[]) {
         float  delta = (now - last_ticks) / 1000.0f;
         last_ticks   = now;
 
-        // Trigger simulation when button was pressed
-        if (run_sim) {
+        // Trigger simulation (new run or restart)
+        if (run_sim || restart_sim) {
             result       = gameState.attemptRaid();
             sim_history  = gameState.getSimHistory();
             current_step = 0;
             step_accum   = 0.0f;
             sim_ready    = true;
             run_sim      = false;
+            restart_sim  = false;
         }
 
         // Advance playback
@@ -101,7 +103,7 @@ int main(int argc, char* argv[]) {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        DrawMainWindow(result, sim_ready, run_sim);
+        DrawMainWindow(result, sim_ready, run_sim, restart_sim);
         DrawDebugWindow(sim_history, current_step, playback_speed);
 
         ImGui::Render();

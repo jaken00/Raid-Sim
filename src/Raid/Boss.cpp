@@ -32,12 +32,16 @@ float Boss::getBossResistType(DamageType damageType) {
 
 void Boss::AdvancePhase(){
     int next_phase_number = current_phase.phaseNumber + 1;
-    
+
     if(next_phase_number > phaseCount){
         return;
     }
 
     current_phase = *bossPhases[next_phase_number - 1];
+}
 
-    
+void Boss::resetPhase() {
+    currentPhaseNumber = 0;
+    if (!bossPhases.empty())
+        current_phase = *bossPhases[0];
 }

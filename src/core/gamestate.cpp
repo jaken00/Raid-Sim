@@ -3,6 +3,10 @@ GameState::GameState() {}
 
 
 EncounterResult GameState::attemptRaid(){
+    for (Player& p : players)
+        p.setCurrentHealth();
+    boss.resetPhase();
+
     std::vector<Player*> playerPtrs;
 
     for(Player& p : players){

@@ -73,6 +73,7 @@ public:
     int GetPhaseCount();
     float getMeleeAttackValue() const { return melee_attack_value; }
     float getSpellAttackValue()  const { return spell_attack_value; }
+    void resetPhase();
 };
 
 inline float Boss::GetBossilvl() {

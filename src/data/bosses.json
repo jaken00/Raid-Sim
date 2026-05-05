@@ -2,7 +2,6 @@
   "bosses": [
     {
       "name": "Flamelord",
-      "raid": "Test Raid",
       "max_hp": 400000,
       "phase_count": 3,
       "tuning_ilvl": 100,

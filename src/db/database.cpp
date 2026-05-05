@@ -15,7 +15,7 @@ bool Database::init() {
         std::cerr << "Failed to open database: " << sqlite3_errmsg(m_db) << "\n";
         return false;
     }
-    
+
 
     const std::string create_players = R"(
         CREATE TABLE IF NOT EXISTS players (
@@ -98,7 +98,6 @@ bool Database::init() {
         CREATE TABLE IF NOT EXISTS bosses (
             id                          INTEGER PRIMARY KEY AUTOINCREMENT,
             name                        TEXT NOT NULL,
-            raid                        TEXT NOT NULL DEFAULT '',
             max_hp                      REAL NOT NULL DEFAULT 0,
             phase_count                 INTEGER NOT NULL DEFAULT 1,
             tuning_ilvl                 INTEGER NOT NULL,
@@ -334,7 +333,7 @@ bool Database::insertSpecialization(
 }
 
 // Returns the new row id, or -1 on failure.
-int Database::insertBoss(const std::string& name, const std::string& raid, float max_hp,
+int Database::insertBoss(const std::string& name, float max_hp,
                          int phase_count, int tuning_ilvl, int hps_threshold, int dps_threshold,
                          int interrupt_coverage_needed, int tank_minimum,
                          int dispel_coverage_needed, bool rewards_physical_buffs,
@@ -344,7 +343,7 @@ int Database::insertBoss(const std::string& name, const std::string& raid, float
                          float melee_attack_value, float spell_attack_value) {
     const char* sql =
         "INSERT INTO bosses ("
-        "name, raid, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
+        "name, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
         "interrupt_coverage_needed, tank_minimum, dispel_coverage_needed, "
         "rewards_physical_buffs, punishes_melee_heavy, damage_type, "
         "resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant, "
@@ -358,26 +357,25 @@ int Database::insertBoss(const std::string& name, const std::string& raid, float
     }
 
     sqlite3_bind_text  (stmt,  1, name.c_str(),         -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text  (stmt,  2, raid.c_str(),         -1, SQLITE_TRANSIENT);
-    sqlite3_bind_double(stmt,  3, static_cast<double>(max_hp));
-    sqlite3_bind_int   (stmt,  4, phase_count);
-    sqlite3_bind_int   (stmt,  5, tuning_ilvl);
-    sqlite3_bind_int   (stmt,  6, hps_threshold);
-    sqlite3_bind_int   (stmt,  7, dps_threshold);
-    sqlite3_bind_int   (stmt,  8, interrupt_coverage_needed);
-    sqlite3_bind_int   (stmt,  9, tank_minimum);
-    sqlite3_bind_int   (stmt, 10, dispel_coverage_needed);
-    sqlite3_bind_int   (stmt, 11, static_cast<int>(rewards_physical_buffs));
-    sqlite3_bind_int   (stmt, 12, static_cast<int>(punishes_melee_heavy));
-    sqlite3_bind_text  (stmt, 13, damage_type.c_str(),  -1, SQLITE_TRANSIENT);
-    sqlite3_bind_double(stmt, 14, resist_physical);
-    sqlite3_bind_double(stmt, 15, resist_fire);
-    sqlite3_bind_double(stmt, 16, resist_storm);
-    sqlite3_bind_double(stmt, 17, resist_frost);
-    sqlite3_bind_double(stmt, 18, resist_shadow);
-    sqlite3_bind_double(stmt, 19, resist_radiant);
-    sqlite3_bind_double(stmt, 20, static_cast<double>(melee_attack_value));
-    sqlite3_bind_double(stmt, 21, static_cast<double>(spell_attack_value));
+    sqlite3_bind_double(stmt,  2, static_cast<double>(max_hp));
+    sqlite3_bind_int   (stmt,  3, phase_count);
+    sqlite3_bind_int   (stmt,  4, tuning_ilvl);
+    sqlite3_bind_int   (stmt,  5, hps_threshold);
+    sqlite3_bind_int   (stmt,  6, dps_threshold);
+    sqlite3_bind_int   (stmt,  7, interrupt_coverage_needed);
+    sqlite3_bind_int   (stmt,  8, tank_minimum);
+    sqlite3_bind_int   (stmt, 9, dispel_coverage_needed);
+    sqlite3_bind_int   (stmt, 10, static_cast<int>(rewards_physical_buffs));
+    sqlite3_bind_int   (stmt, 11, static_cast<int>(punishes_melee_heavy));
+    sqlite3_bind_text  (stmt, 12, damage_type.c_str(),  -1, SQLITE_TRANSIENT);
+    sqlite3_bind_double(stmt, 13, resist_physical);
+    sqlite3_bind_double(stmt, 14, resist_fire);
+    sqlite3_bind_double(stmt, 15, resist_storm);
+    sqlite3_bind_double(stmt, 16, resist_frost);
+    sqlite3_bind_double(stmt, 17, resist_shadow);
+    sqlite3_bind_double(stmt, 18, resist_radiant);
+    sqlite3_bind_double(stmt, 19, static_cast<double>(melee_attack_value));
+    sqlite3_bind_double(stmt, 20, static_cast<double>(spell_attack_value));
 
     int newId = -1;
     if (sqlite3_step(stmt) == SQLITE_DONE) {
@@ -589,7 +587,7 @@ bool Database::getFirstPlayer(PlayerRow& out) {
 
 bool Database::getFirstBoss(BossRow& out) {
     const char* sql =
-        "SELECT id, name, raid, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
+        "SELECT id, name, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
         "damage_type, resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant, "
         "melee_attack_value, spell_attack_value "
         "FROM bosses ORDER BY id LIMIT 1;";
@@ -609,21 +607,20 @@ bool Database::getFirstBoss(BossRow& out) {
 
         int boss_id         = sqlite3_column_int(stmt, 0);
         out.name            = getText(1);
-        out.raid            = getText(2);
-        out.max_hp          = static_cast<float>(sqlite3_column_double(stmt, 3));
-        out.phase_count     = sqlite3_column_int(stmt, 4);
-        out.tuning_ilvl     = sqlite3_column_int(stmt, 5);
-        out.hps_threshold   = sqlite3_column_int(stmt, 6);
-        out.dps_threshold   = sqlite3_column_int(stmt, 7);
-        out.damage_type     = getText(8);
-        out.resist_physical      = static_cast<float>(sqlite3_column_double(stmt, 9));
-        out.resist_fire          = static_cast<float>(sqlite3_column_double(stmt, 10));
-        out.resist_storm         = static_cast<float>(sqlite3_column_double(stmt, 11));
-        out.resist_frost         = static_cast<float>(sqlite3_column_double(stmt, 12));
-        out.resist_shadow        = static_cast<float>(sqlite3_column_double(stmt, 13));
-        out.resist_radiant       = static_cast<float>(sqlite3_column_double(stmt, 14));
-        out.melee_attack_value   = static_cast<float>(sqlite3_column_double(stmt, 15));
-        out.spell_attack_value   = static_cast<float>(sqlite3_column_double(stmt, 16));
+        out.max_hp          = static_cast<float>(sqlite3_column_double(stmt, 2)); // FIXED (was 3)
+        out.phase_count     = sqlite3_column_int(stmt, 3);
+        out.tuning_ilvl     = sqlite3_column_int(stmt, 4);
+        out.hps_threshold   = sqlite3_column_int(stmt, 5);
+        out.dps_threshold   = sqlite3_column_int(stmt, 6);
+        out.damage_type     = getText(7);
+        out.resist_physical = static_cast<float>(sqlite3_column_double(stmt, 8));
+        out.resist_fire     = static_cast<float>(sqlite3_column_double(stmt, 9));
+        out.resist_storm    = static_cast<float>(sqlite3_column_double(stmt, 10));
+        out.resist_frost    = static_cast<float>(sqlite3_column_double(stmt, 11));
+        out.resist_shadow   = static_cast<float>(sqlite3_column_double(stmt, 12));
+        out.resist_radiant  = static_cast<float>(sqlite3_column_double(stmt, 13));
+        out.melee_attack_value = static_cast<float>(sqlite3_column_double(stmt, 14));
+        out.spell_attack_value = static_cast<float>(sqlite3_column_double(stmt, 15));
 
         sqlite3_finalize(stmt);
         stmt = nullptr;

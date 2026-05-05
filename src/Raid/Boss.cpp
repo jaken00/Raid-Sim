@@ -1,6 +1,6 @@
 #include "Boss.h"
 
-Boss::Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP,
+Boss::Boss(const std::string& name, int id, float currentHP, float maxHP,
            int phaseCount, int currentPhase, float ilvl_threshhold,
            const std::vector<Phase*> bossPhases, DamageType bossDamagetype,
            std::map<DamageType, float> resistMap,
@@ -10,7 +10,6 @@ Boss::Boss(const std::string& name, int id, Raid* raid, float currentHP, float m
       phaseCount(phaseCount),
       currentPhaseNumber(currentPhase),
       ilvl_threshhold(ilvl_threshhold),
-      raid(raid),
       currentHP(currentHP),
       maxHP(maxHP),
       bossPhases(bossPhases),

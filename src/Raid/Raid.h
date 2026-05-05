@@ -3,20 +3,15 @@
 #include <vector>
 #include "RaidTypes.h"
 
-
 class Raid {
 private:
-	PhaseBuilder* buildPhase();
+    PhaseBuilder* buildPhase();
     FightBuilder* buildFight();
+    const int NUM_BOSSES = 8;
 
 public:
-    Raid();
-    ~Raid();
-	Raid() {};
-	
-	RaidBuilder* buildRaid();
-	
-	
+    Raid() = default;   // single constructor
+    ~Raid() = default;  // or remove entirely if unnecessary
 
+    RaidBuilder* buildRaid();
 };
-

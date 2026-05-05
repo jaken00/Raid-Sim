@@ -89,7 +89,6 @@ struct SpellRow {
 
 struct BossRow {
     std::string name;
-    std::string raid;
     std::string damage_type;
     int tuning_ilvl;
     int hps_threshold;
@@ -139,7 +138,7 @@ public:
                               double fap_movement, double fap_execute, double fap_melee_hostile);
 
     // Bosses
-    int  insertBoss(const std::string& name, const std::string& raid, float max_hp,
+    int  insertBoss(const std::string& name, float max_hp,
                     int phase_count, int tuning_ilvl, int hps_threshold, int dps_threshold,
                     int interrupt_coverage_needed, int tank_minimum, int dispel_coverage_needed,
                     bool rewards_physical_buffs, bool punishes_melee_heavy,

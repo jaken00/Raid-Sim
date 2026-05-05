@@ -116,7 +116,7 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
             row.performance_rating, row.attendance_percent,
             parseAttitude(row.attitude), row.potential, row.max_hp, row.item_class
         ));
-        
+
     }
 
     for (Player& player : players) {
@@ -167,9 +167,9 @@ static FightAffinityProfile fightAffinityProfileMatch(std::string s){
     if(s == "movement_modifier") return FightAffinityProfile::movement_modifier;
     if(s == "execute_modifier") return FightAffinityProfile::execute_modifier;
     if(s == "melee_hostile_penalty") return FightAffinityProfile::melee_hostile_penalty;
-    
+
     return FightAffinityProfile::MISSING_PROFILE;
-    
+
 
 
 }
@@ -183,7 +183,7 @@ static Phase phaseBuilder(const PhaseRow& pr){
     phase.hp_start_pct = pr.hp_start_pct;
     phase.hp_end_pct = pr.hp_end_pct;
     phase.is_execute_phase = pr.is_execute_phase;
-    
+
     Spell mechanic_spell;
     mechanic_spell.spell_id          = pr.mechanic_spell_id;
     mechanic_spell.spell_name        = pr.mechanic_name;
@@ -201,7 +201,7 @@ static Phase phaseBuilder(const PhaseRow& pr){
     std::stringstream ss(data);
 
     std::vector<std::string> fight_types_split;
-    std::string token; 
+    std::string token;
 
     while(std::getline(ss , token, ',')){
         fight_types_split.push_back(token);
@@ -212,7 +212,7 @@ static Phase phaseBuilder(const PhaseRow& pr){
     }
 
     return phase;
-    
+
 
 }
 
@@ -234,7 +234,7 @@ Boss Loader::loadBosses(Database& db) {
         phases.push_back(new Phase(phaseBuilder(pr)));
 
     return Boss(
-        row.name, 0, nullptr, row.max_hp, row.max_hp,
+        row.name, 0, row.max_hp, row.max_hp,
         row.phase_count, 1, (float)row.tuning_ilvl, phases,
         parseDamageType(row.damage_type),
         resistMap,

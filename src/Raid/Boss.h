@@ -6,7 +6,6 @@
 
 #include "../enum.h"
 #include "../sim/SimTypes.h"
-#include "Raid.h"
 
 struct BossSpellDictionary {
     float melee_delay;
@@ -32,7 +31,6 @@ private:
     int phaseCount;
     int currentPhaseNumber;
     float ilvl_threshhold;
-    Raid* raid;
     float currentHP;
     float maxHP;
     std::vector<Phase*> bossPhases;
@@ -43,7 +41,7 @@ private:
     float spell_attack_value;
 
 public:
-    Boss(const std::string& name, int id, Raid* raid, float currentHP, float maxHP, int phaseCount,
+    Boss(const std::string& name, int id, float currentHP, float maxHP, int phaseCount,
          int currentPhase, float ilvl_threshhold, const std::vector<Phase*> bossPhases,
          DamageType bossDamagetype, std::map<DamageType, float> resistMap,
          float melee_attack_value, float spell_attack_value);
@@ -53,7 +51,6 @@ public:
           phaseCount(0),
           currentPhaseNumber(0),
           ilvl_threshhold(0),
-          raid(nullptr),
           currentHP(0),
           maxHP(0),
           bossDamagetype(DamageType::Physical),

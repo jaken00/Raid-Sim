@@ -92,7 +92,7 @@ inline Player::Player(int id, const std::string& name,
                       float potential, float maxHp, const std::string& itemClass)
     : id(id),
       name(name),
-      spec(spec),
+      spec(spec), 
       itemLevel(itemLevel),
       items(items),
       performanceRating(performanceRating),
@@ -100,12 +100,14 @@ inline Player::Player(int id, const std::string& name,
       attitude(attitude),
       potential(potential),
       maxHp(maxHp),
+      currentHealth(maxHp),
       itemClass(itemClass) {
     if (this->attendancePercent < 0.0f) {
         this->attendancePercent = 0.0f;
     } else if (this->attendancePercent > 100.0f) {
         this->attendancePercent = 100.0f;
     }
+    
 }
 
 inline int Player::GetId() const {

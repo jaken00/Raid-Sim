@@ -13,7 +13,7 @@
 - [x] Add `std::vector<PlayerSpell> m_rotation` to private members
 - [x] Add `void SetRotation(const std::vector<PlayerSpell>& spells)`
 - [x] Add `PlayerSpell& GetRotationSpell(int index)`
-- [ ] Initialize `currentHealth` in constructor — `setCurrentHealth()` is never called during construction, so `currentHealth` starts as garbage
+- [x] Initialize `currentHealth` in constructor — `setCurrentHealth()` is never called during construction, so `currentHealth` starts as garbage
 
 ### Step 3 — ActiveBuffs class (add to SimTypes.h or new file)
 - [ ] Class wrapping `std::vector<ActiveBuff> m_active`
@@ -53,6 +53,10 @@
 ### Step 8 — Wire to UI (do this last)
 - [ ] Replace `attemptFight()` call site with `simulate_encounter()`
 - [ ] Update UI to consume `FightLog` instead of `EncounterResult`
+
+### Step 8 — Wire to UI (do this last)
+- [ ] Add Cooldown to PlayerSpells Struct
+- [ ] Check if Spell is off cooldown before casting it in the spell resolution function
 
 ---
 

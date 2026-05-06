@@ -34,3 +34,6 @@ tools/**/bin/
 tools/**/obj/
 *.nupkg
 *.snupkg
+
+
+~$spell.xlsx

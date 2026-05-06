@@ -44,3 +44,20 @@ void Boss::resetPhase() {
     if (!bossPhases.empty())
         current_phase = *bossPhases[0];
 }
+
+void Boss::takeDamage(float damage_value) {
+    currentHP -= damage_value;
+}
+
+Spell Boss::GetRotationSpell(int index) const {
+    auto& spells = current_phase.phase_spells;
+    return spells[index % spells.size()];
+
+}
+int Boss::GetNextSpellIndex(int current) {
+    return(current + 1) % current_phase.phase_spells.size();
+}
+int Boss::GetCastInterval(int spell_index) {
+    auto& spell = GetRotationSpell(spell_index);
+    return spell.cooldown;
+}

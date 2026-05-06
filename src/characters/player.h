@@ -55,6 +55,10 @@ public:
     void AddRaidHistoryEntry(const std::string& entry);
     void setCurrentHealth();
     void buildHealerState(const std::vector<Spell>& spells);
+    int GetNextSpellIndex(int current);
+    
+    void SetRotation(const std::vector<PlayerSpell>& spells);
+    PlayerSpell& GetRotationSpell(int index);
 
 
 
@@ -74,6 +78,7 @@ private:
     float currentHealth;
 
     HealerState healerState;
+    std::vector<PlayerSpell> m_rotation;
 
 
 

@@ -63,6 +63,7 @@ public:
     float GetBossilvl();
     Phase getCurrentPhase();
     float GetCurrentHP();
+    void takeDamage(float damage_value);
     void AdvancePhase();
 
     std::string GetName() const;
@@ -71,6 +72,14 @@ public:
     float getMeleeAttackValue() const { return melee_attack_value; }
     float getSpellAttackValue()  const { return spell_attack_value; }
     void resetPhase();
+
+    //NEW COMBAT FUNCTIONS
+    float GetEnrageTimer();
+    Spell GetRotationSpell(int index) const;
+    int GetNextSpellIndex(int current);
+    int GetCastInterval(int spell_index);
+   
+
 };
 
 inline float Boss::GetBossilvl() {

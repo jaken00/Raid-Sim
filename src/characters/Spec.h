@@ -57,7 +57,7 @@ public:
     float getHPSweight();
     float getDefenseWeight();
     float getUtilityWeight();
-    SpecStatWeights getStatWeights();
+    SpecStatWeights getStatWeights() const { return specStatWeights; } 
     DamageType getDamageType();
     float getFightAffinity(FightAffinityProfile fightType);
 };
@@ -105,11 +105,6 @@ inline float Spec::getDefenseWeight() {
 inline float Spec::getUtilityWeight() {
     return utility_weight;
 }
-
-inline SpecStatWeights Spec::getStatWeights() {
-    return specStatWeights;
-} 
-
 
 inline DamageType Spec::getDamageType(){
     return specDamageType;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <utility>
+#include "enum.h"
 
 class Player;
 
@@ -124,4 +125,96 @@ struct FightStep {
 
     std::vector<std::pair<std::string, FightDebugData>> player_debug;
     std::vector<PlayerHealthSnapshot>                   player_health;
+};
+
+enum class EventType {
+    DAMAGE,
+    HEAL,
+    BUFF,
+    MECHANIC,
+};
+
+enum class FightResult {
+    KILL,
+    WIPE,
+    ENRAGE,
+};
+
+struct KillingBlow {
+    std::string player_name;
+    std::string spell_name;
+};
+
+struct CombatEvent {
+    float timestamp;
+    std::string source; //player or boss name
+    std::string spell_name;
+    float base_value; //Dmaage or healing value
+    bool did_crit;
+    EventType type;
+    bool is_player_action;
+    std::string target;
+};
+
+struct DeathRecord {
+    std::string player_name;
+    float timestamp;
+    std::string killed_by; //spellname
+};
+
+struct FightLog {
+    FightResult result;
+    float end_time;
+    std::vector<CombatEvent> events;
+    std::vector<DeathRecord> deaths;
+    KillingBlow killing_blow;
+    std::map<std::string, float> player_total_damage;
+    std::map<std::string, float> player_total_healing;
+};
+
+enum class BuffScope {
+    SELF,
+    TARGET,
+    RAID_WIDE,
+};
+enum class SpellType {
+    BUFF,
+    DAMAGE,
+    HEAL,
+};
+
+
+struct ActiveBuff {
+    std::string source;
+    std::string name;
+    float applied_at;
+    float expires_at;
+    float crit_bonus;
+    float haste_bonus;
+    float damage_mult;
+    float dr_bonus; //DAMAGE REDUCTION
+    BuffScope scope;
+
+};
+
+struct PlayerSpell {
+    std::string name;
+    float base_damage;
+    float base_healing;
+    float base_cast_time;
+    SpellType type;
+    DamageType damage_type;
+    bool is_aoe;
+    int aoe_targets;
+    //BUFF SECTION:
+    ActiveBuff buff;
+    float buff_duration;
+};
+
+struct PendingCast {
+    float timestamp;
+    int source_id; //player_index or -1 for boss
+    int spell_index; //index of spell in player rotation queue
+
+    bool operator>(const PendingCast& other) const { return timestamp > other.timestamp; }
 };

@@ -70,3 +70,14 @@ void Player::buildHealerState(const std::vector<Spell>& spells) {
     healerState.current_mana = 10000.0f;
     healerState.mana_regen_per_resolve_phase = 500.0f;
 }
+
+int Player::GetNextSpellIndex(int current) {
+    return (current + 1) % m_rotation.size(); 
+}
+
+void Player::SetRotation(const std::vector<PlayerSpell>& spells) {
+    m_rotation = spells;
+}
+PlayerSpell& Player::GetRotationSpell(int index) {
+    return m_rotation[index];
+}

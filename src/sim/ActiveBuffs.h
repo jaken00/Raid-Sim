@@ -1,6 +1,8 @@
 #pragma once
 #include "SimTypes.h"
 #include <vector>
+#include "../characters/player.h"
+
 
 class ActiveBuffs {
 	public:

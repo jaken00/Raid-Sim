@@ -16,10 +16,10 @@
 - [x] Initialize `currentHealth` in constructor — `setCurrentHealth()` is never called during construction, so `currentHealth` starts as garbage
 
 ### Step 3 — ActiveBuffs class (add to SimTypes.h or new file)
-- [ ] Class wrapping `std::vector<ActiveBuff> m_active`
-- [ ] `void apply(ActiveBuff buff)`
-- [ ] `float get_damage_modifier(Player* p, float current_time)`
-- [ ] `float get_crit_bonus(Player* p, float current_time)`
+- [x] Class wrapping `std::vector<ActiveBuff> m_active`
+- [x] `void apply(ActiveBuff buff)`
+- [x] `float get_damage_modifier(Player* p, float current_time)`
+- [x] `float get_crit_bonus(Player* p, float current_time)`
 - [ ] Update `calculate_spell_damage` and `roll_crit` signatures: `ActiveBuff&` → `ActiveBuffs&`
 
 ### Step 4 — Boss V2 methods (Boss.h)

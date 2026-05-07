@@ -116,7 +116,8 @@ bool Database::init() {
             resist_shadow               REAL DEFAULT 0.0,
             resist_radiant              REAL DEFAULT 0.0,
             melee_attack_value          REAL DEFAULT 0.0,
-            spell_attack_value          REAL DEFAULT 0.0
+            spell_attack_value          REAL DEFAULT 0.0,
+            enrage_timer                REAL DEFAULT 0.0,
         );
     )";
 
@@ -340,15 +341,15 @@ int Database::insertBoss(const std::string& name, float max_hp,
                          bool punishes_melee_heavy, const std::string& damage_type,
                          double resist_physical, double resist_fire, double resist_storm,
                          double resist_frost, double resist_shadow, double resist_radiant,
-                         float melee_attack_value, float spell_attack_value) {
+                         float melee_attack_value, float spell_attack_value, float enrage_timer) {
     const char* sql =
         "INSERT INTO bosses ("
         "name, max_hp, phase_count, tuning_ilvl, hps_threshold, dps_threshold, "
         "interrupt_coverage_needed, tank_minimum, dispel_coverage_needed, "
         "rewards_physical_buffs, punishes_melee_heavy, damage_type, "
         "resist_physical, resist_fire, resist_storm, resist_frost, resist_shadow, resist_radiant, "
-        "melee_attack_value, spell_attack_value"
-        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        "melee_attack_value, spell_attack_value, enrage_timer"
+        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     sqlite3_stmt* stmt;
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -376,6 +377,7 @@ int Database::insertBoss(const std::string& name, float max_hp,
     sqlite3_bind_double(stmt, 18, resist_radiant);
     sqlite3_bind_double(stmt, 19, static_cast<double>(melee_attack_value));
     sqlite3_bind_double(stmt, 20, static_cast<double>(spell_attack_value));
+    sqlite3_bind_double(stmt, 21, static_cast<double>(enrage_timer));
 
     int newId = -1;
     if (sqlite3_step(stmt) == SQLITE_DONE) {
@@ -621,6 +623,8 @@ bool Database::getFirstBoss(BossRow& out) {
         out.resist_radiant  = static_cast<float>(sqlite3_column_double(stmt, 13));
         out.melee_attack_value = static_cast<float>(sqlite3_column_double(stmt, 14));
         out.spell_attack_value = static_cast<float>(sqlite3_column_double(stmt, 15));
+        out.enrage_timer= static_cast<float>(sqlite3_column_double(stmt, 16));
+
 
         sqlite3_finalize(stmt);
         stmt = nullptr;

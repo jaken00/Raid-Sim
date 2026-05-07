@@ -66,7 +66,8 @@ static float getVarianceFloor(float player_performance) {
     else                               return 0.85f;
 }
 
-float Fight::calculate_spell_damage(Player* p, PlayerSpell& spell, bool did_crit, ActiveBuff& buffs) {
+float Fight::calculate_spell_damage(Player* p, PlayerSpell& spell, bool did_crit,
+                                    ActiveBuffs& buffs, float current_time) {
     static std::mt19937 gen(std::random_device{}());
 
     float base = spell.base_damage
@@ -75,7 +76,7 @@ float Fight::calculate_spell_damage(Player* p, PlayerSpell& spell, bool did_crit
         * resist_profile(*p)
         * get_fight_affinity(*p, boss.getCurrentPhase());
 
-    base *= buffs.damage_mult;
+    base *= buffs.get_damage_modifier(p, current_time);
 
     float crit_mult = did_crit ? 2.0f : 1.0f;
 
@@ -85,9 +86,9 @@ float Fight::calculate_spell_damage(Player* p, PlayerSpell& spell, bool did_crit
     return base * crit_mult * variance;
 }
 
-bool Fight::roll_crit(Player* p, ActiveBuff& buffs) {
+bool Fight::roll_crit(Player* p, ActiveBuffs& buffs, float current_time) {
     float crit_chance = (p->GetTotalCritStrike() / 100.0f) * p->GetSpec().getStatWeights().critStrike;
-    crit_chance += buffs.crit_bonus;
+    crit_chance += buffs.get_crit_bonus(p, current_time); // TODO: THis might be wrong and instead of rolling for Crit Bonus we might need crit chance modifier?
 
     static std::mt19937 gen(std::random_device{}());
     std::uniform_real_distribution<float> dis(0.0f, 1.0f);

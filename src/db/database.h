@@ -104,6 +104,7 @@ struct BossRow {
     float melee_attack_value;
     float spell_attack_value;
     std::vector<PhaseRow> phases;
+    float enrage_timer;
 };
 
 class Database {
@@ -145,7 +146,7 @@ public:
                     const std::string& damage_type,
                     double resist_physical, double resist_fire, double resist_storm,
                     double resist_frost, double resist_shadow, double resist_radiant,
-                    float melee_attack_value, float spell_attack_value);
+                    float melee_attack_value, float spell_attack_value, float enrage_timer);
     bool insertBossPhase(int boss_id, int phase_number, float hp_start_pct, float hp_end_pct,
                          bool is_execute_phase, const std::string& fight_types_csv,
                          const std::string& mechanic_name, float mechanic_damage_value,

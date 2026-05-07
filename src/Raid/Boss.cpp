@@ -4,7 +4,7 @@ Boss::Boss(const std::string& name, int id, float currentHP, float maxHP,
            int phaseCount, int currentPhase, float ilvl_threshhold,
            const std::vector<Phase*> bossPhases, DamageType bossDamagetype,
            std::map<DamageType, float> resistMap,
-           float melee_attack_value, float spell_attack_value)
+           float melee_attack_value, float spell_attack_value, float enrage_timer)
     : name(name),
       id(id),
       phaseCount(phaseCount),
@@ -17,8 +17,8 @@ Boss::Boss(const std::string& name, int id, float currentHP, float maxHP,
       resistMap(resistMap),
       current_phase(bossPhases.empty() ? Phase{} : *bossPhases[0]),
       melee_attack_value(melee_attack_value),
-      spell_attack_value(spell_attack_value)
-{}
+      spell_attack_value(spell_attack_value),
+      enrage_timer(enrage_timer) {}
 
 Boss::~Boss() {}
 
@@ -57,7 +57,7 @@ Spell Boss::GetRotationSpell(int index) const {
 int Boss::GetNextSpellIndex(int current) {
     return(current + 1) % current_phase.phase_spells.size();
 }
-int Boss::GetCastInterval(int spell_index) {
-    auto& spell = GetRotationSpell(spell_index);
+float Boss::GetCastInterval(int spell_index) {
+    Spell spell = GetRotationSpell(spell_index);
     return spell.cooldown;
 }

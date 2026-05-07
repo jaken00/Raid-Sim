@@ -1,6 +1,6 @@
 #include "Spec.h"
 
-float Spec::getFightAffinity(FightAffinityProfile fightType) {
+float Spec::getFightAffinity(FightAffinityProfile fightType) const {
     auto it = fightAffinityProfile.find(fightType);
     if (it != fightAffinityProfile.end())
         return it->second;

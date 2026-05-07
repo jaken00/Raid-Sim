@@ -20,18 +20,27 @@
 - [x] `void apply(ActiveBuff buff)`
 - [x] `float get_damage_modifier(Player* p, float current_time)`
 - [x] `float get_crit_bonus(Player* p, float current_time)`
-- [ ] Update `calculate_spell_damage` and `roll_crit` signatures: `ActiveBuff&` → `ActiveBuffs&`
+- [x] Update `calculate_spell_damage` and `roll_crit` signatures: `ActiveBuff&` → `ActiveBuffs&`
 
 ### Step 4 — Boss V2 methods (Boss.h)
-- [ ] Add `float enrage_timer` to private members + set in constructor — declared but no backing field yet
-- [ ] Implement `GetEnrageTimer()` — no implementation in Boss.cpp
+- [x] Add `float enrage_timer` to private members + set in constructor — declared but no backing field yet
+- [x] Implement `GetEnrageTimer()` — no implementation in Boss.cpp
 - [x] `GetRotationSpell(int index)` — implemented
 - [x] `GetNextSpellIndex(int current)` — implemented
 - [x] `GetCastInterval(int spell_index)` — implemented, **but fix 2 bugs (see below)**
 
+### STEP 4.5 - Add in Cooldown to Player Spells rather than just casttime. 
+- [ ] Add in Cooldown to Playerspell Struct
+- [ ] Add in ready_at timestamp to playerSpell struct -> initialized to 0.0f
+- [ ] Rather than blindly going to next spell, check if spell is on cooldown in next.spell_index
+- [ ] After Casting mark the cooldown and update the ready_at timestamp
+- [ ] Queue next cast:   float interval = get_cast_interval(spell.base_cast_time, *p);
+  queue.push({t + interval, next.source_id, p->GetNextSpellIndex(idx)});
+
 ### Step 5 — Define spec spells
-- [ ] At least 1 DPS spec — 3-4 spells minimum
-- [ ] At least 1 Healer spec — 2-3 spells (mix of ST and AoE heal)
+- [x] At least 1 DPS spec — 3-4 spells minimum
+- [x] At least 1 Healer spec — 2-3 spells (mix of ST and AoE heal)
+- [ ] Update Loader/Seeders
 - [ ] Boss phase — fill `phase_spells` with 2-3 `Spell` objects, set `cooldown` = cast interval
 
 ### Step 6 — simulate_encounter() (fight.h + fight.cpp)
@@ -57,27 +66,6 @@
 ### Step 8 — Wire to UI (do this last)
 - [ ] Add Cooldown to PlayerSpells Struct
 - [ ] Check if Spell is off cooldown before casting it in the spell resolution function
-
----
-
-## Bugs to fix before Step 6
-
-### Bug 1 — `GetCastInterval` return type (Boss.h line 80 + Boss.cpp line 60)
-`cooldown` is a `float` but the method is declared and returns `int` — this silently truncates 2.5s → 2, 4.5s → 4.
-Fix: change both declaration and definition to `float GetCastInterval(int spell_index)`.
-
-### Bug 2 — `GetCastInterval` binds reference to temporary (Boss.cpp line 61)
-```cpp
-auto& spell = GetRotationSpell(spell_index);  // GetRotationSpell returns by VALUE
-```
-`auto&` on a by-value return is a compile error (non-const ref to temporary). Fix:
-```cpp
-Spell spell = GetRotationSpell(spell_index);
-return spell.cooldown;
-```
-
-### Bug 3 — `currentHealth` uninitialized in Player
-The `Player` constructor never calls `setCurrentHealth()`, so `currentHealth` is garbage at the start of a fight. Fix: add `currentHealth(maxHp)` to the constructor initializer list in `player.h`.
 
 ---
 

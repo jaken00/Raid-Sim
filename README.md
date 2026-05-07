@@ -1,1 +1,1 @@
-# Raid Sim - An MMO Simulation Game
+# Raid Sim - An MMO Raid Management Simulation Game

@@ -8,6 +8,7 @@
 
 #include "../Raid/Boss.h"
 #include "../characters/player.h"
+#include "ActiveBuffs.h"
 
 class Fight {
 private:
@@ -26,8 +27,8 @@ private:
 
     // ############### V2 SPELL RESOLUTION ############### //
     float get_cast_interval(float base_cast_time, const Player& p);
-    float calculate_spell_damage(Player* p, PlayerSpell& spell, bool did_crit, ActiveBuff& buffs);
-    bool roll_crit(Player* p, ActiveBuff& buffs);
+    float calculate_spell_damage(Player* p, PlayerSpell& spell, bool did_crit, ActiveBuffs& buffs, float current_time);
+    bool roll_crit(Player* p, ActiveBuffs& buffs, float current_time);
 
     // ############### DEATH TRACKING ############### //
     std::vector<Player*> check_deaths();

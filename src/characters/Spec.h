@@ -58,8 +58,8 @@ public:
     float getDefenseWeight();
     float getUtilityWeight();
     SpecStatWeights getStatWeights() const { return specStatWeights; } 
-    DamageType getDamageType();
-    float getFightAffinity(FightAffinityProfile fightType);
+    DamageType getDamageType() const;
+    float getFightAffinity(FightAffinityProfile fightType) const ;
 };
 
 inline Spec::Spec(std::string name, Role role, Resource resouceUsed, AttackRange attackRange, float dps_weight,
@@ -106,6 +106,6 @@ inline float Spec::getUtilityWeight() {
     return utility_weight;
 }
 
-inline DamageType Spec::getDamageType(){
+inline DamageType Spec::getDamageType() const{
     return specDamageType;
 }

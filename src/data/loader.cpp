@@ -239,6 +239,7 @@ Boss Loader::loadBosses(Database& db) {
         parseDamageType(row.damage_type),
         resistMap,
         row.melee_attack_value,
-        row.spell_attack_value
+        row.spell_attack_value,
+        row.enrage_timer
     );
 }

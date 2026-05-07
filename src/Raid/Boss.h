@@ -39,12 +39,13 @@ private:
     Phase current_phase;
     float melee_attack_value;
     float spell_attack_value;
+    float enrage_timer;
 
 public:
     Boss(const std::string& name, int id, float currentHP, float maxHP, int phaseCount,
          int currentPhase, float ilvl_threshhold, const std::vector<Phase*> bossPhases,
          DamageType bossDamagetype, std::map<DamageType, float> resistMap,
-         float melee_attack_value, float spell_attack_value);
+         float melee_attack_value, float spell_attack_value, float enrage_timer);
 
     Boss()
         : id(0),
@@ -55,7 +56,8 @@ public:
           maxHP(0),
           bossDamagetype(DamageType::Physical),
           melee_attack_value(0.0f),
-          spell_attack_value(0.0f) {}  // default construor
+          spell_attack_value(0.0f),
+          enrage_timer(100.0f) {}  // default construor
 
     ~Boss();
 
@@ -77,7 +79,7 @@ public:
     float GetEnrageTimer();
     Spell GetRotationSpell(int index) const;
     int GetNextSpellIndex(int current);
-    int GetCastInterval(int spell_index);
+    float GetCastInterval(int spell_index);
    
 
 };

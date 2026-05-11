@@ -106,3 +106,103 @@ std::vector<Player*> Fight::check_deaths() {
     }
     return death_list;
 }
+
+FightLog Fight::simulate_encounter() {
+    /*
+    struct FightLog {
+    FightResult result;
+    float end_time;
+    std::vector<CombatEvent> events;
+    std::vector<DeathRecord> deaths;
+    KillingBlow killing_blow;
+    std::map<std::string, float> player_total_damage;
+    std::map<std::string, float> player_total_healing;
+    
+    struct PendingCast {
+    float timestamp;
+    int source_id; //player_index or -1 for boss
+    int spell_index; //index of spell in player rotation queue
+
+    bool operator>(const PendingCast& other) const { return timestamp > other.timestamp; }
+};
+
+    */
+    FightLog log;
+
+    std::priority_queue<PendingCast, std::vector<PendingCast>, std::greater<PendingCast>> prio_queue;
+
+    m_alive_players = players;
+    for (int i = 0; i < (int)players.size(); i++) {
+        prio_queue.push({0.0f, i, 0});
+    }
+    prio_queue.push({0.0f, -1, 0});  // boss
+
+    while (!prio_queue.empty()) {
+        PendingCast next = prio_queue.top();
+        prio_queue.pop();
+        float t = next.timestamp;
+
+        if (t > boss.GetEnrageTimer()) {
+            log.result = FightResult::ENRAGE;
+            log.end_time = t;
+            break;
+        }
+
+        if (next.source_id != -1) {
+            Player* p = m_alive_players[next.source_id];
+            PlayerSpell& spell = p->GetRotationSpell(next.spell_index);
+            spell.ready_at = t + spell.cooldown;
+            /*
+              Player* p = players[next.source_id];
+              PlayerSpell& spell = p->GetRotationSpell(next.spell_index);
+
+              bool crit = roll_crit(p, buffs, t);
+              float dmg = calculate_spell_damage(p, spell, crit, buffs, t);
+              boss.takeDamage(dmg);
+
+              log.events.push_back({t, p->GetName(), spell.name, spell.base_damage, dmg, crit, EventType::DAMAGE, true, "Boss"});
+
+              // requeue
+              prio_queue.push({t + get_cast_interval(spell.base_cast_time, *p), next.source_id,
+              p->GetNextSpellIndex(next.spell_index)});
+
+              Pop → resolve → push back. That's the entire loop.
+            
+                  while (!prio_queue.empty() && !m_alive_players.empty() && boss.GetCurrentHP() > 0)
+
+              With ||: loop continues as long as either condition is true — so it keeps running even after the boss dies as long as
+              players are alive. Wrong.
+
+              With &&: loop continues only while all conditions are true — stops the moment any one fails. Correct.
+
+              That said, this actually isn't the primary exit mechanism anyway. The && conditions here are just safety nets. The
+              real exits are the break statements inside the loop:
+
+              // Kill
+              if (boss.GetCurrentHP() <= 0) {
+                  log.result = FightResult::KILL;
+                  log.end_time = t;
+                  break;
+              }
+
+              // Wipe
+              if (m_alive_players.empty()) {
+                  log.result = FightResult::WIPE;
+                  log.end_time = t;
+                  break;
+              }
+
+              // Enrage
+              if (t > boss.GetEnrageTimer()) {
+                  log.result = FightResult::ENRAGE;
+                  log.end_time = t;
+                  break;
+              }
+
+
+            */
+        }
+
+    }
+
+}

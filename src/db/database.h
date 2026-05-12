@@ -87,6 +87,25 @@ struct SpellRow {
     float cooldown;
 };
 
+
+
+
+struct PlayerSpellRow {
+    std::string name;
+    float base_damage;
+    float base_healing;
+    float base_cast_time;
+    float cooldown;
+    float ready_at;  // init at 0.0f -> This will be mostly needed to be inited at 0.0 for loader.
+    SpellType type;
+    DamageType damage_type;
+    bool is_aoe;
+    int aoe_targets;
+    // BUFF SECTION:
+    ActiveBuff buff;
+    float buff_duration;
+};
+
 struct BossRow {
     std::string name;
     std::string damage_type;

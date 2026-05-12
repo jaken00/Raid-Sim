@@ -30,7 +30,7 @@
 - [x] `GetCastInterval(int spell_index)` — implemented, **but fix 2 bugs (see below)**
 
 ### STEP 4.5 - Add in Cooldown to Player Spells rather than just casttime. 
-- [ ] Add in Cooldown to Playerspell Struct
+- [x] Add in Cooldown to Playerspell Struct
 - [ ] Add in ready_at timestamp to playerSpell struct -> initialized to 0.0f
 - [ ] Rather than blindly going to next spell, check if spell is on cooldown in next.spell_index
 - [ ] After Casting mark the cooldown and update the ready_at timestamp

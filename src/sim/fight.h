@@ -33,6 +33,9 @@ private:
     // ############### DEATH TRACKING ############### //
     std::vector<Player*> check_deaths();
 
+    // ############### STACK RESOLUTION ############### //
+    
+
 public:
     Fight(const std::vector<Player*> players, Boss& boss);
     ~Fight();

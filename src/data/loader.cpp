@@ -30,6 +30,19 @@ static Attitude parseAttitude(const std::string& s) {
     return Attitude::Neutral;
 }
 
+static SpellType parseSpellType(const std::string& s) {
+    if (s == "HEAL")   return SpellType::HEAL;
+    if (s == "BUFF")   return SpellType::BUFF;
+    return SpellType::DAMAGE;
+}
+
+static BuffScope parseBuffScope(const std::string& s) {
+    if (s == "SELF")      return BuffScope::SELF;
+    if (s == "TARGET")    return BuffScope::TARGET;
+    if (s == "RAID_WIDE") return BuffScope::RAID_WIDE;
+    return BuffScope::SELF;
+}
+
 static Slot parseSlot(const std::string& s) {
     if (s == "Head")      return Slot::Head;
     if (s == "Neck")      return Slot::Neck;
@@ -39,6 +52,31 @@ static Slot parseSlot(const std::string& s) {
     if (s == "Feet")      return Slot::Feet;
     if (s == "MainHand")  return Slot::MainHand;
     return Slot::OffHand;
+}
+
+static PlayerSpell buildPlayerSpell(const SpellRow& r) {
+    PlayerSpell ps;
+    ps.name           = r.spell_name;
+    ps.base_damage    = r.damage_value;
+    ps.base_healing   = r.heal_value;
+    ps.base_cast_time = r.cast_time;
+    ps.cooldown       = r.cooldown;
+    ps.ready_at       = 0.0f;
+    ps.type           = parseSpellType(r.spell_type);
+    ps.damage_type    = parseDamageType(r.damage_type);
+    ps.is_aoe         = r.is_aoe;
+    ps.aoe_targets    = r.number_of_targets;
+    ps.buff_duration  = r.buff_duration;
+    ps.buff.crit_bonus   = r.buff_crit_bonus;
+    ps.buff.damage_mult  = r.buff_damage_multi;
+    ps.buff.haste_bonus  = r.buff_haste_bonus;
+    ps.buff.dr_bonus     = r.buff_dr_bonus;
+    ps.buff.scope        = parseBuffScope(r.buff_scope);
+    ps.buff.source    = "";
+    ps.buff.name      = r.spell_name;
+    ps.buff.applied_at = 0.0f;
+    ps.buff.expires_at = 0.0f;
+    return ps;
 }
 
 static Items buildItem(const ItemRow& r) {
@@ -126,6 +164,7 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
         db.getSpellsBySpec(player.GetSpec().getName(), spell_rows);
         if (!spell_rows.empty()) {
             std::vector<Spell> spells;
+            std::vector<PlayerSpell> player_spells;
             for (const SpellRow& sr : spell_rows) {
                 Spell s;
                 s.spell_id          = sr.spell_id;
@@ -141,8 +180,10 @@ std::vector<Player> Loader::loadPlayers(Database& db) {
                 s.is_hot            = sr.is_hot;
                 s.cooldown          = sr.cooldown;
                 spells.push_back(s);
+                player_spells.push_back(buildPlayerSpell(sr));
             }
             player.buildHealerState(spells);
+            player.SetRotation(player_spells);
         }
     }
 

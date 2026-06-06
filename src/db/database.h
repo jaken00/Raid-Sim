@@ -85,9 +85,30 @@ struct SpellRow {
     bool provides_buff;
     bool is_hot;
     float cooldown;
+    float cast_time;
+    std::string spell_type;
+    std::string damage_type;
+    float buff_duration;
+    float buff_crit_bonus;
+    float buff_damage_multi;
+    float buff_haste_bonus;
+    float buff_dr_bonus;
+    std::string buff_scope;
+    bool is_playerspell;
 };
 
+struct ActiveBuffRow {
+    std::string source;
+    std::string name;
+    float applied_at;
+    float expires_at;
+    float crit_bonus;
+    float haste_bonus;
+    float damage_mult;
+    float dr_bonus; //DAMAGE REDUCTION
+    std::string scope;
 
+};
 
 
 struct PlayerSpellRow {
@@ -102,7 +123,7 @@ struct PlayerSpellRow {
     bool is_aoe;
     int aoe_targets;
     // BUFF SECTION:
-    ActiveBuff buff;
+    ActiveBuffRow buff;
     float buff_duration;
 };
 
@@ -176,7 +197,11 @@ public:
     bool insertSpell(int spell_id, const std::string& spell_name, const std::string& spec_name,
                      float mana_cost, float heal_value, float damage_value,
                      bool is_aoe, int number_of_targets, float shield_amount,
-                     bool provides_buff, bool is_hot, float cooldown);
+                     bool provides_buff, bool is_hot, float cooldown,
+                     float cast_time, const std::string& spell_type, const std::string& damage_type,
+                     float buff_duration, float buff_crit_bonus, float buff_damage_multi,
+                     float buff_haste_bonus, float buff_dr_bonus, const std::string& buff_scope,
+                     bool is_playerspell);
     bool getSpellsBySpec(const std::string& spec_name, std::vector<SpellRow>& out);
 
     // Queries

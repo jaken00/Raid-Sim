@@ -22,6 +22,15 @@ static json loadJson(const std::string& filename) {
     return json::parse(f);
 }
 
+// Infers spell_type from data for old spells that lack the field.
+static std::string inferSpellType(const json& s) {
+    if (s.contains("spell_type") && !s["spell_type"].get<std::string>().empty())
+        return s["spell_type"].get<std::string>();
+    if (s.value("heal_value", 0.0f) > 0.0f) return "HEAL";
+    if (s.value("provides_buff", false))      return "BUFF";
+    return "DAMAGE";
+}
+
 // Joins a JSON array of strings into a comma-separated string.
 static std::string joinFightTypes(const json& arr) {
     std::string result;
@@ -190,7 +199,17 @@ void Seeder::seedSpells(Database& db) {
             s["shield_amount"].get<float>(),
             s["provides_buff"].get<bool>(),
             s["is_hot"].get<bool>(),
-            s["cooldown"].get<float>()
+            s["cooldown"].get<float>(),
+            s.value("cast_time",         0.0f),
+            inferSpellType(s),
+            s.value("damage_type",       std::string("Physical")),
+            s.value("buff_duration",     0.0f),
+            s.value("buff_crit_bonus",   0.0f),
+            s.value("buff_damage_multi", 0.0f),
+            s.value("buff_haste_bonus",  0.0f),
+            s.value("buff_dr_bonus",     0.0f),
+            s.value("buff_scope",        std::string("NULL")),
+            s.value("is_playerspell",    false)
         );
     }
 }

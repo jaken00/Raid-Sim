@@ -156,7 +156,17 @@ bool Database::init() {
             shield_amount     REAL NOT NULL DEFAULT 0.0,
             provides_buff     BOOLEAN DEFAULT 0,
             is_hot            BOOLEAN DEFAULT 0,
-            cooldown          REAL NOT NULL DEFAULT 0.0
+            cooldown          REAL NOT NULL DEFAULT 0.0,
+            cast_time         REAL NOT NULL DEFAULT 0.0,
+            spell_type        TEXT NOT NULL DEFAULT 'DAMAGE',
+            damage_type       TEXT NOT NULL DEFAULT 'Physical',
+            buff_duration     REAL NOT NULL DEFAULT 0.0,
+            buff_crit_bonus   REAL NOT NULL DEFAULT 0.0,
+            buff_damage_multi REAL NOT NULL DEFAULT 0.0,
+            buff_haste_bonus  REAL NOT NULL DEFAULT 0.0,
+            buff_dr_bonus     REAL NOT NULL DEFAULT 0.0,
+            buff_scope        TEXT NOT NULL DEFAULT 'NULL',
+            is_playerspell    BOOLEAN DEFAULT 0
         );
     )";
 
@@ -708,12 +718,18 @@ bool Database::getBossPhases(int boss_id, std::vector<PhaseRow>& out) {
 bool Database::insertSpell(int spell_id, const std::string& spell_name, const std::string& spec_name,
                            float mana_cost, float heal_value, float damage_value,
                            bool is_aoe, int number_of_targets, float shield_amount,
-                           bool provides_buff, bool is_hot, float cooldown) {
+                           bool provides_buff, bool is_hot, float cooldown,
+                           float cast_time, const std::string& spell_type, const std::string& damage_type,
+                           float buff_duration, float buff_crit_bonus, float buff_damage_multi,
+                           float buff_haste_bonus, float buff_dr_bonus, const std::string& buff_scope,
+                           bool is_playerspell) {
     const char* sql =
         "INSERT INTO spells "
         "(spell_id, spell_name, spec_name, mana_cost, heal_value, damage_value, "
-        "is_aoe, number_of_targets, shield_amount, provides_buff, is_hot, cooldown) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        "is_aoe, number_of_targets, shield_amount, provides_buff, is_hot, cooldown, "
+        "cast_time, spell_type, damage_type, buff_duration, buff_crit_bonus, buff_damage_multi, "
+        "buff_haste_bonus, buff_dr_bonus, buff_scope, is_playerspell) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(m_db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
@@ -722,8 +738,8 @@ bool Database::insertSpell(int spell_id, const std::string& spell_name, const st
     }
 
     sqlite3_bind_int   (stmt,  1, spell_id);
-    sqlite3_bind_text  (stmt,  2, spell_name.c_str(),  -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text  (stmt,  3, spec_name.c_str(),   -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt,  2, spell_name.c_str(),    -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt,  3, spec_name.c_str(),     -1, SQLITE_TRANSIENT);
     sqlite3_bind_double(stmt,  4, static_cast<double>(mana_cost));
     sqlite3_bind_double(stmt,  5, static_cast<double>(heal_value));
     sqlite3_bind_double(stmt,  6, static_cast<double>(damage_value));
@@ -733,6 +749,16 @@ bool Database::insertSpell(int spell_id, const std::string& spell_name, const st
     sqlite3_bind_int   (stmt, 10, static_cast<int>(provides_buff));
     sqlite3_bind_int   (stmt, 11, static_cast<int>(is_hot));
     sqlite3_bind_double(stmt, 12, static_cast<double>(cooldown));
+    sqlite3_bind_double(stmt, 13, static_cast<double>(cast_time));
+    sqlite3_bind_text  (stmt, 14, spell_type.c_str(),    -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text  (stmt, 15, damage_type.c_str(),   -1, SQLITE_TRANSIENT);
+    sqlite3_bind_double(stmt, 16, static_cast<double>(buff_duration));
+    sqlite3_bind_double(stmt, 17, static_cast<double>(buff_crit_bonus));
+    sqlite3_bind_double(stmt, 18, static_cast<double>(buff_damage_multi));
+    sqlite3_bind_double(stmt, 19, static_cast<double>(buff_haste_bonus));
+    sqlite3_bind_double(stmt, 20, static_cast<double>(buff_dr_bonus));
+    sqlite3_bind_text  (stmt, 21, buff_scope.c_str(),    -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int   (stmt, 22, static_cast<int>(is_playerspell));
 
     bool ok = sqlite3_step(stmt) == SQLITE_DONE;
     if (!ok)
@@ -744,7 +770,9 @@ bool Database::insertSpell(int spell_id, const std::string& spell_name, const st
 bool Database::getSpellsBySpec(const std::string& spec_name, std::vector<SpellRow>& out) {
     const char* sql =
         "SELECT spell_id, spell_name, spec_name, mana_cost, heal_value, damage_value, "
-        "is_aoe, number_of_targets, shield_amount, provides_buff, is_hot, cooldown "
+        "is_aoe, number_of_targets, shield_amount, provides_buff, is_hot, cooldown, "
+        "cast_time, spell_type, damage_type, buff_duration, buff_crit_bonus, buff_damage_multi, "
+        "buff_haste_bonus, buff_dr_bonus, buff_scope, is_playerspell "
         "FROM spells WHERE spec_name = ? ORDER BY spell_id;";
 
     sqlite3_stmt* stmt = nullptr;
@@ -774,6 +802,16 @@ bool Database::getSpellsBySpec(const std::string& spec_name, std::vector<SpellRo
         row.provides_buff     = sqlite3_column_int(stmt, 9) != 0;
         row.is_hot            = sqlite3_column_int(stmt, 10) != 0;
         row.cooldown          = static_cast<float>(sqlite3_column_double(stmt, 11));
+        row.cast_time         = static_cast<float>(sqlite3_column_double(stmt, 12));
+        row.spell_type        = getText(13);
+        row.damage_type       = getText(14);
+        row.buff_duration     = static_cast<float>(sqlite3_column_double(stmt, 15));
+        row.buff_crit_bonus   = static_cast<float>(sqlite3_column_double(stmt, 16));
+        row.buff_damage_multi = static_cast<float>(sqlite3_column_double(stmt, 17));
+        row.buff_haste_bonus  = static_cast<float>(sqlite3_column_double(stmt, 18));
+        row.buff_dr_bonus     = static_cast<float>(sqlite3_column_double(stmt, 19));
+        row.buff_scope        = getText(20);
+        row.is_playerspell    = sqlite3_column_int(stmt, 21) != 0;
 
         out.push_back(row);
     }
